@@ -6,6 +6,7 @@ import TopBar from '@/components/TopBar'
 import StatusBar from '@/components/StatusBar'
 import LayerToggle from '@/components/LayerToggle'
 import ContextPanel from '@/components/ContextPanel'
+import FrancePanel from '@/components/FrancePanel'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 
@@ -47,6 +48,7 @@ export default function Home() {
       {selectedPoint && (
         <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />
       )}
+      {isFranceView && <FrancePanel />}
       <StatusBar layerStates={layerStates} viewState={viewState} />
     </main>
   )
