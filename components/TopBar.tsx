@@ -27,7 +27,7 @@ export default function TopBar({ layerStates }: Props) {
   return (
     <header className="absolute top-0 left-0 right-0 z-10 flex items-center gap-4 px-4 h-10 bg-[#07111f]/95 border-b border-[#1a2840]">
       <span className="text-[#00D4FF] tracking-[0.2em] text-xs font-bold">
-        SENTINEL
+        SentinAile
       </span>
       <span className="w-2 h-2 rounded-full bg-[#00D4FF] shadow-[0_0_8px_#00D4FF] animate-pulse" />
       <div className="flex gap-4 ml-2">
