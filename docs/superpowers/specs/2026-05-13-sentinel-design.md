@@ -31,6 +31,7 @@ L'objectif est double : vitrine visuellement impressionnante ET outil quotidien 
 /app
   /page.tsx              → page principale (carte + UI)
   /api
+    /_template/route.ts  → template commenté pour nouvelles sources
     /flights/route.ts    → proxy OpenSky Network
     /ships/route.ts      → proxy VesselFinder AIS
     /weather/route.ts    → proxy Open-Meteo
@@ -44,14 +45,22 @@ L'objectif est double : vitrine visuellement impressionnante ET outil quotidien 
 /components
   TopBar.tsx
   StatusBar.tsx
-  LayerToggle.tsx
-  ContextPanel.tsx
+  LayerToggle.tsx        → auto-généré depuis layers-registry
+  ContextPanel.tsx       → dispatch vers le bon panel selon layer id
   FrancePanel.tsx
-  MapCanvas.tsx
+  MapCanvas.tsx          → monte les couches depuis layers-registry
+  /panels
+    FlightPanel.tsx
+    ShipPanel.tsx
+    WebcamPanel.tsx
+    SurfPanel.tsx
+    SkydivePanel.tsx
+    ParaglidingPanel.tsx
+    BasejumpPanel.tsx
 /lib
+  layers-registry.ts     → registre central de toutes les couches
   cache.ts               → cache in-memory avec TTL par source
   weather.ts             → helpers calcul conditions (surf, DZ, BASE)
-  layers.ts              → config Deck.gl par couche
 /data
   surf-spots.json        → dataset statique des spots de surf
   skydive-dz.json        → dataset statique des DZ (OpenAIP export)
@@ -237,6 +246,64 @@ Panneau fixe bas-droite, s'active automatiquement quand le zoom Mapbox ≥ 5 et 
    - `WINDY_API_KEY` (gratuit)
    - `STORMGLASS_API_KEY` (gratuit, 50 req/jour)
 3. URL publique générée automatiquement par Vercel
+
+---
+
+## Extensibilité — Ajouter une nouvelle source de données
+
+L'architecture est construite autour d'un **registre de couches** (`/lib/layers-registry.ts`). Chaque couche est déclarée en un seul endroit via une interface `LayerConfig`. Le reste de l'application (LayerToggle, MapCanvas, StatusBar, polling) se branche automatiquement sur tout ce qui est dans le registre — sans modification.
+
+### Interface `LayerConfig`
+
+```ts
+interface LayerConfig {
+  id: string                // identifiant unique, ex: "surf"
+  label: string             // affiché dans le LayerToggle
+  color: string             // hex, couleur sémantique
+  icon: string              // emoji ou nom d'icône
+  apiRoute: string          // ex: "/api/surf"
+  pollInterval: number      // ms, ex: 1800000 (30min)
+  defaultEnabled: boolean
+  getDeckLayer: (data: unknown) => DeckLayer  // fonction qui retourne la couche Deck.gl
+  renderContextPanel: (point: unknown) => ReactNode  // contenu du ContextPanel au clic
+}
+```
+
+### Pour ajouter une couche : 3 étapes
+
+**1. Créer la route API** `/app/api/<nom>/route.ts`
+
+```ts
+// Copier le template /app/api/_template/route.ts
+// Remplir : URL source, transformation de données, TTL cache
+export async function GET() {
+  return fetchWithCache('https://...', TTL_MS, transform)
+}
+```
+
+**2. Déclarer la couche dans le registre** `/lib/layers-registry.ts`
+
+```ts
+{
+  id: 'ma-nouvelle-couche',
+  label: 'Ma Couche',
+  color: '#AABBCC',
+  icon: '🎯',
+  apiRoute: '/api/ma-nouvelle-couche',
+  pollInterval: 60_000,
+  defaultEnabled: true,
+  getDeckLayer: (data) => new ScatterplotLayer({ data, ... }),
+  renderContextPanel: (point) => <MaCouchePanel point={point} />,
+}
+```
+
+**3. (Optionnel) Créer le composant ContextPanel** `/components/panels/MaCouchePanel.tsx`
+
+C'est tout. Le LayerToggle, le polling, le StatusBar et le MapCanvas récupèrent la nouvelle couche automatiquement.
+
+### Template API route
+
+`/app/api/_template/route.ts` est fourni dans le projet comme point de départ commenté, avec le pattern cache + fallback stale déjà en place.
 
 ---
 
