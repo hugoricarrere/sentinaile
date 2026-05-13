@@ -1,0 +1,6 @@
+[
+  { "id": "bj-brento", "name": "Monte Brento", "longitude": 10.77, "latitude": 45.82, "country": "Italy", "type": "cliff", "heightM": 1300, "openingAltitudeM": 500, "difficulty": "advanced", "legal": "authorized" },
+  { "id": "bj-eiger", "name": "Eiger Nordwand", "longitude": 7.99, "latitude": 46.58, "country": "Switzerland", "type": "cliff", "heightM": 1800, "openingAltitudeM": 600, "difficulty": "expert", "legal": "tolerated" },
+  { "id": "bj-kjerag", "name": "Kjerag", "longitude": 6.57, "latitude": 59.03, "country": "Norway", "type": "cliff", "heightM": 1000, "openingAltitudeM": 400, "difficulty": "advanced", "legal": "authorized" },
+  { "id": "bj-proctor", "name": "Proctor Valley Bridge", "longitude": -116.96, "latitude": 32.85, "country": "USA", "type": "bridge", "heightM": 120, "openingAltitudeM": 60, "difficulty": "intermediate", "legal": "authorized" }
+]

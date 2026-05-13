@@ -1,0 +1,6 @@
+[
+  { "id": "dz-perris", "name": "Skydive Paris - Perris", "longitude": 2.72, "latitude": 48.83, "icao": "LFPT", "altitudeM": 76, "radio": "122.5", "phone": "+33 1 34 66 00 00", "website": "https://skydiveparis.com", "aircraft": ["PC-6", "Caravan"], "maxAltitudeM": 4200 },
+  { "id": "dz-empuriabrava", "name": "Skydive Empuriabrava", "longitude": 3.12, "latitude": 42.26, "icao": "LEEP", "altitudeM": 17, "radio": "118.45", "phone": "+34 972 45 01 11", "website": "https://skydiveempuriabrava.com", "aircraft": ["CASA 212", "Caravan"], "maxAltitudeM": 4200 },
+  { "id": "dz-saintjean", "name": "Parachutisme Sarlat", "longitude": 1.22, "latitude": 44.89, "icao": "LFDS", "altitudeM": 174, "radio": "123.5", "phone": "+33 5 53 59 00 00", "website": "https://parachutisme-sarlat.fr", "aircraft": ["Cessna 182"], "maxAltitudeM": 3000 },
+  { "id": "dz-hinton", "name": "UK Parachuting Hinton", "longitude": -1.29, "latitude": 51.98, "icao": "EGBH", "altitudeM": 71, "radio": "130.1", "phone": "+44 1295 750555", "website": "https://ukparachuting.co.uk", "aircraft": ["BN2 Islander"], "maxAltitudeM": 4270 }
+]

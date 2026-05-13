@@ -1,0 +1,9 @@
+[
+  { "id": "hossegor", "name": "Hossegor", "longitude": -1.79, "latitude": 43.66, "country": "France", "level": "advanced", "breakType": "beach" },
+  { "id": "lacanau", "name": "Lacanau Ocean", "longitude": -1.20, "latitude": 44.99, "country": "France", "level": "all", "breakType": "beach" },
+  { "id": "biarritz", "name": "Biarritz Grande Plage", "longitude": -1.56, "latitude": 43.49, "country": "France", "level": "beginner", "breakType": "beach" },
+  { "id": "mundaka", "name": "Mundaka", "longitude": -2.69, "latitude": 43.40, "country": "Spain", "level": "expert", "breakType": "river mouth" },
+  { "id": "nazare", "name": "Nazaré", "longitude": -8.92, "latitude": 39.60, "country": "Portugal", "level": "expert", "breakType": "beach" },
+  { "id": "pipeline", "name": "Pipeline", "longitude": -158.05, "latitude": 21.66, "country": "USA", "level": "expert", "breakType": "reef" },
+  { "id": "uluwatu", "name": "Uluwatu", "longitude": 115.09, "latitude": -8.82, "country": "Indonesia", "level": "advanced", "breakType": "reef" }
+]

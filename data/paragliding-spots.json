@@ -1,0 +1,7 @@
+[
+  { "id": "pg-planfait", "name": "Planfait - Doussard", "longitude": 6.19, "latitude": 45.77, "country": "France", "type": "takeoff", "level": "intermediate", "windDirections": ["N","NE","E"], "altitudeM": 1200 },
+  { "id": "pg-sthilaire", "name": "Saint-Hilaire du Touvet", "longitude": 5.91, "latitude": 45.33, "country": "France", "type": "takeoff", "level": "advanced", "windDirections": ["W","NW"], "altitudeM": 1350 },
+  { "id": "pg-chamonix", "name": "Chamonix Plan Praz", "longitude": 6.87, "latitude": 45.92, "country": "France", "type": "takeoff", "level": "advanced", "windDirections": ["SW","W"], "altitudeM": 2000 },
+  { "id": "pg-oludeniz", "name": "Ölüdeniz Babadag", "longitude": 29.12, "latitude": 36.55, "country": "Turkey", "type": "takeoff", "level": "all", "windDirections": ["N","NW"], "altitudeM": 1975 },
+  { "id": "pg-interlaken", "name": "Interlaken Beatenberg", "longitude": 7.87, "latitude": 46.71, "country": "Switzerland", "type": "takeoff", "level": "intermediate", "windDirections": ["W","NW","N"], "altitudeM": 1312 }
+]
