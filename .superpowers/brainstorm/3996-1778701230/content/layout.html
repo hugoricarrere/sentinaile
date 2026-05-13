@@ -1,0 +1,275 @@
+<style>
+  body { background: #070B14; color: #e0e8ff; font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  h2 { color: #00D4FF; letter-spacing: 0.1em; text-transform: uppercase; font-size: 1rem; }
+  .subtitle { color: #4a6fa5; font-size: 0.8rem; letter-spacing: 0.05em; }
+
+  .cards { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .card {
+    flex: 1; min-width: 260px; border: 1px solid #1a2840;
+    border-radius: 4px; overflow: hidden; cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #0B1120;
+  }
+  .card:hover { border-color: #00D4FF; box-shadow: 0 0 20px rgba(0,212,255,0.15); }
+  .card.selected { border-color: #00D4FF; box-shadow: 0 0 24px rgba(0,212,255,0.3); }
+  .card-label {
+    padding: 0.5rem 0.75rem; background: #0d1628;
+    font-size: 0.7rem; letter-spacing: 0.1em; color: #00D4FF;
+    text-transform: uppercase; border-bottom: 1px solid #1a2840;
+    display: flex; justify-content: space-between;
+  }
+  .card-label span { color: #4a6fa5; }
+  .card-body { padding: 0; }
+  .card-desc { padding: 0.75rem; font-size: 0.72rem; color: #7a9ac0; line-height: 1.5; border-top: 1px solid #1a2840; }
+
+  /* LAYOUT MOCKUP STYLES */
+  .mock { width: 100%; aspect-ratio: 16/9; position: relative; background: #050810; overflow: hidden; }
+
+  /* MAP */
+  .mock-map {
+    background: #07111f;
+    background-image:
+      linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .map-glow {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,180,255,0.15) 0%, transparent 70%);
+  }
+  .map-dot {
+    position: absolute; width: 4px; height: 4px; border-radius: 50%;
+    background: #00D4FF; box-shadow: 0 0 6px #00D4FF;
+  }
+  .map-line {
+    position: absolute; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), transparent);
+    transform-origin: left center;
+  }
+
+  /* PANELS */
+  .panel {
+    background: rgba(11,17,32,0.92); border: 1px solid #1a2840;
+    border-radius: 2px; overflow: hidden;
+  }
+  .panel-header {
+    background: #0d1628; padding: 3px 6px;
+    font-size: 6px; letter-spacing: 0.1em; color: #00D4FF;
+    text-transform: uppercase; border-bottom: 1px solid #1a2840;
+    display: flex; justify-content: space-between;
+  }
+  .panel-header span { color: #2a6fa5; }
+  .panel-body { padding: 4px 6px; }
+  .mini-bar { height: 2px; background: #1a2840; margin: 2px 0; border-radius: 1px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; background: linear-gradient(90deg, #0066aa, #00D4FF); border-radius: 1px; }
+  .mini-stat { font-size: 5px; color: #4a6fa5; display: flex; justify-content: space-between; margin: 1px 0; }
+  .mini-stat span { color: #00D4FF; }
+
+  /* TOP BAR */
+  .topbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 12px;
+    background: rgba(7,11,20,0.95); border-bottom: 1px solid #1a2840;
+    display: flex; align-items: center; padding: 0 6px; gap: 6px; z-index: 10;
+  }
+  .topbar-logo { font-size: 5px; color: #00D4FF; letter-spacing: 0.2em; text-transform: uppercase; }
+  .topbar-dot { width: 4px; height: 4px; border-radius: 50%; }
+  .topbar-stat { font-size: 4px; color: #4a6fa5; margin-left: auto; display: flex; gap: 6px; }
+  .topbar-stat span { color: #7fc4e0; }
+
+  /* STATUS BAR */
+  .statusbar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 8px;
+    background: rgba(7,11,20,0.9); border-top: 1px solid #1a2840;
+    display: flex; align-items: center; padding: 0 6px; gap: 8px; z-index: 10;
+  }
+  .status-item { font-size: 4px; color: #2a4a6a; letter-spacing: 0.05em; display: flex; align-items: center; gap: 2px; }
+  .status-dot { width: 3px; height: 3px; border-radius: 50%; }
+</style>
+
+<h2>Quel layout pour ton Palantir ?</h2>
+<p class="subtitle">Clique sur une option pour la sélectionner</p>
+
+<div class="cards">
+
+  <!-- OPTION A: MAP-CENTRIC -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-label">Option A <span>Map immersive</span></div>
+    <div class="card-body">
+      <div class="mock mock-map">
+        <!-- Map fills everything -->
+        <div class="map-glow" style="width:60%;height:80%;top:10%;left:20%;"></div>
+        <div class="map-dot" style="top:35%;left:45%;"></div>
+        <div class="map-dot" style="top:50%;left:55%;background:#ff6b35;box-shadow:0 0 6px #ff6b35;"></div>
+        <div class="map-dot" style="top:28%;left:60%;"></div>
+        <div class="map-dot" style="top:45%;left:30%;background:#00ff88;box-shadow:0 0 6px #00ff88;"></div>
+        <div class="map-line" style="top:35%;left:45%;width:14%;transform:rotate(20deg);"></div>
+        <div class="map-line" style="top:28%;left:52%;width:10%;transform:rotate(55deg);"></div>
+
+        <!-- Top bar -->
+        <div class="topbar">
+          <div class="topbar-logo">SENTINEL</div>
+          <div class="topbar-dot" style="background:#00D4FF;box-shadow:0 0 4px #00D4FF;"></div>
+          <div class="topbar-stat">
+            <div>VOLS <span>8 241</span></div>
+            <div>NAVIRES <span>12 584</span></div>
+            <div>ALERTES <span style="color:#ff6b35;">3</span></div>
+          </div>
+        </div>
+
+        <!-- Floating panels -->
+        <div class="panel" style="position:absolute;top:16px;left:6px;width:22%;">
+          <div class="panel-header">TRAFIC AÉRIEN <span>LIVE</span></div>
+          <div class="panel-body">
+            <div class="mini-stat">Europe <span>3 241</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:78%"></div></div>
+            <div class="mini-stat">Atlantique <span>1 820</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:44%"></div></div>
+            <div class="mini-stat">Asie-Pac <span>2 180</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:53%"></div></div>
+          </div>
+        </div>
+
+        <div class="panel" style="position:absolute;top:16px;right:6px;width:22%;">
+          <div class="panel-header">MÉTÉO FRANCE <span>NOW</span></div>
+          <div class="panel-body">
+            <div class="mini-stat">Paris <span>14°C</span></div>
+            <div class="mini-stat">Lyon <span>17°C</span></div>
+            <div class="mini-stat">Marseille <span>22°C</span></div>
+            <div class="mini-stat">Vent moy. <span>24 km/h</span></div>
+          </div>
+        </div>
+
+        <div class="panel" style="position:absolute;bottom:12px;left:6px;width:28%;">
+          <div class="panel-header">TRAFIC SNCF <span>PERTURBATIONS</span></div>
+          <div class="panel-body">
+            <div class="mini-stat">TGV opérationnel <span style="color:#00ff88;">98%</span></div>
+            <div class="mini-stat">TER retards <span style="color:#ff6b35;">12</span></div>
+            <div class="mini-stat">RER A <span style="color:#00D4FF;">normal</span></div>
+          </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="statusbar">
+          <div class="status-item"><div class="status-dot" style="background:#00ff88;"></div>LIVE</div>
+          <div class="status-item">DERNIÈRE MAJ <span style="color:#00D4FF;margin-left:2px;">00:00:12</span></div>
+          <div class="status-item" style="margin-left:auto;">LAT 48.8°N — LON 2.3°E</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Carte plein écran avec panneaux flottants. Maximum d'immersion. Toute l'attention va à la carte, les données contextuelles s'affichent en overlay.</div>
+  </div>
+
+  <!-- OPTION B: COMMAND CENTER -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-label">Option B <span>Command center</span></div>
+    <div class="card-body">
+      <div class="mock" style="display:flex;background:#050810;">
+        <!-- Left: map 65% -->
+        <div class="mock-map" style="flex:0 0 65%;position:relative;border-right:1px solid #1a2840;">
+          <div class="map-glow" style="width:70%;height:80%;top:10%;left:10%;"></div>
+          <div class="map-dot" style="top:38%;left:40%;"></div>
+          <div class="map-dot" style="top:52%;left:55%;background:#ff6b35;box-shadow:0 0 6px #ff6b35;"></div>
+          <div class="map-dot" style="top:30%;left:60%;"></div>
+          <div class="map-line" style="top:38%;left:40%;width:18%;transform:rotate(25deg);"></div>
+          <div class="topbar" style="right:0;">
+            <div class="topbar-logo">SENTINEL</div>
+            <div class="topbar-dot" style="background:#00D4FF;box-shadow:0 0 4px #00D4FF;"></div>
+          </div>
+          <div class="statusbar" style="right:0;">
+            <div class="status-item"><div class="status-dot" style="background:#00ff88;"></div>LIVE</div>
+            <div class="status-item" style="margin-left:auto;">48.8°N 2.3°E</div>
+          </div>
+        </div>
+
+        <!-- Right: data panels 35% -->
+        <div style="flex:0 0 35%;display:flex;flex-direction:column;gap:0;overflow:hidden;">
+          <div style="padding:4px 6px;background:#0d1628;border-bottom:1px solid #1a2840;">
+            <div style="font-size:5px;letter-spacing:0.15em;color:#00D4FF;text-transform:uppercase;">FLUX DE DONNÉES</div>
+          </div>
+
+          <div style="flex:1;border-bottom:1px solid #1a2840;padding:4px 6px;">
+            <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">TRAFIC AÉRIEN</div>
+            <div class="mini-stat">Vols actifs <span>8 241</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:82%"></div></div>
+            <div class="mini-stat">France <span>342</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:34%"></div></div>
+          </div>
+
+          <div style="flex:1;border-bottom:1px solid #1a2840;padding:4px 6px;">
+            <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">TRAFIC MARITIME</div>
+            <div class="mini-stat">Navires <span>12 584</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:70%"></div></div>
+            <div class="mini-stat">Cargo <span>7 820</span></div>
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:55%"></div></div>
+          </div>
+
+          <div style="flex:1;border-bottom:1px solid #1a2840;padding:4px 6px;">
+            <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">SNCF FRANCE</div>
+            <div class="mini-stat">TGV <span style="color:#00ff88;">98%</span></div>
+            <div class="mini-stat">Retards <span style="color:#ff6b35;">12</span></div>
+            <div class="mini-stat">Annulations <span style="color:#ff6b35;">2</span></div>
+          </div>
+
+          <div style="flex:1;padding:4px 6px;">
+            <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">QUALITÉ DE L'AIR</div>
+            <div class="mini-stat">Paris IDF <span style="color:#00ff88;">Bon</span></div>
+            <div class="mini-stat">Lyon <span style="color:#ffaa00;">Modéré</span></div>
+            <div class="mini-stat">Marseille <span style="color:#00ff88;">Bon</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Carte à gauche, colonne de données à droite. Layout "analyst workstation". Beaucoup de données visibles simultanément sans cacher la carte.</div>
+  </div>
+
+  <!-- OPTION C: MULTI-PANEL GRID -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-label">Option C <span>Mosaic Grid</span></div>
+    <div class="card-body">
+      <div class="mock" style="background:#050810;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:12px 1fr 1fr 8px;gap:1px;padding:0;">
+
+        <!-- Topbar spanning all -->
+        <div style="grid-column:1/-1;background:#0d1628;border-bottom:1px solid #1a2840;display:flex;align-items:center;padding:0 6px;gap:6px;">
+          <div style="font-size:5px;color:#00D4FF;letter-spacing:0.2em;text-transform:uppercase;">SENTINEL</div>
+          <div style="width:3px;height:3px;border-radius:50%;background:#00D4FF;box-shadow:0 0 4px #00D4FF;"></div>
+          <div style="font-size:4px;color:#4a6fa5;margin-left:auto;">2026-05-13 — 14:32:07 UTC</div>
+        </div>
+
+        <!-- Big map: 2 cols x 2 rows -->
+        <div class="mock-map" style="grid-column:1/3;grid-row:2/4;position:relative;border-right:1px solid #1a2840;border-bottom:1px solid #1a2840;">
+          <div class="map-glow" style="width:60%;height:70%;top:15%;left:20%;"></div>
+          <div class="map-dot" style="top:35%;left:40%;"></div>
+          <div class="map-dot" style="top:50%;left:55%;background:#ff6b35;box-shadow:0 0 6px #ff6b35;"></div>
+          <div class="map-dot" style="top:28%;left:62%;"></div>
+          <div class="map-dot" style="top:45%;left:28%;background:#00ff88;box-shadow:0 0 6px #00ff88;"></div>
+          <div class="map-line" style="top:35%;left:40%;width:18%;transform:rotate(22deg);"></div>
+        </div>
+
+        <!-- Top-right panel -->
+        <div style="grid-column:3;grid-row:2;background:#07111f;border-bottom:1px solid #1a2840;padding:4px 6px;">
+          <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">AÉRIEN MONDIAL</div>
+          <div class="mini-stat">Vols actifs <span>8 241</span></div>
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:82%"></div></div>
+          <div class="mini-stat">Alertes <span style="color:#ff6b35;">3</span></div>
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:15%;background:linear-gradient(90deg,#aa2200,#ff6b35);"></div></div>
+        </div>
+
+        <!-- Bottom-right panel -->
+        <div style="grid-column:3;grid-row:3;background:#07111f;padding:4px 6px;">
+          <div style="font-size:5px;color:#2a6fa5;text-transform:uppercase;margin-bottom:3px;">TRANSPORTS FRANCE</div>
+          <div class="mini-stat">SNCF TGV <span style="color:#00ff88;">98%</span></div>
+          <div class="mini-stat">RATP métro <span style="color:#00D4FF;">normal</span></div>
+          <div class="mini-stat">Autoroutes <span style="color:#ffaa00;">+18 min</span></div>
+        </div>
+
+        <!-- Status bar -->
+        <div style="grid-column:1/-1;background:#0d1628;border-top:1px solid #1a2840;display:flex;align-items:center;padding:0 6px;gap:8px;">
+          <div class="status-item"><div class="status-dot" style="background:#00ff88;"></div>LIVE</div>
+          <div class="status-item">8 SOURCES CONNECTÉES</div>
+          <div class="status-item" style="margin-left:auto;">LAT 48.8 LON 2.3</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-desc">Grande carte + widgets modulaires. Layout "mission control". Extensible — tu peux ajouter/retirer des widgets selon tes besoins.</div>
+  </div>
+
+</div>

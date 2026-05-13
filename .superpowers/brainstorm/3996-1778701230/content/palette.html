@@ -1,0 +1,123 @@
+<style>
+  body { background: #070B14; color: #e0e8ff; font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  h2 { color: #e0e8ff; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.9rem; }
+  .subtitle { color: #4a6fa5; font-size: 0.78rem; letter-spacing: 0.04em; }
+
+  .cards { display: flex; gap: 1.2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .card {
+    flex: 1; min-width: 200px;
+    border: 1px solid #1a2840; border-radius: 4px;
+    overflow: hidden; cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #0B1120;
+  }
+  .card:hover { box-shadow: 0 0 20px rgba(255,255,255,0.06); }
+  .card.selected { box-shadow: 0 0 28px rgba(255,255,255,0.12); }
+  .card-label {
+    padding: 0.5rem 0.75rem; background: #0d1628;
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; border-bottom: 1px solid #1a2840;
+    display: flex; justify-content: space-between;
+  }
+  .card-desc { padding: 0.7rem; font-size: 0.7rem; color: #5a7a9a; line-height: 1.5; border-top: 1px solid #1a2840; }
+
+  .preview {
+    padding: 1rem;
+    background: #050810;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .accent-bar { height: 2px; border-radius: 1px; }
+  .stat-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: #4a6fa5; }
+  .mini-panel {
+    border-radius: 2px; padding: 0.5rem 0.6rem;
+    border: 1px solid; font-size: 0.6rem;
+  }
+  .mini-panel-title { font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .glow-text { font-size: 1rem; font-weight: bold; letter-spacing: 0.05em; }
+  .bar-bg { background: #0d1628; height: 3px; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+  .bar-fill { height: 100%; border-radius: 2px; }
+</style>
+
+<h2>Quelle palette pour ton Palantir ?</h2>
+<p class="subtitle">L'accent couleur définit l'ambiance générale</p>
+
+<div class="cards">
+
+  <!-- A: Electric Blue (Palantir classic) -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-label" style="color:#00D4FF;">A <span style="color:#2a5a8a;">Electric Blue — Palantir Classic</span></div>
+    <div class="preview">
+      <div class="accent-bar" style="background: linear-gradient(90deg, #003366, #00D4FF, #003366);"></div>
+      <div class="mini-panel" style="border-color:#1a3a5a;background:#07111f;">
+        <div class="mini-panel-title" style="color:#0077aa;">TRAFIC AÉRIEN</div>
+        <div class="glow-text" style="color:#00D4FF;text-shadow:0 0 12px rgba(0,212,255,0.6);">8 241</div>
+        <div class="stat-row">vols actifs <span style="color:#00D4FF;">↑ 3%</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:82%;background:linear-gradient(90deg,#003a6a,#00D4FF);"></div></div>
+      </div>
+      <div class="stat-row">
+        <span><span class="dot" style="background:#00D4FF;box-shadow:0 0 4px #00D4FF;"></span>normal</span>
+        <span style="color:#00D4FF;">LIVE ●</span>
+      </div>
+    </div>
+    <div class="card-desc">Le bleu électrique iconique de Palantir. Froid, analytique, autorité. Exactement ce qu'on attend d'une intelligence platform.</div>
+  </div>
+
+  <!-- B: Amber / Threat Intel -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-label" style="color:#FFB347;">B <span style="color:#7a5a20;">Amber — Threat Intelligence</span></div>
+    <div class="preview">
+      <div class="accent-bar" style="background: linear-gradient(90deg, #3a1a00, #FFB347, #3a1a00);"></div>
+      <div class="mini-panel" style="border-color:#3a2a10;background:#120900;">
+        <div class="mini-panel-title" style="color:#aa7020;">TRAFIC AÉRIEN</div>
+        <div class="glow-text" style="color:#FFB347;text-shadow:0 0 12px rgba(255,179,71,0.6);">8 241</div>
+        <div class="stat-row">vols actifs <span style="color:#FFB347;">↑ 3%</span></div>
+        <div class="bar-bg" style="background:#1a1000;"><div class="bar-fill" style="width:82%;background:linear-gradient(90deg,#5a2a00,#FFB347);"></div></div>
+      </div>
+      <div class="stat-row">
+        <span><span class="dot" style="background:#FFB347;box-shadow:0 0 4px #FFB347;"></span>normal</span>
+        <span style="color:#FFB347;">LIVE ●</span>
+      </div>
+    </div>
+    <div class="card-desc">Ambre chaud sur fond très sombre. Évoque les écrans radar, les salles de contrôle militaires. Plus dramatique et organique.</div>
+  </div>
+
+  <!-- C: Emerald / Matrix -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-label" style="color:#00FF88;">C <span style="color:#1a5a30;">Emerald — Matrix Green</span></div>
+    <div class="preview">
+      <div class="accent-bar" style="background: linear-gradient(90deg, #001a10, #00FF88, #001a10);"></div>
+      <div class="mini-panel" style="border-color:#0a2a1a;background:#020f08;">
+        <div class="mini-panel-title" style="color:#008844;">TRAFIC AÉRIEN</div>
+        <div class="glow-text" style="color:#00FF88;text-shadow:0 0 12px rgba(0,255,136,0.6);">8 241</div>
+        <div class="stat-row">vols actifs <span style="color:#00FF88;">↑ 3%</span></div>
+        <div class="bar-bg" style="background:#021008;"><div class="bar-fill" style="width:82%;background:linear-gradient(90deg,#003318,#00FF88);"></div></div>
+      </div>
+      <div class="stat-row">
+        <span><span class="dot" style="background:#00FF88;box-shadow:0 0 4px #00FF88;"></span>normal</span>
+        <span style="color:#00FF88;">LIVE ●</span>
+      </div>
+    </div>
+    <div class="card-desc">Vert émeraude classique des terminaux hacker. Référence Matrix / old-school ops center. Très reconnaissable, polarisant.</div>
+  </div>
+
+  <!-- D: Multi-layer -->
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-label" style="color:#B388FF;">D <span style="color:#4a2a8a;">Multi-layer — Data Layers</span></div>
+    <div class="preview">
+      <div class="accent-bar" style="background: linear-gradient(90deg, #00D4FF 0%, #00D4FF 33%, #00FF88 33%, #00FF88 66%, #FF6B35 66%, #FF6B35 100%);height:3px;"></div>
+      <div class="mini-panel" style="border-color:#2a1a4a;background:#0a0518;">
+        <div class="mini-panel-title" style="color:#7755cc;">TRAFIC AÉRIEN</div>
+        <div class="glow-text" style="color:#00D4FF;text-shadow:0 0 12px rgba(0,212,255,0.5);">8 241</div>
+        <div class="stat-row">vols <span style="color:#00D4FF;">8 241</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:82%;background:#00D4FF;opacity:0.7;"></div></div>
+        <div class="stat-row" style="margin-top:3px;">navires <span style="color:#00FF88;">12 584</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:70%;background:#00FF88;opacity:0.7;"></div></div>
+        <div class="stat-row" style="margin-top:3px;">alertes <span style="color:#FF6B35;">3</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:10%;background:#FF6B35;opacity:0.9;"></div></div>
+      </div>
+    </div>
+    <div class="card-desc">Bleu pour les vols, vert pour les navires, orange pour les alertes. Chaque couche de données a sa propre couleur sémantique.</div>
+  </div>
+
+</div>
