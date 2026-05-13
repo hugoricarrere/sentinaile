@@ -6,6 +6,11 @@ import type { GeoPoint } from './types'
 import { hexToRgb } from './color'
 import FlightPanel from '@/components/panels/FlightPanel'
 import ShipPanel from '@/components/panels/ShipPanel'
+import WebcamPanel from '@/components/panels/WebcamPanel'
+import SurfPanel from '@/components/panels/SurfPanel'
+import SkydivePanel from '@/components/panels/SkydivePanel'
+import ParaglidingPanel from '@/components/panels/ParaglidingPanel'
+import BasejumpPanel from '@/components/panels/BasejumpPanel'
 
 export interface LayerConfig {
   id: string
@@ -34,6 +39,17 @@ interface AirPoint {
 interface WeatherPoint {
   id: string; name: string; longitude: number; latitude: number
   tempC: number; windKmh: number; precipitation: number
+}
+
+interface WebcamPoint {
+  id: string; title: string; longitude: number; latitude: number
+  city: string; country: string; streamUrl: string | null
+}
+
+interface SurfResult {
+  id: string; longitude: number; latitude: number; name: string
+  country: string; level: string; breakType: string; score: number
+  swellHeightM: number; swellPeriodS: number; windKmh: number; windOffshore: boolean
 }
 
 export const LAYERS: LayerConfig[] = [
@@ -219,5 +235,180 @@ export const LAYERS: LayerConfig[] = [
         </div>
       )
     },
+  },
+  {
+    id: 'webcams',
+    label: 'Webcams',
+    icon: '📷',
+    color: '#FFD700',
+    colorRgb: hexToRgb('#FFD700'),
+    apiRoute: '/api/webcams',
+    pollIntervalMs: 300_000,
+    defaultEnabled: false,
+    transformResponse: (raw) => {
+      const items = raw as WebcamPoint[]
+      return items.map(w => ({
+        id: w.id, longitude: w.longitude, latitude: w.latitude,
+        layerId: 'webcams',
+        data: w as unknown as Record<string, unknown>,
+      }))
+    },
+    getDeckLayer: (points, onClick) =>
+      new ScatterplotLayer<GeoPoint>({
+        id: 'webcams-layer',
+        data: points,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getColor: hexToRgb('#FFD700'),
+        getRadius: 8000,
+        radiusMinPixels: 3,
+        radiusMaxPixels: 8,
+        pickable: true,
+        onClick: ({ object }) => { if (object) onClick(object) },
+      }),
+    renderContextPanel: (point) => <WebcamPanel point={point} />,
+  },
+  {
+    id: 'surf',
+    label: 'Surf',
+    icon: '🏄',
+    color: '#00CED1',
+    colorRgb: hexToRgb('#00CED1'),
+    apiRoute: '/api/surf',
+    pollIntervalMs: 1_800_000,
+    defaultEnabled: true,
+    transformResponse: (raw) => {
+      const items = raw as SurfResult[]
+      return items.map(s => ({
+        id: s.id, longitude: s.longitude, latitude: s.latitude,
+        layerId: 'surf',
+        data: s as unknown as Record<string, unknown>,
+      }))
+    },
+    getDeckLayer: (points, onClick) =>
+      new ScatterplotLayer<GeoPoint>({
+        id: 'surf-layer',
+        data: points,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getColor: (d) => {
+          const score = (d.data as { score: number }).score
+          if (score >= 7) return [0, 255, 136, 255]
+          if (score >= 4) return [255, 179, 71, 255]
+          return [255, 107, 53, 255]
+        },
+        getRadius: 15_000,
+        radiusMinPixels: 4,
+        radiusMaxPixels: 12,
+        pickable: true,
+        onClick: ({ object }) => { if (object) onClick(object) },
+      }),
+    renderContextPanel: (point) => <SurfPanel point={point} />,
+  },
+  {
+    id: 'skydive',
+    label: 'Parachutisme',
+    icon: '🪂',
+    color: '#FF4500',
+    colorRgb: hexToRgb('#FF4500'),
+    apiRoute: '/api/skydive',
+    pollIntervalMs: 600_000,
+    defaultEnabled: true,
+    transformResponse: (raw) => {
+      const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
+      return items.map(d => ({
+        id: d.id, longitude: d.longitude, latitude: d.latitude,
+        layerId: 'skydive',
+        data: d as Record<string, unknown>,
+      }))
+    },
+    getDeckLayer: (points, onClick) =>
+      new ScatterplotLayer<GeoPoint>({
+        id: 'skydive-layer',
+        data: points,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getColor: (d) => {
+          const c = (d.data as { condition: string }).condition
+          if (c === 'green') return [0, 255, 136, 255]
+          if (c === 'yellow') return [255, 179, 71, 255]
+          return [255, 69, 0, 255]
+        },
+        getRadius: 20_000,
+        radiusMinPixels: 5,
+        radiusMaxPixels: 14,
+        pickable: true,
+        onClick: ({ object }) => { if (object) onClick(object) },
+      }),
+    renderContextPanel: (point) => <SkydivePanel point={point} />,
+  },
+  {
+    id: 'paragliding',
+    label: 'Parapente',
+    icon: '🪂',
+    color: '#9B59B6',
+    colorRgb: hexToRgb('#9B59B6'),
+    apiRoute: '/api/paragliding',
+    pollIntervalMs: 600_000,
+    defaultEnabled: true,
+    transformResponse: (raw) => {
+      const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
+      return items.map(d => ({
+        id: d.id, longitude: d.longitude, latitude: d.latitude,
+        layerId: 'paragliding',
+        data: d as Record<string, unknown>,
+      }))
+    },
+    getDeckLayer: (points, onClick) =>
+      new ScatterplotLayer<GeoPoint>({
+        id: 'paragliding-layer',
+        data: points,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getColor: (d) => {
+          const c = (d.data as { condition: string }).condition
+          if (c === 'green') return [155, 89, 182, 255]
+          if (c === 'yellow') return [255, 179, 71, 255]
+          return [255, 107, 53, 255]
+        },
+        getRadius: 18_000,
+        radiusMinPixels: 5,
+        radiusMaxPixels: 12,
+        pickable: true,
+        onClick: ({ object }) => { if (object) onClick(object) },
+      }),
+    renderContextPanel: (point) => <ParaglidingPanel point={point} />,
+  },
+  {
+    id: 'basejump',
+    label: 'BASE jump',
+    icon: '🏔',
+    color: '#FF0080',
+    colorRgb: hexToRgb('#FF0080'),
+    apiRoute: '/api/basejump',
+    pollIntervalMs: 600_000,
+    defaultEnabled: true,
+    transformResponse: (raw) => {
+      const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
+      return items.map(d => ({
+        id: d.id, longitude: d.longitude, latitude: d.latitude,
+        layerId: 'basejump',
+        data: d as Record<string, unknown>,
+      }))
+    },
+    getDeckLayer: (points, onClick) =>
+      new ScatterplotLayer<GeoPoint>({
+        id: 'basejump-layer',
+        data: points,
+        getPosition: (d) => [d.longitude, d.latitude],
+        getColor: (d) => {
+          const c = (d.data as { condition: string }).condition
+          if (c === 'green') return [255, 0, 128, 255]
+          if (c === 'yellow') return [255, 179, 71, 255]
+          return [100, 0, 50, 255]
+        },
+        getRadius: 22_000,
+        radiusMinPixels: 6,
+        radiusMaxPixels: 14,
+        pickable: true,
+        onClick: ({ object }) => { if (object) onClick(object) },
+      }),
+    renderContextPanel: (point) => <BasejumpPanel point={point} />,
   },
 ]
