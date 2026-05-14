@@ -18,14 +18,41 @@ const S = {
     background: 'linear-gradient(to right, #040810, #060c18)',
     borderBottom: '1px solid #1a2840',
   } as React.CSSProperties,
-  logo: {
+  logoWrap: {
+    display: 'inline-flex',
+    alignItems: 'flex-end',
+    lineHeight: 1,
+    gap: 0,
+  },
+  logoBase: {
     fontFamily: 'var(--font-rajdhani)',
     fontWeight: 700,
-    fontSize: 26,
-    letterSpacing: '0.18em',
+    fontSize: 22,
+    letterSpacing: '0.2em',
     textTransform: 'uppercase' as const,
-    color: '#00D4FF',
-    textShadow: '0 0 24px rgba(0,212,255,0.45)',
+    color: '#00C4EE',
+    textShadow: '0 0 18px rgba(0,196,238,0.35)',
+    lineHeight: 1,
+  },
+  logoA: {
+    fontFamily: 'var(--font-rajdhani)',
+    fontWeight: 800,
+    fontSize: 52,
+    letterSpacing: '0.05em',
+    textTransform: 'uppercase' as const,
+    color: '#ffffff',
+    textShadow: '0 0 28px rgba(0,212,255,0.8), 0 0 8px rgba(0,212,255,0.5)',
+    lineHeight: 0.82,
+    marginBottom: -1,
+  },
+  logoAile: {
+    fontFamily: 'var(--font-rajdhani)',
+    fontWeight: 700,
+    fontSize: 22,
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    color: '#e8f6ff',
+    textShadow: '0 0 18px rgba(0,196,238,0.5)',
     lineHeight: 1,
   },
   liveDot: {
@@ -110,7 +137,11 @@ export default function TopBar({ layerStates }: Props) {
         />
       </svg>
 
-      <span style={S.logo}>SentinAile</span>
+      <span style={S.logoWrap}>
+        <span style={S.logoBase}>Sentin</span>
+        <span style={S.logoA}>A</span>
+        <span style={S.logoAile}>ile</span>
+      </span>
 
       <span style={S.divider} />
 
