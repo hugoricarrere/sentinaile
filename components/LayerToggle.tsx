@@ -13,11 +13,7 @@ export default function LayerToggle({ enabledMap, onToggle, layerStates }: Props
   const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <aside
-      className={`fixed top-10 left-0 z-10 bg-[#0B1120]/95 border-r border-[#1a2840] transition-all duration-200 ${
-        collapsed ? 'w-10' : 'w-44'
-      }`}
-    >
+    <aside className="border-b border-[#1a2840]">
       <button
         onClick={() => setCollapsed(c => !c)}
         className="w-full h-8 flex items-center justify-center text-[#4a6fa5] hover:text-[#00D4FF] border-b border-[#1a2840] text-xs transition-colors"

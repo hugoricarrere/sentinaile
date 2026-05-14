@@ -11,7 +11,7 @@ export default function ContextPanel({ point, onClose }: Props) {
   const layer = LAYERS.find(l => l.id === point.layerId)
 
   return (
-    <aside className="fixed top-10 right-0 bottom-7 z-10 w-72 bg-[#0B1120]/97 border-l border-[#1a2840] overflow-y-auto">
+    <aside className="border-t border-[#1a2840]">
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a2840] bg-[#0d1628]">
         <span
           className="text-[10px] tracking-[0.15em] uppercase"

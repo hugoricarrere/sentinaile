@@ -27,29 +27,49 @@ export default function Home() {
     viewState.latitude > 41 &&
     viewState.latitude < 52
 
-  function handleToggle(id: string, enabled: boolean) {
-    setEnabledMap(prev => ({ ...prev, [id]: enabled }))
-  }
-
   return (
-    <main className="relative w-screen h-screen overflow-hidden bg-[#070B14] font-mono">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', background: '#070B14', overflow: 'hidden' }}>
+
+      {/* Top bar — full width, fixed height */}
       <TopBar layerStates={layerStates} />
-      <MapCanvas
-        enabledMap={enabledMap}
-        onPointClick={setSelectedPoint}
-        onViewStateChange={setViewState}
-        onLayerStatesChange={setLayerStates}
-      />
-      <LayerToggle
-        enabledMap={enabledMap}
-        onToggle={handleToggle}
-        layerStates={layerStates}
-      />
-      {selectedPoint && (
-        <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />
-      )}
-      {isFranceView && <FrancePanel />}
+
+      {/* Middle row: map + right sidebar */}
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+
+        {/* Map — fills remaining space */}
+        <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+          <MapCanvas
+            enabledMap={enabledMap}
+            onPointClick={setSelectedPoint}
+            onViewStateChange={setViewState}
+            onLayerStatesChange={setLayerStates}
+          />
+        </div>
+
+        {/* Right sidebar — layer toggles + context panel */}
+        <aside style={{
+          width: 272,
+          flexShrink: 0,
+          borderLeft: '1px solid #1a2840',
+          background: '#0B1120',
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+        }}>
+          <LayerToggle
+            enabledMap={enabledMap}
+            onToggle={(id, enabled) => setEnabledMap(prev => ({ ...prev, [id]: enabled }))}
+            layerStates={layerStates}
+          />
+          {selectedPoint && (
+            <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />
+          )}
+          {isFranceView && <FrancePanel />}
+        </aside>
+      </div>
+
+      {/* Status bar — full width, fixed height */}
       <StatusBar layerStates={layerStates} viewState={viewState} />
-    </main>
+    </div>
   )
 }
