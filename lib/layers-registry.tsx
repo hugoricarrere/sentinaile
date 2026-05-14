@@ -1,6 +1,7 @@
-import { ScatterplotLayer } from '@deck.gl/layers'
+import { ScatterplotLayer, TextLayer } from '@deck.gl/layers'
 import { HeatmapLayer } from '@deck.gl/aggregation-layers'
 import type { LayersList } from '@deck.gl/core'
+import Supercluster from 'supercluster'
 import type { ReactNode } from 'react'
 import type { GeoPoint } from './types'
 import { hexToRgb } from './color'
@@ -20,7 +21,7 @@ export interface LayerConfig {
   apiRoute: string
   pollIntervalMs: number
   defaultEnabled: boolean
-  getDeckLayer: (points: GeoPoint[], onClick: (point: GeoPoint) => void) => LayersList[number] | null
+  getDeckLayer: (points: GeoPoint[], onClick: (point: GeoPoint) => void, zoom?: number) => LayersList
   renderContextPanel: (point: GeoPoint) => ReactNode
   transformResponse: (raw: unknown) => GeoPoint[]
 }
@@ -63,7 +64,7 @@ export const LAYERS: LayerConfig[] = [
         data: { name: a.name, aqi: a.aqi, parameter: a.parameter } as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points) =>
+    getDeckLayer: (points) => [
       new HeatmapLayer<GeoPoint>({
         id: 'air-layer',
         data: points,
@@ -71,6 +72,7 @@ export const LAYERS: LayerConfig[] = [
         getWeight: (d) => (d.data as { aqi: number }).aqi,
         radiusPixels: 60,
       }),
+    ],
     renderContextPanel: (point) => {
       const d = point.data as { name: string; aqi: number; parameter: string }
       return (
@@ -105,7 +107,7 @@ export const LAYERS: LayerConfig[] = [
         data: w as unknown as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
+    getDeckLayer: (points, onClick) => [
       new ScatterplotLayer<GeoPoint>({
         id: 'weather-layer',
         data: points,
@@ -125,6 +127,7 @@ export const LAYERS: LayerConfig[] = [
         pickable: true,
         onClick: ({ object }) => { if (object) onClick(object) },
       }),
+    ],
     renderContextPanel: (point) => {
       const d = point.data as { name: string; tempC: number; windKmh: number; precipitation: number }
       return (
@@ -163,7 +166,7 @@ export const LAYERS: LayerConfig[] = [
         data: w as unknown as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
+    getDeckLayer: (points, onClick) => [
       new ScatterplotLayer<GeoPoint>({
         id: 'webcams-layer',
         data: points,
@@ -175,6 +178,7 @@ export const LAYERS: LayerConfig[] = [
         pickable: true,
         onClick: ({ object }) => { if (object) onClick(object) },
       }),
+    ],
     renderContextPanel: (point) => <WebcamPanel point={point} />,
   },
   {
@@ -194,7 +198,7 @@ export const LAYERS: LayerConfig[] = [
         data: s as unknown as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
+    getDeckLayer: (points, onClick) => [
       new ScatterplotLayer<GeoPoint>({
         id: 'surf-layer',
         data: points,
@@ -211,6 +215,7 @@ export const LAYERS: LayerConfig[] = [
         pickable: true,
         onClick: ({ object }) => { if (object) onClick(object) },
       }),
+    ],
     renderContextPanel: (point) => <SurfPanel point={point} />,
   },
   {
@@ -230,7 +235,7 @@ export const LAYERS: LayerConfig[] = [
         data: d as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
+    getDeckLayer: (points, onClick) => [
       new ScatterplotLayer<GeoPoint>({
         id: 'skydive-layer',
         data: jitterCoincident(points),
@@ -247,6 +252,7 @@ export const LAYERS: LayerConfig[] = [
         pickable: true,
         onClick: ({ object }) => { if (object) onClick(object) },
       }),
+    ],
     renderContextPanel: (point) => <SkydivePanel point={point} />,
   },
   {
@@ -266,23 +272,83 @@ export const LAYERS: LayerConfig[] = [
         data: d as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
-      new ScatterplotLayer<GeoPoint>({
-        id: 'paragliding-layer',
-        data: jitterCoincident(points),
-        getPosition: (d) => [d.longitude, d.latitude],
-        getColor: (d) => {
-          const c = (d.data as { condition: string }).condition
-          if (c === 'green') return [155, 89, 182, 255]
-          if (c === 'yellow') return [255, 179, 71, 255]
-          return [255, 107, 53, 255]
-        },
-        getRadius: 18_000,
-        radiusMinPixels: 5,
-        radiusMaxPixels: 12,
-        pickable: true,
-        onClick: ({ object }) => { if (object) onClick(object) },
-      }),
+    getDeckLayer: (points, onClick, zoom = 5) => {
+      // ── Cluster when zoomed out ──────────────────────────────────────────
+      const CLUSTER_THRESHOLD = 9
+      const sc = new Supercluster<{ originalPoint: GeoPoint }>({ radius: 55, maxZoom: 15 })
+      sc.load(
+        points.map(p => ({
+          type: 'Feature' as const,
+          geometry: { type: 'Point' as const, coordinates: [p.longitude, p.latitude] },
+          properties: { originalPoint: p },
+        }))
+      )
+      const tileZoom = Math.max(0, Math.min(Math.round(zoom), 20))
+      const features = sc.getClusters([-10, 40, 12, 52], tileZoom)
+
+      // Build flat GeoPoint array from cluster features
+      const displayPoints: GeoPoint[] = features.map(f => {
+        const [lng, lat] = f.geometry.coordinates
+        const props = f.properties as (Supercluster.ClusterProperties & Supercluster.AnyProps) | { originalPoint: GeoPoint }
+        const isCluster = 'cluster' in props && !!props.cluster
+        const count: number = isCluster ? (props as Supercluster.ClusterProperties).point_count : 1
+        if (isCluster) {
+          return {
+            id: `pg-cluster-${f.id ?? lng + lat}`,
+            longitude: lng, latitude: lat,
+            layerId: 'paragliding',
+            data: { isCluster: true, count, condition: '' } as Record<string, unknown>,
+          }
+        }
+        return f.properties.originalPoint
+      })
+
+      const showIndividual = zoom >= CLUSTER_THRESHOLD
+
+      return [
+        new ScatterplotLayer<GeoPoint>({
+          id: 'paragliding-layer',
+          data: displayPoints,
+          getPosition: (d) => [d.longitude, d.latitude],
+          getColor: (d) => {
+            const { isCluster, condition } = d.data as { isCluster?: boolean; condition: string }
+            if (isCluster) return [155, 89, 182, 190]
+            if (condition === 'green') return [155, 89, 182, 255]
+            if (condition === 'yellow') return [255, 179, 71, 255]
+            return [255, 107, 53, 255]
+          },
+          getRadius: (d) => {
+            const { isCluster, count } = d.data as { isCluster?: boolean; count?: number }
+            if (!isCluster) return 18_000
+            const n = count ?? 1
+            if (n < 5) return 25_000
+            if (n < 20) return 40_000
+            if (n < 100) return 60_000
+            return 80_000
+          },
+          radiusMinPixels: showIndividual ? 5 : 8,
+          radiusMaxPixels: showIndividual ? 12 : 40,
+          pickable: true,
+          onClick: ({ object }) => {
+            if (!object) return
+            if ((object.data as { isCluster?: boolean }).isCluster) return
+            onClick(object)
+          },
+        }),
+        new TextLayer<GeoPoint>({
+          id: 'paragliding-cluster-labels',
+          data: displayPoints.filter(d => !!(d.data as { isCluster?: boolean }).isCluster),
+          getPosition: (d) => [d.longitude, d.latitude],
+          getText: (d) => String((d.data as { count: number }).count),
+          getSize: 13,
+          getColor: [255, 255, 255, 230],
+          fontWeight: 700,
+          fontFamily: 'monospace',
+          getTextAnchor: 'middle',
+          getAlignmentBaseline: 'center',
+        }),
+      ]
+    },
     renderContextPanel: (point) => <ParaglidingPanel point={point} />,
   },
   {
@@ -302,7 +368,7 @@ export const LAYERS: LayerConfig[] = [
         data: d as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) =>
+    getDeckLayer: (points, onClick) => [
       new ScatterplotLayer<GeoPoint>({
         id: 'basejump-layer',
         data: jitterCoincident(points),
@@ -319,6 +385,7 @@ export const LAYERS: LayerConfig[] = [
         pickable: true,
         onClick: ({ object }) => { if (object) onClick(object) },
       }),
+    ],
     renderContextPanel: (point) => <BasejumpPanel point={point} />,
   },
 ]

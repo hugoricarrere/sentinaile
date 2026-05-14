@@ -42,10 +42,15 @@ export default function MapCanvas({
 
   const deckLayers = useMemo(
     () =>
-      LAYERS.filter(l => enabledMap[l.id])
-        .map(l => l.getDeckLayer(applyFilters(layerStates[l.id]?.points ?? [], l.id, filters), onPointClick))
-        .filter((l): l is NonNullable<typeof l> => l !== null),
-    [enabledMap, layerStates, onPointClick, filters]
+      LAYERS.filter(l => enabledMap[l.id]).flatMap(l =>
+        l.getDeckLayer(
+          applyFilters(layerStates[l.id]?.points ?? [], l.id, filters),
+          onPointClick,
+          viewState.zoom,
+        )
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [enabledMap, layerStates, onPointClick, filters, viewState.zoom]
   )
 
   return (

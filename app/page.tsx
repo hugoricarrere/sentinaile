@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import { DEFAULT_FILTERS } from '@/lib/filters'
 import { usePersistedState } from '@/lib/use-persisted-state'
+// enabledMap default — computed once (not inside render)
+const DEFAULT_ENABLED = Object.fromEntries(LAYERS.map(l => [l.id, l.defaultEnabled]))
 import TopBar from '@/components/TopBar'
 import StatusBar from '@/components/StatusBar'
 import LayerToggle from '@/components/LayerToggle'
@@ -16,8 +18,9 @@ import type { LayerStates } from '@/lib/use-layer-data'
 const MapCanvas = dynamic(() => import('@/components/MapCanvas'), { ssr: false })
 
 export default function Home() {
-  const [enabledMap, setEnabledMap] = useState<Record<string, boolean>>(
-    () => Object.fromEntries(LAYERS.map(l => [l.id, l.defaultEnabled]))
+  const [enabledMap, setEnabledMap] = usePersistedState<Record<string, boolean>>(
+    'sentinaile-enabled-layers',
+    DEFAULT_ENABLED,
   )
   const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
   const [viewState, setViewState] = useState({ longitude: 2.3, latitude: 46.5, zoom: 5.5 })
