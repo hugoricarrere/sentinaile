@@ -16,13 +16,14 @@ const SVG_W      = ML + CHART_W + MR  // 1052
 // Section Y bounds (top → bottom)  — vent AU-DESSUS de la température
 const CLD_Y0 = 2,  CLD_Y1 = 74   // nuages        72 px
 const SEP1   = 77
-const WND_Y0 = 82, WND_Y1 = 195  // vent          113 px  (agrandi)
+const WND_Y0 = 82, WND_Y1 = 195  // vent          113 px
 const SEP2   = 198
-const TMP_Y0 = 203, TMP_Y1 = 253 // température   50 px  (réduit)
+const TMP_Y0 = 203, TMP_Y1 = 253 // température   50 px
 const SEP3   = 256
-const PRC_Y0 = 261, PRC_Y1 = 285 // précipitations 24 px
-const XAX_Y  = 295               // x-axis labels
-const SVG_H  = 306
+const PRC_Y0 = 261, PRC_Y1 = 281 // précipitations 20 px
+const COND_Y0= 284, COND_Y1= 293 // bande favorable/défavorable  9 px
+const XAX_Y  = 303               // x-axis labels
+const SVG_H  = 314
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 const hx = (i: number) => X0 + (i + 0.5) * PX  // centre of hour column
@@ -94,6 +95,41 @@ interface Daily {
   windspeed_10m_max:  number[]
 }
 interface Forecast { hourly: Hourly; daily: Daily }
+
+// ── Condition horaire par type de couche ───────────────────────────────────
+// Données en km/h. Retourne 'green' | 'yellow' | 'red' pour chaque heure.
+function hourlyConditions(layerId: string, h: Hourly): ('green' | 'yellow' | 'red')[] {
+  return Array.from({ length: N }, (_, i) => {
+    const ws  = h.windspeed_10m[i]   ?? 0   // vent sol km/h
+    const w3  = h.windspeed_700hPa[i] ?? 0  // ~3 000m
+    const w4  = h.windspeed_600hPa[i] ?? 0  // ~4 000m
+    const pr  = h.precipitation[i]   ?? 0
+    const wc  = h.weathercode[i]     ?? 0
+    const cl  = h.cloudcover_low[i]  ?? 0
+    const tmp = h.temperature_2m[i]  ?? 15
+    const storm = wc >= 95
+
+    if (layerId === 'skydive') {
+      if (storm || ws > 35 || w4 > 80) return 'red'
+      if (ws > 25 || w4 > 60 || w3 > 60 || pr > 0.1 || cl > 75) return 'yellow'
+      return 'green'
+    }
+    if (layerId === 'paragliding') {
+      if (storm || ws > 45) return 'red'
+      if (ws > 30 || ws < 8 || tmp < 0 || tmp > 38) return 'yellow'
+      return 'green'
+    }
+    if (layerId === 'basejump') {
+      if (storm || pr > 0.1 || ws > 20) return 'red'
+      if (ws > 15) return 'yellow'
+      return 'green'
+    }
+    // surf / autres : basé sur le vent uniquement
+    if (ws > 50 || storm) return 'red'
+    if (ws > 30) return 'yellow'
+    return 'green'
+  })
+}
 
 // ── Layer meta: derived from LAYERS registry ───────────────────────────────
 function getLayerMeta(layerId: string): { color: string; icon: string } {
@@ -309,10 +345,11 @@ export default function MeteogramOverlay({
             style={{ width:'100%', height:'100%', display:'block' }}>
 
             {/* ── Section backgrounds ── */}
-            <rect x={X0} y={CLD_Y0} width={CHART_W} height={CLD_Y1 - CLD_Y0 + 1} fill="#07101c" />
-            <rect x={X0} y={WND_Y0} width={CHART_W} height={WND_Y1 - WND_Y0 + 1} fill="#060910" />
-            <rect x={X0} y={TMP_Y0} width={CHART_W} height={TMP_Y1 - TMP_Y0 + 1} fill="#060910" />
-            <rect x={X0} y={PRC_Y0} width={CHART_W} height={PRC_Y1 - PRC_Y0 + 1} fill="#060910" />
+            <rect x={X0} y={CLD_Y0}  width={CHART_W} height={CLD_Y1  - CLD_Y0  + 1} fill="#07101c" />
+            <rect x={X0} y={WND_Y0}  width={CHART_W} height={WND_Y1  - WND_Y0  + 1} fill="#060910" />
+            <rect x={X0} y={TMP_Y0}  width={CHART_W} height={TMP_Y1  - TMP_Y0  + 1} fill="#060910" />
+            <rect x={X0} y={PRC_Y0}  width={CHART_W} height={PRC_Y1  - PRC_Y0  + 1} fill="#060910" />
+            <rect x={X0} y={COND_Y0} width={CHART_W} height={COND_Y1 - COND_Y0 + 1} fill="#040810" />
 
             {/* ── Cloud bands (3 altitude layers per hour) ── */}
             {Array.from({ length: N }, (_, i) => {
@@ -438,6 +475,25 @@ export default function MeteogramOverlay({
               )
             })}
 
+            {/* ── Bande conditions horaires ── */}
+            <rect x={X0} y={COND_Y0} width={CHART_W} height={COND_Y1 - COND_Y0} fill="#040810" />
+            <text x={X0 - 3} y={COND_Y0 + 7} textAnchor="end"
+              fontSize={7} fill="#3a5a7a" fontFamily="monospace">GO</text>
+            {hourlyConditions(point.layerId, h).map((cond, i) => {
+              const fill = cond === 'green'  ? '#00FF8880'
+                         : cond === 'yellow' ? '#FFB34770'
+                         :                    '#FF6B3570'
+              return (
+                <rect key={i}
+                  x={X0 + i * PX} y={COND_Y0}
+                  width={PX} height={COND_Y1 - COND_Y0}
+                  fill={fill}
+                />
+              )
+            })}
+            {/* trait supérieur de séparation */}
+            <line x1={X0} y1={COND_Y0} x2={X1} y2={COND_Y0} stroke="#1a2840" strokeWidth={0.8} />
+
             {/* ── X axis: hour ticks + labels ── */}
             {Array.from({ length: N + 1 }, (_, i) => {
               const h24 = i % 24
@@ -445,7 +501,7 @@ export default function MeteogramOverlay({
               const x = X0 + i * PX
               return (
                 <g key={i}>
-                  <line x1={x} y1={PRC_Y1} x2={x} y2={PRC_Y1 + 3}
+                  <line x1={x} y1={COND_Y1} x2={x} y2={COND_Y1 + 3}
                     stroke="#1a2840" strokeWidth={0.8} />
                   <text x={x} y={XAX_Y - 2} textAnchor="middle"
                     fontSize={8} fill="#2a4a6a" fontFamily="monospace">
@@ -469,7 +525,7 @@ export default function MeteogramOverlay({
             })}
 
             {/* Chart border */}
-            <rect x={X0} y={CLD_Y0} width={CHART_W} height={XAX_Y - CLD_Y0}
+            <rect x={X0} y={CLD_Y0} width={CHART_W} height={COND_Y1 - CLD_Y0}
               fill="none" stroke="#0d1826" strokeWidth={1} />
           </svg>
         </div>
