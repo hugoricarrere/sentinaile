@@ -7,6 +7,63 @@ interface Props {
   layerStates: LayerStates
 }
 
+const S = {
+  bar: {
+    height: 56,
+    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 16,
+    padding: '0 24px',
+    background: 'linear-gradient(to right, #040810, #060c18)',
+    borderBottom: '1px solid #1a2840',
+  } as React.CSSProperties,
+  logo: {
+    fontFamily: 'var(--font-rajdhani)',
+    fontWeight: 700,
+    fontSize: 26,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const,
+    color: '#00D4FF',
+    textShadow: '0 0 24px rgba(0,212,255,0.45)',
+    lineHeight: 1,
+  },
+  liveDot: {
+    width: 9,
+    height: 9,
+    borderRadius: '50%',
+    background: '#00D4FF',
+    color: '#00D4FF',
+    flexShrink: 0,
+  },
+  liveLabel: {
+    fontFamily: 'var(--font-rajdhani)',
+    fontWeight: 600,
+    fontSize: 11,
+    letterSpacing: '0.2em',
+    color: '#3a8aaa',
+    textTransform: 'uppercase' as const,
+  },
+  divider: {
+    width: 1,
+    height: 20,
+    background: '#1a2840',
+    flexShrink: 0,
+  },
+  layerPills: {
+    display: 'flex',
+    gap: 6,
+    alignItems: 'center',
+  },
+  time: {
+    fontFamily: 'var(--font-mono)',
+    fontSize: 12,
+    color: '#2a4a6a',
+    letterSpacing: '0.08em',
+    marginLeft: 'auto',
+  },
+} as const
+
 export default function TopBar({ layerStates }: Props) {
   const [utc, setUtc] = useState('')
 
@@ -25,25 +82,42 @@ export default function TopBar({ layerStates }: Props) {
   )
 
   return (
-    <header className="flex items-center gap-4 px-4 h-10 bg-[#07111f] border-b border-[#1a2840] flex-shrink-0">
-      <span className="text-[#00D4FF] tracking-[0.2em] text-xs font-bold">
-        SentinAile
-      </span>
-      <span className="w-2 h-2 rounded-full bg-[#00D4FF] shadow-[0_0_8px_#00D4FF] animate-pulse" />
-      <div className="flex gap-4 ml-2">
-        {activeLayers.map(l => (
-          <span
-            key={l.id}
-            className="text-[10px] tracking-wider"
-            style={{ color: l.color }}
-          >
-            {l.icon} {layerStates[l.id]?.points.length.toLocaleString()}
-          </span>
-        ))}
-      </div>
-      <span className="ml-auto text-[10px] text-[#4a6fa5] tracking-wider">
-        {utc}
-      </span>
+    <header style={S.bar}>
+      <span style={S.logo}>SentinAile</span>
+
+      <span style={S.divider} />
+
+      <span className="live-dot" style={S.liveDot} />
+      <span style={S.liveLabel}>Live</span>
+
+      {activeLayers.length > 0 && (
+        <>
+          <span style={S.divider} />
+          <div style={S.layerPills}>
+            {activeLayers.map(l => (
+              <span
+                key={l.id}
+                style={{
+                  fontFamily: 'var(--font-rajdhani)',
+                  fontWeight: 600,
+                  fontSize: 12,
+                  letterSpacing: '0.06em',
+                  color: l.color,
+                  background: `${l.color}18`,
+                  border: `1px solid ${l.color}35`,
+                  padding: '2px 10px',
+                  borderRadius: 3,
+                  whiteSpace: 'nowrap' as const,
+                }}
+              >
+                {l.icon}&nbsp;{(layerStates[l.id]?.points.length ?? 0).toLocaleString('fr-FR')}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+
+      <span style={S.time}>{utc}</span>
     </header>
   )
 }

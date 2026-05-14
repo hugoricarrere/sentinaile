@@ -66,6 +66,7 @@ export default function MapCanvas({
       <Map
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         mapStyle="mapbox://styles/mapbox/dark-v11"
+        onLoad={({ target }) => target.setProjection({ name: 'mercator' })}
       />
     </DeckGL>
   )

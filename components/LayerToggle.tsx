@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import type { LayerStates } from '@/lib/use-layer-data'
 
@@ -9,51 +8,94 @@ interface Props {
   layerStates: LayerStates
 }
 
-export default function LayerToggle({ enabledMap, onToggle, layerStates }: Props) {
-  const [collapsed, setCollapsed] = useState(false)
+const SectionHeader = ({ label }: { label: string }) => (
+  <div style={{
+    padding: '10px 16px 8px',
+    fontFamily: 'var(--font-rajdhani)',
+    fontWeight: 600,
+    fontSize: 10,
+    letterSpacing: '0.25em',
+    color: '#2a4a6a',
+    textTransform: 'uppercase',
+    borderBottom: '1px solid #111c2e',
+    background: '#040810',
+  }}>
+    {label}
+  </div>
+)
 
+export default function LayerToggle({ enabledMap, onToggle, layerStates }: Props) {
   return (
-    <aside className="border-b border-[#1a2840]">
-      <button
-        onClick={() => setCollapsed(c => !c)}
-        className="w-full h-8 flex items-center justify-center text-[#4a6fa5] hover:text-[#00D4FF] border-b border-[#1a2840] text-xs transition-colors"
-        aria-label={collapsed ? 'Expand layers' : 'Collapse layers'}
-      >
-        {collapsed ? '›' : '‹ LAYERS'}
-      </button>
+    <div style={{ borderBottom: '1px solid #1a2840' }}>
+      <SectionHeader label="Couches de données" />
       {LAYERS.map(l => {
         const count = layerStates[l.id]?.points.length ?? 0
         const enabled = enabledMap[l.id] ?? l.defaultEnabled
+
         return (
           <button
             key={l.id}
             onClick={() => onToggle(l.id, !enabled)}
-            className={`w-full flex items-center gap-2 px-2 py-1.5 text-[10px] tracking-wider border-b border-[#1a2840]/50 hover:bg-[#1a2840]/30 transition-colors ${
-              enabled ? 'opacity-100' : 'opacity-40'
-            }`}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              padding: '0 16px',
+              height: 44,
+              background: enabled ? `${l.color}08` : 'transparent',
+              border: 'none',
+              borderBottom: '1px solid #0d1826',
+              cursor: 'pointer',
+              transition: 'background 0.15s',
+              textAlign: 'left',
+            }}
           >
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ background: enabled ? l.color : '#2a4a6a' }}
-            />
-            {!collapsed && (
-              <>
-                <span
-                  className="flex-1 text-left"
-                  style={{ color: enabled ? l.color : '#4a6fa5' }}
-                >
-                  {l.label}
-                </span>
-                {count > 0 && (
-                  <span className="text-[#4a6fa5]">
-                    {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
-                  </span>
-                )}
-              </>
+            {/* Color indicator bar */}
+            <span style={{
+              width: 3,
+              height: 22,
+              borderRadius: 2,
+              background: enabled ? l.color : '#1a2840',
+              flexShrink: 0,
+              boxShadow: enabled ? `0 0 8px ${l.color}60` : 'none',
+              transition: 'background 0.15s, box-shadow 0.15s',
+            }} />
+
+            {/* Icon */}
+            <span style={{ fontSize: 15, lineHeight: 1, flexShrink: 0 }}>{l.icon}</span>
+
+            {/* Layer name */}
+            <span style={{
+              fontFamily: 'var(--font-rajdhani)',
+              fontWeight: 600,
+              fontSize: 14,
+              letterSpacing: '0.05em',
+              color: enabled ? '#b8cde0' : '#2a4a6a',
+              flex: 1,
+              transition: 'color 0.15s',
+            }}>
+              {l.label}
+            </span>
+
+            {/* Count badge */}
+            {count > 0 && enabled && (
+              <span style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 10,
+                color: l.color,
+                background: `${l.color}15`,
+                padding: '1px 6px',
+                borderRadius: 3,
+                flexShrink: 0,
+                letterSpacing: '0.04em',
+              }}>
+                {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
+              </span>
             )}
           </button>
         )
       })}
-    </aside>
+    </div>
   )
 }

@@ -8,23 +8,53 @@ interface Props {
 }
 
 export default function StatusBar({ layerStates, viewState }: Props) {
-  const connected = LAYERS.filter(
-    l => layerStates[l.id]?.lastUpdated !== null
-  ).length
+  const connected = LAYERS.filter(l => layerStates[l.id]?.lastUpdated !== null).length
   const staleCount = LAYERS.filter(l => layerStates[l.id]?.stale).length
 
   return (
-    <footer className="flex items-center gap-6 px-4 h-7 bg-[#07111f] border-t border-[#1a2840] text-[10px] text-[#2a4a6a] tracking-wider flex-shrink-0">
-      <span className="text-[#00ff88]">● LIVE</span>
-      <span>
-        {connected}/{LAYERS.length} SOURCES
+    <footer style={{
+      height: 34,
+      flexShrink: 0,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 20,
+      padding: '0 20px',
+      background: '#040810',
+      borderTop: '1px solid #1a2840',
+    }}>
+      <span style={{
+        fontFamily: 'var(--font-rajdhani)',
+        fontWeight: 600,
+        fontSize: 12,
+        letterSpacing: '0.12em',
+        color: '#00c87a',
+        textTransform: 'uppercase',
+      }}>
+        ● Sources {connected}/{LAYERS.length}
       </span>
+
       {staleCount > 0 && (
-        <span className="text-[#FFB347]">⚠ {staleCount} STALE</span>
+        <span style={{
+          fontFamily: 'var(--font-rajdhani)',
+          fontWeight: 600,
+          fontSize: 12,
+          letterSpacing: '0.1em',
+          color: '#cc8820',
+        }}>
+          ⚠ {staleCount} Stale
+        </span>
       )}
-      <span className="ml-auto">
-        LAT {viewState.latitude.toFixed(2)} LON {viewState.longitude.toFixed(2)}{' '}
-        ZOOM {viewState.zoom.toFixed(1)}
+
+      <span style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: 11,
+        color: '#243a55',
+        marginLeft: 'auto',
+        letterSpacing: '0.06em',
+      }}>
+        {viewState.latitude.toFixed(4)}°N &nbsp;
+        {viewState.longitude.toFixed(4)}°E &nbsp;
+        z{viewState.zoom.toFixed(1)}
       </span>
     </footer>
   )

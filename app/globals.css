@@ -4,4 +4,22 @@
 @tailwind utilities;
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; background: #070B14; }
+html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px currentColor; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.live-dot {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.panel-fade-in {
+  animation: fade-in 0.15s ease-out;
+}
