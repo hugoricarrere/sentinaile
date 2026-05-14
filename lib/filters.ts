@@ -58,6 +58,20 @@ export const DEFAULT_FILTERS: AllFilters = {
   },
 }
 
+// ─── France bounding box (metropolitan + Corsica) ────────────────────────────
+const FRANCE_BBOX = { minLat: 41.3, maxLat: 51.1, minLon: -5.2, maxLon: 9.6 }
+
+function inFrance(p: GeoPoint): boolean {
+  // Prefer explicit country field when present (faster + handles DOM-TOM)
+  const country = (p.data as Record<string, unknown>).country
+  if (country !== undefined) return country === 'France'
+  // Fallback: bounding-box check for layers without a country field
+  return (
+    p.latitude  >= FRANCE_BBOX.minLat && p.latitude  <= FRANCE_BBOX.maxLat &&
+    p.longitude >= FRANCE_BBOX.minLon && p.longitude <= FRANCE_BBOX.maxLon
+  )
+}
+
 // ─── Filter application ───────────────────────────────────────────────────────
 
 export function applyFilters(
@@ -67,11 +81,9 @@ export function applyFilters(
 ): GeoPoint[] {
   let result = points
 
-  // Global: France only
+  // Global: France only (uses country field when available, bbox otherwise)
   if (filters.global.franceOnly) {
-    result = result.filter(
-      (p) => (p.data as Record<string, unknown>).country === 'France',
-    )
+    result = result.filter(inFrance)
   }
 
   switch (layerId) {
