@@ -33,6 +33,8 @@ export function paraglideCondition(
   stormForecast: boolean,
 ): ConditionStatus {
   if (stormForecast || windKmh > 45 || gustKmh > 30) return 'red'
+  // Very cold or very hot temperatures add caution (thermals unpredictable)
+  if (tempC < 0 || tempC > 38) return 'yellow'
   if (windKmh > 30) return 'yellow'
   if (windKmh < 10) return 'yellow'
   return 'green'

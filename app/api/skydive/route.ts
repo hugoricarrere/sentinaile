@@ -3,6 +3,15 @@ import { globalCache } from '@/lib/cache'
 import dzData from '@/data/skydive-dz.json'
 import { skydiveCondition, type ConditionStatus } from '@/lib/weather'
 
+function currentHourIndex(times: string[]): number {
+  const now = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  // Build "YYYY-MM-DDTHH" prefix to match against the times array
+  const prefix = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}`
+  const idx = times.findIndex(t => t.startsWith(prefix))
+  return idx >= 0 ? idx : now.getHours() // fallback to UTC hour if not found
+}
+
 interface DZ {
   id: string; name: string; longitude: number; latitude: number
   country: string; icao: string; altitudeM: number; radio: string; phone: string
@@ -41,6 +50,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
 
       const json: {
         hourly: {
+          time:             string[]
           windspeed_10m:    number[]
           windspeed_700hPa: number[]
           windspeed_600hPa: number[]
@@ -56,7 +66,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
       } = await res.json()
 
       const h   = json.hourly
-      const idx = new Date().getHours()
+      const idx = currentHourIndex(h.time ?? [])
 
       // ── Wind / visibility at current hour ───────────────────────────────
       const windSurface = h.windspeed_10m?.[idx]    ?? 0
@@ -99,7 +109,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
           ...dzList[i],
           windSurface: 0, wind3000: 0, wind4000: 0,
           visibility: 10, precipFraction: 0, cloudcoverLow: 0, hasStorm: false,
-          condition: 'green' as ConditionStatus,
+          condition: 'red' as ConditionStatus,
         }
   )
 }

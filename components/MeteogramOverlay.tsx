@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import type { GeoPoint } from '@/lib/types'
+import { LAYERS } from '@/lib/layers-registry'
 
 // ── Layout constants ───────────────────────────────────────────────────────
 const N          = 120      // 5 days × 24 h
@@ -94,11 +95,10 @@ interface Daily {
 }
 interface Forecast { hourly: Hourly; daily: Daily }
 
-// ── Layer meta ─────────────────────────────────────────────────────────────
-const LAYER_META: Record<string, { color: string; icon: string }> = {
-  skydive:     { color: '#FF4500', icon: '🪂' },
-  paragliding: { color: '#9B59B6', icon: '🪂' },
-  basejump:    { color: '#FF0080', icon: '🏔' },
+// ── Layer meta: derived from LAYERS registry ───────────────────────────────
+function getLayerMeta(layerId: string): { color: string; icon: string } {
+  const layer = LAYERS.find(l => l.id === layerId)
+  return layer ? { color: layer.color, icon: layer.icon } : { color: '#00D4FF', icon: '📍' }
 }
 
 // ── Legend item ────────────────────────────────────────────────────────────
@@ -133,7 +133,7 @@ export default function MeteogramOverlay({
   const [loading, setLoading] = useState(true)
   const [error,   setError]   = useState<string | null>(null)
 
-  const meta      = LAYER_META[point.layerId] ?? { color: '#00D4FF', icon: '📍' }
+  const meta      = getLayerMeta(point.layerId)
   const name      = (point.data.name  as string) ?? ''
   const icao      = (point.data.icao  as string) ?? ''
   const showAlti  = point.layerId === 'skydive' || point.layerId === 'paragliding'
@@ -226,7 +226,7 @@ export default function MeteogramOverlay({
         <span style={{ fontFamily:'var(--font-mono)', fontSize:9, color:'#2a4a6a', flexShrink:0 }}>
           {lat.toFixed(3)}°N&nbsp;{Math.abs(lon).toFixed(3)}°{lon >= 0 ? 'E' : 'O'}
         </span>
-        <button onClick={onClose} style={{
+        <button onClick={onClose} aria-label="Fermer le météogramme" style={{
           background:'none', border:'1px solid #1a2840', color:'#2a4a6a',
           width:20, height:20, borderRadius:3, cursor:'pointer', fontSize:13,
           display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,

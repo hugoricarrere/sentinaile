@@ -135,7 +135,7 @@ export function hasActiveFilters(layerId: string, filters: AllFilters): boolean 
       const f = filters.skydive
       const d = def.skydive
       return (
-        f.conditions.length !== d.conditions.length ||
+        [...f.conditions].sort().join() !== [...d.conditions].sort().join() ||
         f.altitudeMin !== d.altitudeMin
       )
     }
@@ -143,7 +143,7 @@ export function hasActiveFilters(layerId: string, filters: AllFilters): boolean 
       const f = filters.paragliding
       const d = def.paragliding
       return (
-        f.levels.length !== d.levels.length ||
+        [...f.levels].sort().join() !== [...d.levels].sort().join() ||
         f.altitudeMin !== d.altitudeMin
       )
     }
@@ -151,9 +151,9 @@ export function hasActiveFilters(layerId: string, filters: AllFilters): boolean 
       const f = filters.basejump
       const d = def.basejump
       return (
-        f.difficulties.length !== d.difficulties.length ||
-        f.legalStatus.length !== d.legalStatus.length ||
-        f.types.length !== d.types.length
+        [...f.difficulties].sort().join() !== [...d.difficulties].sort().join() ||
+        [...f.legalStatus].sort().join() !== [...d.legalStatus].sort().join() ||
+        [...f.types].sort().join() !== [...d.types].sort().join()
       )
     }
     default:

@@ -57,6 +57,7 @@ export default function LayerToggle({
               {/* Main toggle button */}
               <button
                 onClick={() => onToggle(l.id, !enabled)}
+                aria-pressed={enabled}
                 style={{
                   flex: 1,
                   display: 'flex',

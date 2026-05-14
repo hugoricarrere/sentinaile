@@ -11,6 +11,7 @@ export interface CacheResult<T> {
 
 export function createCache() {
   const store = new Map<string, CacheEntry<unknown>>()
+  const maxSize: number = 50
 
   async function get<T>(
     key: string,
@@ -27,6 +28,10 @@ export function createCache() {
     try {
       const data = await fetcher()
       store.set(key, { data, fetchedAt: now, stale: false })
+      if (store.size > maxSize) {
+        const oldestKey = store.keys().next().value
+        if (oldestKey) store.delete(oldestKey)
+      }
       return { data, stale: false }
     } catch (err) {
       if (entry) {

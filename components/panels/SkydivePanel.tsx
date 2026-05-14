@@ -30,6 +30,7 @@ interface SkydiveData {
 export default function SkydivePanel({ point }: { point: GeoPoint }) {
   const d = point.data as unknown as SkydiveData
   const cond = COND[d.condition]
+  const safeUrl = d.website?.match(/^https?:\/\//) ? d.website : null
   return (
     <div>
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF4500', marginBottom: 4, lineHeight: 1.2 }}>
@@ -61,9 +62,9 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       >
         {d.phone}
       </a>
-      {d.website && (
+      {safeUrl && (
         <a
-          href={d.website}
+          href={safeUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{

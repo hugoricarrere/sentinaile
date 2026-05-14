@@ -46,6 +46,21 @@ interface SurfResult {
   swellHeightM: number; swellPeriodS: number; windKmh: number; windOffshore: boolean
 }
 
+// Module-level cache: avoids rebuilding Supercluster index on every zoom change
+const _scCache = new WeakMap<GeoPoint[], Supercluster<{ originalPoint: GeoPoint }>>()
+
+function getClusterIndex(points: GeoPoint[]) {
+  if (_scCache.has(points)) return _scCache.get(points)!
+  const sc = new Supercluster<{ originalPoint: GeoPoint }>({ radius: 55, maxZoom: 15 })
+  sc.load(points.map(p => ({
+    type: 'Feature' as const,
+    geometry: { type: 'Point' as const, coordinates: [p.longitude, p.latitude] },
+    properties: { originalPoint: p },
+  })))
+  _scCache.set(points, sc)
+  return sc
+}
+
 export const LAYERS: LayerConfig[] = [
   {
     id: 'air',
@@ -275,14 +290,7 @@ export const LAYERS: LayerConfig[] = [
     getDeckLayer: (points, onClick, zoom = 5) => {
       // ── Cluster when zoomed out ──────────────────────────────────────────
       const CLUSTER_THRESHOLD = 9
-      const sc = new Supercluster<{ originalPoint: GeoPoint }>({ radius: 55, maxZoom: 15 })
-      sc.load(
-        points.map(p => ({
-          type: 'Feature' as const,
-          geometry: { type: 'Point' as const, coordinates: [p.longitude, p.latitude] },
-          properties: { originalPoint: p },
-        }))
-      )
+      const sc = getClusterIndex(points)
       const tileZoom = Math.max(0, Math.min(Math.round(zoom), 20))
       const features = sc.getClusters([-10, 40, 12, 52], tileZoom)
 
