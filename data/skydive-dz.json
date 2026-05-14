@@ -2449,5 +2449,37 @@
       "PC-6 Pilatus Porter"
     ],
     "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-epcol",
+    "name": "EPCOL – École de Parachutisme Centre Orléans Loiret",
+    "longitude": 2.1645,
+    "latitude": 47.8978,
+    "country": "France",
+    "icao": "LFOZ",
+    "altitudeM": 121,
+    "radio": "122.405",
+    "phone": "+33 6 15 74 69 18",
+    "website": "https://parachutisme-orleans.net",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-fretoy",
+    "name": "Skydive Frétoy – EICEPS",
+    "longitude": 2.9681,
+    "latitude": 49.6675,
+    "country": "France",
+    "icao": "LF6023",
+    "altitudeM": 82,
+    "radio": "123.500",
+    "phone": "+33 3 44 43 68 39",
+    "website": "https://www.skydivefretoy.com",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
   }
 ]
