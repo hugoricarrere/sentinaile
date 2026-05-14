@@ -15,36 +15,50 @@ interface SurfResult extends SurfSpot {
 
 async function fetchSurf(): Promise<SurfResult[]> {
   const spots = surfSpotsData as SurfSpot[]
-  const key = process.env.STORMGLASS_API_KEY
-
-  if (!key) {
-    return spots.map(s => ({
-      ...s, score: 5, swellHeightM: 1.5, swellPeriodS: 10, windKmh: 15, windOffshore: true,
-    }))
-  }
-
-  const now = new Date()
-  const end = new Date(now.getTime() + 3_600_000)
 
   const results = await Promise.allSettled(
     spots.map(async (spot) => {
-      const url = `https://api.stormglass.io/v2/weather/point?lat=${spot.latitude}&lng=${spot.longitude}&params=waveHeight,wavePeriod,windSpeed&start=${now.toISOString()}&end=${end.toISOString()}`
-      const res = await fetch(url, { headers: { Authorization: key }, next: { revalidate: 0 } })
-      if (!res.ok) throw new Error(`Stormglass ${res.status}`)
-      const json: { hours: { waveHeight?: { noaa?: number }; wavePeriod?: { noaa?: number }; windSpeed?: { noaa?: number } }[] } = await res.json()
-      const h = json.hours?.[0]
-      const swellHeightM = h?.waveHeight?.noaa ?? 1.5
-      const swellPeriodS = h?.wavePeriod?.noaa ?? 10
-      const windKmh = (h?.windSpeed?.noaa ?? 5) * 3.6
+      const url = [
+        'https://marine-api.open-meteo.com/v1/marine',
+        `?latitude=${spot.latitude}&longitude=${spot.longitude}`,
+        '&hourly=wave_height,wave_period,swell_wave_height,swell_wave_period,wind_speed_10m',
+        '&wind_speed_unit=kmh&timezone=auto&forecast_days=1',
+      ].join('')
+
+      const res = await fetch(url, { next: { revalidate: 0 } })
+      if (!res.ok) throw new Error(`Open-Meteo Marine ${res.status}`)
+
+      const json: {
+        hourly: {
+          wave_height: number[]; wave_period: number[]
+          swell_wave_height: number[]; swell_wave_period: number[]
+          wind_speed_10m: number[]
+        }
+      } = await res.json()
+
+      const h = json.hourly
+      const idx = new Date().getHours()
+
+      const swellHeightM = h.swell_wave_height?.[idx] ?? h.wave_height?.[idx] ?? 1.0
+      const swellPeriodS = h.swell_wave_period?.[idx] ?? h.wave_period?.[idx] ?? 8
+      const windKmh = h.wind_speed_10m?.[idx] ?? 10
       const windOffshore = windKmh < 20
-      return { ...spot, swellHeightM, swellPeriodS, windKmh, windOffshore, score: surfScore(swellHeightM, swellPeriodS, windKmh, windOffshore) }
+
+      return {
+        ...spot,
+        swellHeightM,
+        swellPeriodS,
+        windKmh,
+        windOffshore,
+        score: surfScore(swellHeightM, swellPeriodS, windKmh, windOffshore),
+      }
     })
   )
 
   return results.map((r, i) =>
     r.status === 'fulfilled'
       ? r.value
-      : { ...spots[i], score: 5, swellHeightM: 0, swellPeriodS: 0, windKmh: 0, windOffshore: false }
+      : { ...spots[i], score: 0, swellHeightM: 0, swellPeriodS: 0, windKmh: 0, windOffshore: false }
   )
 }
 
