@@ -1,24 +1,60 @@
 import { describe, it, expect } from 'vitest'
 import { skydiveCondition, paraglideCondition, basejumpCondition, surfScore } from './weather'
 
+// Helper: good base conditions (no storm, dry day, clear sky, light wind)
+const GOOD = { wind4k: 40, vis: 10, precip: 0, cloud: 20, storm: false }
+
 describe('skydiveCondition', () => {
-  it('returns green on favorable conditions', () => {
-    expect(skydiveCondition(20, 50, 8, false)).toBe('green')
+  it('returns green on ideal conditions', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('green')
   })
-  it('returns yellow when surface wind 25-35', () => {
-    expect(skydiveCondition(30, 50, 8, false)).toBe('yellow')
+
+  // ── Storm ──
+  it('returns red on thunderstorm regardless of other conditions', () => {
+    expect(skydiveCondition(10, 30, 10, 0, 20, true)).toBe('red')
   })
-  it('returns red when surface wind > 35', () => {
-    expect(skydiveCondition(40, 50, 8, false)).toBe('red')
+
+  // ── Surface wind ──
+  it('returns yellow when surface wind 25–35 km/h', () => {
+    expect(skydiveCondition(30, GOOD.wind4k, GOOD.vis, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('yellow')
   })
-  it('returns red when precipitation', () => {
-    expect(skydiveCondition(10, 40, 8, true)).toBe('red')
+  it('returns red when surface wind > 35 km/h', () => {
+    expect(skydiveCondition(40, GOOD.wind4k, GOOD.vis, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('red')
   })
-  it('returns yellow when 3000m wind 60-80', () => {
-    expect(skydiveCondition(20, 70, 8, false)).toBe('yellow')
+
+  // ── Wind at 4 000m ──
+  it('returns yellow when 4000m wind 60–80 km/h', () => {
+    expect(skydiveCondition(15, 70, GOOD.vis, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('yellow')
   })
-  it('returns red when visibility < 3km', () => {
-    expect(skydiveCondition(20, 50, 2, false)).toBe('red')
+  it('returns red when 4000m wind > 80 km/h', () => {
+    expect(skydiveCondition(15, 90, GOOD.vis, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('red')
+  })
+
+  // ── Visibility ──
+  it('returns red when visibility < 3 km', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, 2, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('red')
+  })
+  it('returns yellow when visibility 3–5 km', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, 4, GOOD.precip, GOOD.cloud, GOOD.storm)).toBe('yellow')
+  })
+
+  // ── Precipitation fraction ──
+  it('returns green when precip < 50% of daylight', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, 0.3, GOOD.cloud, GOOD.storm)).toBe('green')
+  })
+  it('returns yellow when precip 50–75% of daylight', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, 0.6, GOOD.cloud, GOOD.storm)).toBe('yellow')
+  })
+  it('returns red when precip > 75% of daylight', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, 0.8, GOOD.cloud, GOOD.storm)).toBe('red')
+  })
+
+  // ── Low cloud cover ──
+  it('returns yellow when low cloud cover > 75%', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, GOOD.precip, 80, GOOD.storm)).toBe('yellow')
+  })
+  it('returns green when low cloud cover ≤ 75%', () => {
+    expect(skydiveCondition(15, GOOD.wind4k, GOOD.vis, GOOD.precip, 60, GOOD.storm)).toBe('green')
   })
 })
 
@@ -32,7 +68,7 @@ describe('paraglideCondition', () => {
   it('returns red on storm forecast', () => {
     expect(paraglideCondition(15, 10, 18, 400, true)).toBe('red')
   })
-  it('returns yellow when wind 30-45', () => {
+  it('returns yellow when wind 30–45', () => {
     expect(paraglideCondition(35, 15, 18, 400, false)).toBe('yellow')
   })
 })
@@ -47,7 +83,7 @@ describe('basejumpCondition', () => {
   it('returns red when ceiling < 600m', () => {
     expect(basejumpCondition(10, 8, 8, false, 400)).toBe('red')
   })
-  it('returns yellow when wind 15-20', () => {
+  it('returns yellow when wind 15–20', () => {
     expect(basejumpCondition(17, 10, 8, false, 800)).toBe('yellow')
   })
 })

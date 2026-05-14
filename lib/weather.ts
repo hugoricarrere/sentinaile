@@ -2,12 +2,26 @@ export type ConditionStatus = 'green' | 'yellow' | 'red'
 
 export function skydiveCondition(
   windKmhSurface: number,
-  windKmh3000m: number,
+  windKmh4000m: number,        // 600 hPa ≈ 4 300 m (altitude de largage tandem)
   visibilityKm: number,
-  precipitation: boolean,
+  precipFraction: number,       // fraction des heures de jour avec précipitation (0–1)
+  cloudcoverLowPct: number,     // couverture nuageuse basse < 2 000 m (0–100)
+  hasStorm: boolean,            // weathercode ≥ 95 dans les 4 prochaines heures
 ): ConditionStatus {
-  if (precipitation || visibilityKm < 3 || windKmhSurface > 35 || windKmh3000m > 80) return 'red'
-  if (visibilityKm < 5 || windKmhSurface > 25 || windKmh3000m > 60) return 'yellow'
+  // ── Rouge immédiat ────────────────────────────────────────────────────────
+  if (hasStorm)                     return 'red'   // orage/foudre
+  if (visibilityKm < 3)             return 'red'   // visibilité insuffisante
+  if (windKmhSurface > 35)          return 'red'   // vent atterrissage trop fort
+  if (windKmh4000m > 80)            return 'red'   // vent largage trop fort
+  if (precipFraction > 0.75)        return 'red'   // pluie toute la journée
+
+  // ── Orange ───────────────────────────────────────────────────────────────
+  if (precipFraction > 0.5)         return 'yellow' // pluie + de 50 % du jour
+  if (cloudcoverLowPct > 75)        return 'yellow' // plafond bas bloque le saut
+  if (visibilityKm < 5)             return 'yellow'
+  if (windKmhSurface > 25)          return 'yellow'
+  if (windKmh4000m > 60)            return 'yellow'
+
   return 'green'
 }
 

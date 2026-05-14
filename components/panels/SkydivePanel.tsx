@@ -22,8 +22,9 @@ const COND = {
 interface SkydiveData {
   name: string; icao: string; altitudeM: number; radio: string
   phone: string; website: string; aircraft: string[]; maxAltitudeM: number
-  windSurface: number; wind3000: number; wind6000: number; visibility: number
-  precipitation: boolean; condition: 'green' | 'yellow' | 'red'
+  windSurface: number; wind3000: number; wind4000: number; visibility: number
+  precipFraction: number; cloudcoverLow: number; hasStorm: boolean
+  condition: 'green' | 'yellow' | 'red'
 }
 
 export default function SkydivePanel({ point }: { point: GeoPoint }) {
@@ -41,10 +42,17 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       <Row label="ALT TERRAIN" value={`${d.altitudeM} m`} />
       <Row label="ALT LARGAGE" value={`${d.maxAltitudeM} m`} />
       <Row label="VENT SOL" value={`${Math.round(d.windSurface)} km/h`} />
-      <Row label="VENT 3000m" value={`${Math.round(d.wind3000)} km/h`} />
-      <Row label="VENT 6000m" value={`${Math.round(d.wind6000)} km/h`} />
+      <Row label="VENT 3 000m" value={`${Math.round(d.wind3000)} km/h`} />
+      <Row label="VENT 4 000m" value={`${Math.round(d.wind4000)} km/h`} />
       <Row label="VISIBILITÉ" value={`${d.visibility.toFixed(1)} km`} />
-      <Row label="PRÉCIP" value={d.precipitation ? 'Oui ⚠️' : 'Non'} />
+      <Row label="NUAGES BAS" value={`${Math.round(d.cloudcoverLow)} %`} />
+      <Row label="PRÉCIP JOUR" value={
+        d.hasStorm
+          ? '⛈ Orage'
+          : d.precipFraction > 0
+          ? `${Math.round(d.precipFraction * 100)} % du jour`
+          : 'Sec'
+      } />
       <Row label="FRÉQUENCE" value={d.radio} />
       <Row label="AVIONS" value={d.aircraft.join(', ')} />
       <a
