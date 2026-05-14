@@ -36,7 +36,7 @@ export default function FrancePanel() {
       : null
 
   return (
-    <aside className="absolute bottom-7 right-0 z-10 w-52 bg-[#0B1120]/95 border-l border-t border-[#1a2840]">
+    <aside className="fixed bottom-7 right-0 z-10 w-52 bg-[#0B1120]/95 border-l border-t border-[#1a2840]">
       <div className="px-3 py-1.5 bg-[#0d1628] border-b border-[#1a2840]">
         <span className="text-[10px] tracking-[0.15em] text-[#FFB347] uppercase">
           🇫🇷 France

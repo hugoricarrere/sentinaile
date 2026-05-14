@@ -18,7 +18,7 @@ const COND = {
 interface SkydiveData {
   name: string; icao: string; altitudeM: number; radio: string
   phone: string; website: string; aircraft: string[]; maxAltitudeM: number
-  windSurface: number; wind3000: number; visibility: number
+  windSurface: number; wind3000: number; wind6000: number; visibility: number
   precipitation: boolean; condition: 'green' | 'yellow' | 'red'
 }
 
@@ -34,6 +34,7 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       <Row label="ALT LARGAGE" value={`${d.maxAltitudeM} m`} />
       <Row label="VENT SOL" value={`${Math.round(d.windSurface)} km/h`} />
       <Row label="VENT 3000m" value={`${Math.round(d.wind3000)} km/h`} />
+      <Row label="VENT 6000m" value={`${Math.round(d.wind6000)} km/h`} />
       <Row label="VISIBILITÉ" value={`${d.visibility.toFixed(1)} km`} />
       <Row label="PRÉCIP" value={d.precipitation ? 'Oui ⚠️' : 'Non'} />
       <Row label="FRÉQUENCE" value={d.radio} />

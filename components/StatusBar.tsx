@@ -14,7 +14,7 @@ export default function StatusBar({ layerStates, viewState }: Props) {
   const staleCount = LAYERS.filter(l => layerStates[l.id]?.stale).length
 
   return (
-    <footer className="absolute bottom-0 left-0 right-0 z-10 flex items-center gap-6 px-4 h-7 bg-[#07111f]/90 border-t border-[#1a2840] text-[10px] text-[#2a4a6a] tracking-wider">
+    <footer className="fixed bottom-0 left-0 right-0 z-10 flex items-center gap-6 px-4 h-7 bg-[#07111f]/90 border-t border-[#1a2840] text-[10px] text-[#2a4a6a] tracking-wider">
       <span className="text-[#00ff88]">● LIVE</span>
       <span>
         {connected}/{LAYERS.length} SOURCES

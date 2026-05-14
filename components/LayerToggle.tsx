@@ -14,7 +14,7 @@ export default function LayerToggle({ enabledMap, onToggle, layerStates }: Props
 
   return (
     <aside
-      className={`absolute top-10 left-0 z-10 bg-[#0B1120]/95 border-r border-[#1a2840] transition-all duration-200 ${
+      className={`fixed top-10 left-0 z-10 bg-[#0B1120]/95 border-r border-[#1a2840] transition-all duration-200 ${
         collapsed ? 'w-10' : 'w-44'
       }`}
     >
