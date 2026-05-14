@@ -1,4 +1,5 @@
 import type { GeoPoint } from '@/lib/types'
+import { parisHour } from '@/lib/time'
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
@@ -52,7 +53,7 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
               if (h < 6 || h > 20) return null
               const condH = d.hourlyConditions![h]
               const color = condH === 'green' ? '#00FF88' : condH === 'yellow' ? '#FFB347' : '#FF6B35'
-              const isNow = h === new Date().getHours()
+              const isNow = h === parisHour()
               return (
                 <div key={h} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                   <div style={{

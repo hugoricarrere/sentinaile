@@ -188,7 +188,7 @@ export default function MeteogramOverlay({
       ].join(','),
       daily:         'weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max',
       forecast_days: '5',
-      timezone:      'auto',
+      timezone:      'Europe/Paris',
       windspeed_unit:'kmh',
     })
     fetch(`https://api.open-meteo.com/v1/forecast?${p}`)

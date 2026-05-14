@@ -97,7 +97,12 @@ export default function TopBar({ layerStates }: Props) {
   useEffect(() => {
     const tick = () => {
       const now = new Date()
-      setUtc(now.toISOString().slice(11, 19) + ' UTC')
+      const heure = now.toLocaleTimeString('fr-FR', {
+        timeZone: 'Europe/Paris',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false,
+      })
+      setUtc(heure + ' (Paris)')
     }
     tick()
     const id = setInterval(tick, 1000)

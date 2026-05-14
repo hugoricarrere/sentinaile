@@ -23,7 +23,7 @@ export default function Home() {
     DEFAULT_ENABLED,
   )
   const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
-  const [viewState, setViewState] = useState({ longitude: 2.3, latitude: 46.5, zoom: 5.5 })
+  const [viewState, setViewState] = useState({ longitude: 2.3, latitude: 46.8, zoom: 5.6 })
   const [layerStates, setLayerStates] = useState<LayerStates>({})
   const [filters, setFilters] = usePersistedState('sentinaile-filters', DEFAULT_FILTERS)
   const [activeFilterLayer, setActiveFilterLayer] = useState<string | null>(null)
