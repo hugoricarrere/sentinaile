@@ -2288,15 +2288,15 @@
   },
   {
     "id": "dz-troyes-blowind",
-    "name": "SAS Blowind – Troyes-Barberey",
-    "longitude": 4.017,
-    "latitude": 48.323,
+    "name": "Aube Parachutisme / SAS Blowind – Brienne-le-Château",
+    "longitude": 4.539,
+    "latitude": 48.402,
     "country": "France",
-    "icao": "LFQB",
-    "altitudeM": 111,
+    "icao": "LFFN",
+    "altitudeM": 130,
     "radio": "123.5",
     "phone": "+33 3 25 71 31 31",
-    "website": "",
+    "website": "https://aubeparachutisme.fr",
     "aircraft": [
       "Cessna 182"
     ],
@@ -2481,5 +2481,21 @@
       "Cessna 208 Caravan"
     ],
     "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-epba-guiscriff",
+    "name": "EPBA – École de Parachutisme Bretagne Atlantique – Guiscriff",
+    "longitude": -3.65,
+    "latitude": 47.767,
+    "country": "France",
+    "icao": "LFES",
+    "altitudeM": 175,
+    "radio": "123.500",
+    "phone": "+33 6 89 81 14 55",
+    "website": "https://epba-parachutisme.sportsregions.fr",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3500
   }
 ]
