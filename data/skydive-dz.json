@@ -2187,5 +2187,21 @@
       "Cessna 208 Caravan"
     ],
     "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-envoleniort",
+    "name": "Envol'Niort Parachutisme",
+    "longitude": -0.406,
+    "latitude": 46.319,
+    "country": "France",
+    "icao": "LFBN",
+    "altitudeM": 59,
+    "radio": "123.5",
+    "phone": "+33 5 49 33 15 15",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
   }
 ]

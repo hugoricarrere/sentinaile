@@ -23,3 +23,12 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
 .panel-fade-in {
   animation: fade-in 0.15s ease-out;
 }
+
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.meteogram-slide-up {
+  animation: slide-up 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}

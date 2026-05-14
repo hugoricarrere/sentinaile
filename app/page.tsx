@@ -9,6 +9,7 @@ import StatusBar from '@/components/StatusBar'
 import LayerToggle from '@/components/LayerToggle'
 import ContextPanel from '@/components/ContextPanel'
 import FrancePanel from '@/components/FrancePanel'
+import MeteogramOverlay from '@/components/MeteogramOverlay'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 
@@ -49,6 +50,12 @@ export default function Home() {
             onLayerStatesChange={setLayerStates}
             filters={filters}
           />
+          {selectedPoint && ['skydive', 'paragliding', 'basejump'].includes(selectedPoint.layerId) && (
+            <MeteogramOverlay
+              point={selectedPoint}
+              onClose={() => setSelectedPoint(null)}
+            />
+          )}
         </div>
 
         {/* Right sidebar — layer toggles + context panel */}

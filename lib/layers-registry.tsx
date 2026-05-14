@@ -9,6 +9,7 @@ import SurfPanel from '@/components/panels/SurfPanel'
 import SkydivePanel from '@/components/panels/SkydivePanel'
 import ParaglidingPanel from '@/components/panels/ParaglidingPanel'
 import BasejumpPanel from '@/components/panels/BasejumpPanel'
+import { jitterCoincident } from './jitter'
 
 export interface LayerConfig {
   id: string
@@ -232,7 +233,7 @@ export const LAYERS: LayerConfig[] = [
     getDeckLayer: (points, onClick) =>
       new ScatterplotLayer<GeoPoint>({
         id: 'skydive-layer',
-        data: points,
+        data: jitterCoincident(points),
         getPosition: (d) => [d.longitude, d.latitude],
         getColor: (d) => {
           const c = (d.data as { condition: string }).condition
@@ -268,7 +269,7 @@ export const LAYERS: LayerConfig[] = [
     getDeckLayer: (points, onClick) =>
       new ScatterplotLayer<GeoPoint>({
         id: 'paragliding-layer',
-        data: points,
+        data: jitterCoincident(points),
         getPosition: (d) => [d.longitude, d.latitude],
         getColor: (d) => {
           const c = (d.data as { condition: string }).condition
@@ -304,7 +305,7 @@ export const LAYERS: LayerConfig[] = [
     getDeckLayer: (points, onClick) =>
       new ScatterplotLayer<GeoPoint>({
         id: 'basejump-layer',
-        data: points,
+        data: jitterCoincident(points),
         getPosition: (d) => [d.longitude, d.latitude],
         getColor: (d) => {
           const c = (d.data as { condition: string }).condition
