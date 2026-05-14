@@ -18,12 +18,12 @@ interface Props {
 
 const SectionHeader = ({ label }: { label: string }) => (
   <div style={{
-    padding: '10px 16px 8px',
+    padding: '12px 18px 10px',
     fontFamily: 'var(--font-rajdhani)',
-    fontWeight: 600,
-    fontSize: 10,
-    letterSpacing: '0.25em',
-    color: '#2a4a6a',
+    fontWeight: 700,
+    fontSize: 11,
+    letterSpacing: '0.28em',
+    color: '#4a6a8a',
     textTransform: 'uppercase',
     borderBottom: '1px solid #111c2e',
     background: '#040810',
@@ -51,7 +51,7 @@ export default function LayerToggle({
               display: 'flex',
               alignItems: 'stretch',
               borderBottom: '1px solid #0d1826',
-              background: enabled ? `${l.color}08` : 'transparent',
+              background: enabled ? `${l.color}0a` : 'transparent',
               transition: 'background 0.15s',
             }}>
               {/* Main toggle button */}
@@ -62,9 +62,9 @@ export default function LayerToggle({
                   flex: 1,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 10,
-                  padding: '0 12px 0 16px',
-                  height: 44,
+                  gap: 12,
+                  padding: '0 12px 0 18px',
+                  height: 50,
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
@@ -74,24 +74,24 @@ export default function LayerToggle({
                 {/* Color indicator bar */}
                 <span style={{
                   width: 3,
-                  height: 22,
+                  height: 26,
                   borderRadius: 2,
                   background: enabled ? l.color : '#1a2840',
                   flexShrink: 0,
-                  boxShadow: enabled ? `0 0 8px ${l.color}60` : 'none',
+                  boxShadow: enabled ? `0 0 10px ${l.color}70` : 'none',
                   transition: 'background 0.15s, box-shadow 0.15s',
                 }} />
 
                 {/* Icon */}
-                <span style={{ fontSize: 15, lineHeight: 1, flexShrink: 0 }}>{l.icon}</span>
+                <span style={{ fontSize: 17, lineHeight: 1, flexShrink: 0 }}>{l.icon}</span>
 
                 {/* Layer name */}
                 <span style={{
                   fontFamily: 'var(--font-rajdhani)',
                   fontWeight: 600,
-                  fontSize: 14,
-                  letterSpacing: '0.05em',
-                  color: enabled ? '#b8cde0' : '#2a4a6a',
+                  fontSize: 16,
+                  letterSpacing: '0.04em',
+                  color: enabled ? '#c8dff0' : '#3a5a7a',
                   flex: 1,
                   transition: 'color 0.15s',
                 }}>
@@ -102,13 +102,14 @@ export default function LayerToggle({
                 {count > 0 && enabled && (
                   <span style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 10,
+                    fontSize: 11,
                     color: l.color,
-                    background: `${l.color}15`,
-                    padding: '1px 6px',
+                    background: `${l.color}18`,
+                    padding: '2px 8px',
                     borderRadius: 3,
                     flexShrink: 0,
                     letterSpacing: '0.04em',
+                    border: `1px solid ${l.color}30`,
                   }}>
                     {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
                   </span>
@@ -121,16 +122,16 @@ export default function LayerToggle({
                   onClick={() => onFilterLayer(filterOpen ? null : l.id)}
                   title="Filtres"
                   style={{
-                    width: 36,
+                    width: 40,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: filterOpen ? `${l.color}22` : 'none',
+                    background: filterOpen ? `${l.color}25` : 'none',
                     border: 'none',
-                    borderLeft: `1px solid ${filterOpen ? l.color + '40' : '#0d1826'}`,
+                    borderLeft: `1px solid ${filterOpen ? l.color + '50' : '#0d1826'}`,
                     cursor: 'pointer',
-                    color: filterOpen ? l.color : '#2a4a6a',
-                    fontSize: 13,
+                    color: filterOpen ? l.color : '#3a5a7a',
+                    fontSize: 15,
                     flexShrink: 0,
                     transition: 'background 0.15s, color 0.15s',
                   }}

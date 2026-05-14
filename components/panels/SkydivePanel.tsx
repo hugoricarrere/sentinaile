@@ -2,11 +2,11 @@ import type { GeoPoint } from '@/lib/types'
 
 function Row({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
-      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, letterSpacing: '0.05em', color: '#5a7a9a' }}>
         {label}
       </span>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: highlight ? '#FFB347' : '#8aaccc', textAlign: 'right', maxWidth: '55%', fontWeight: highlight ? 700 : 400 }}>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: highlight ? '#FFB347' : '#a0c4dc', textAlign: 'right', maxWidth: '55%', fontWeight: highlight ? 700 : 400 }}>
         {value}
       </span>
     </div>
@@ -49,7 +49,7 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       {/* Barre go/no-go horaire */}
       {d.hourlyConditions && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#4a6a8a', marginBottom: 6 }}>
             FENÊTRE DE SAUT — AUJOURD&apos;HUI
           </div>
           <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}>
@@ -108,15 +108,15 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
         ]
         return (
           <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid #0d1826' }}>
-            <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
+            <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#4a6a8a', marginBottom: 6 }}>
               LIMITES PAR NIVEAU
             </div>
             {levels.map(({ label, limit }) => {
               const ok = ws <= limit
               return (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '3px 0', borderBottom: '1px solid #0d1826' }}>
-                  <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 12, letterSpacing: '0.06em', color: '#4a6fa5' }}>{label}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: ok ? '#00FF88' : '#FF6B35', fontWeight: ok ? 400 : 700 }}>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+                  <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, letterSpacing: '0.04em', color: '#5a7a9a' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: ok ? '#00FF88' : '#FF6B35', fontWeight: ok ? 400 : 700 }}>
                     {ok ? `✓ OK (< ${limit})` : `✗ ${ws} km/h`}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
 
       <a
         href={`tel:${d.phone}`}
-        style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 11, color: '#4a6fa5', marginTop: 8, textDecoration: 'none' }}
+        style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 12, color: '#5a7a9a', marginTop: 10, textDecoration: 'none' }}
       >
         {d.phone}
       </a>
@@ -139,10 +139,10 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
           rel="noopener noreferrer"
           style={{
             display: 'block', textAlign: 'center', marginTop: 12,
-            fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13,
+            fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 14,
             letterSpacing: '0.1em', textDecoration: 'none',
-            color: '#4a6fa5', border: '1px solid #1a2840',
-            padding: '6px 0', borderRadius: 3,
+            color: '#5a7a9a', border: '1px solid #1a2840',
+            padding: '8px 0', borderRadius: 4,
             transition: 'border-color 0.15s, color 0.15s',
           }}
         >

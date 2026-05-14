@@ -14,11 +14,11 @@ const TRAFFIC_COLOR: Record<string, string> = {
 }
 
 const Row = ({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-    <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #0d1826' }}>
+    <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 14, letterSpacing: '0.05em', color: '#5a7a9a' }}>
       {label}
     </span>
-    <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 13, color: valueColor ?? '#8aaccc' }}>
+    <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 14, color: valueColor ?? '#a0c4dc' }}>
       {value}
     </span>
   </div>
@@ -48,20 +48,20 @@ export default function FrancePanel() {
   return (
     <div className="panel-fade-in" style={{ borderTop: '1px solid #1a2840' }}>
       <div style={{
-        padding: '10px 16px 8px',
+        padding: '12px 18px 10px',
         background: '#040810',
         borderBottom: '1px solid #111c2e',
         fontFamily: 'var(--font-rajdhani)',
-        fontWeight: 600,
-        fontSize: 10,
-        letterSpacing: '0.25em',
+        fontWeight: 700,
+        fontSize: 11,
+        letterSpacing: '0.28em',
         color: '#cc8820',
         textTransform: 'uppercase',
       }}>
         🇫🇷&nbsp; France
       </div>
 
-      <div style={{ padding: '4px 16px 8px' }}>
+      <div style={{ padding: '4px 18px 10px' }}>
         {avgPonct !== null && (
           <Row
             label="Ponctualité TGV"
