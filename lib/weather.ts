@@ -7,15 +7,18 @@ export function skydiveCondition(
   precipFraction: number,       // fraction des heures de jour avec précipitation (0–1)
   cloudcoverLowPct: number,     // couverture nuageuse basse < 2 000 m (0–100)
   hasStorm: boolean,            // weathercode ≥ 95 dans les 4 prochaines heures
+  cape = 0,                     // CAPE en J/kg (instabilité convective)
 ): ConditionStatus {
   // ── Rouge immédiat ────────────────────────────────────────────────────────
   if (hasStorm)                     return 'red'   // orage/foudre
+  if (cape > 2500)                  return 'red'   // instabilité sévère, orage convectif probable
   if (visibilityKm < 3)             return 'red'   // visibilité insuffisante
   if (windKmhSurface > 35)          return 'red'   // vent atterrissage trop fort
   if (windKmh4000m > 80)            return 'red'   // vent largage trop fort
   if (precipFraction > 0.75)        return 'red'   // pluie toute la journée
 
   // ── Orange ───────────────────────────────────────────────────────────────
+  if (cape > 1000)                  return 'yellow' // instabilité modérée
   if (precipFraction > 0.5)         return 'yellow' // pluie + de 50 % du jour
   if (cloudcoverLowPct > 75)        return 'yellow' // plafond bas bloque le saut
   if (visibilityKm < 5)             return 'yellow'
@@ -31,10 +34,19 @@ export function paraglideCondition(
   tempC: number,
   solarRadiationWm2: number,
   stormForecast: boolean,
+  cape = 0,                     // CAPE en J/kg
+  blHeight = 1000,              // Boundary Layer Height en mètres
+  liftedIndex = 0,              // Lifted Index (instabilité, négatif = instable)
 ): ConditionStatus {
   if (stormForecast || windKmh > 45 || gustKmh > 30) return 'red'
+  if (cape > 2000)              return 'red'    // instabilité sévère
+  if (liftedIndex < -6)         return 'red'    // instabilité sévère, orage convectif
+  if (blHeight < 200)           return 'red'    // thermals inexistants, vol impossible
   // Very cold or very hot temperatures add caution (thermals unpredictable)
   if (tempC < 0 || tempC > 38) return 'yellow'
+  if (cape > 800)               return 'yellow' // instabilité modérée
+  if (liftedIndex < -3)         return 'yellow' // instabilité modérée, thermiques actifs mais risque
+  if (blHeight < 400)           return 'yellow' // vol très limité en altitude
   if (windKmh > 30) return 'yellow'
   if (windKmh < 10) return 'yellow'
   return 'green'
