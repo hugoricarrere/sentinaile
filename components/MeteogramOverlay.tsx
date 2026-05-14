@@ -21,9 +21,9 @@ const SEP2   = 198
 const TMP_Y0 = 203, TMP_Y1 = 253 // température   50 px
 const SEP3   = 256
 const PRC_Y0 = 261, PRC_Y1 = 281 // précipitations 20 px
-const COND_Y0= 284, COND_Y1= 293 // bande favorable/défavorable  9 px
-const XAX_Y  = 303               // x-axis labels
-const SVG_H  = 314
+const COND_Y0= 284, COND_Y1= 298 // bande favorable/défavorable  14 px
+const XAX_Y  = 308               // x-axis labels
+const SVG_H  = 319
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 const hx = (i: number) => X0 + (i + 0.5) * PX  // centre of hour column
@@ -480,9 +480,9 @@ export default function MeteogramOverlay({
             <text x={X0 - 3} y={COND_Y0 + 7} textAnchor="end"
               fontSize={7} fill="#3a5a7a" fontFamily="monospace">GO</text>
             {hourlyConditions(point.layerId, h).map((cond, i) => {
-              const fill = cond === 'green'  ? '#00FF8880'
-                         : cond === 'yellow' ? '#FFB34770'
-                         :                    '#FF6B3570'
+              const fill = cond === 'green'  ? '#00CC66'
+                         : cond === 'yellow' ? '#CC8800'
+                         :                    '#CC3300'
               return (
                 <rect key={i}
                   x={X0 + i * PX} y={COND_Y0}
