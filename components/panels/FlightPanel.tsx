@@ -10,9 +10,13 @@ interface FlightData {
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between text-[11px]">
-      <span className="text-[#4a6fa5] tracking-wider">{label}</span>
-      <span className="text-[#a0c4d8]">{value}</span>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
+        {value}
+      </span>
     </div>
   )
 }
@@ -20,8 +24,8 @@ function Row({ label, value }: { label: string; value: string | number }) {
 export default function FlightPanel({ point }: { point: GeoPoint }) {
   const d = point.data as unknown as FlightData
   return (
-    <div className="space-y-2">
-      <p className="text-[#00D4FF] text-sm font-bold">
+    <div>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#00D4FF', marginBottom: 4, lineHeight: 1.2 }}>
         {d.callsign || point.id.toUpperCase()}
       </p>
       <Row label="ICAO24" value={point.id} />
@@ -33,7 +37,14 @@ export default function FlightPanel({ point }: { point: GeoPoint }) {
         href={`https://www.flightaware.com/live/flight/${d.callsign}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="block mt-3 text-center text-[10px] tracking-wider text-[#4a6fa5] border border-[#1a2840] py-1 hover:border-[#00D4FF] hover:text-[#00D4FF] transition-colors"
+        style={{
+          display: 'block', textAlign: 'center', marginTop: 12,
+          fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13,
+          letterSpacing: '0.1em', textDecoration: 'none',
+          color: '#4a6fa5', border: '1px solid #1a2840',
+          padding: '6px 0', borderRadius: 3,
+          transition: 'border-color 0.15s, color 0.15s',
+        }}
       >
         FLIGHTAWARE →
       </a>

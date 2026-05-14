@@ -2,9 +2,13 @@ import type { GeoPoint } from '@/lib/types'
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between text-[11px]">
-      <span className="text-[#4a6fa5] tracking-wider">{label}</span>
-      <span className="text-[#a0c4d8]">{value}</span>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
+        {value}
+      </span>
     </div>
   )
 }
@@ -26,9 +30,13 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
   const d = point.data as unknown as SkydiveData
   const cond = COND[d.condition]
   return (
-    <div className="space-y-2">
-      <p className="text-[#FF4500] text-sm font-bold">{d.name}</p>
-      <p className="text-[11px] font-bold" style={{ color: cond.color }}>{cond.label}</p>
+    <div>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF4500', marginBottom: 4, lineHeight: 1.2 }}>
+        {d.name}
+      </p>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+        {cond.label}
+      </p>
       <Row label="OACI" value={d.icao} />
       <Row label="ALT TERRAIN" value={`${d.altitudeM} m`} />
       <Row label="ALT LARGAGE" value={`${d.maxAltitudeM} m`} />
@@ -39,11 +47,25 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       <Row label="PRÉCIP" value={d.precipitation ? 'Oui ⚠️' : 'Non'} />
       <Row label="FRÉQUENCE" value={d.radio} />
       <Row label="AVIONS" value={d.aircraft.join(', ')} />
-      <a href={`tel:${d.phone}`} className="block text-[10px] text-[#4a6fa5] mt-1">{d.phone}</a>
+      <a
+        href={`tel:${d.phone}`}
+        style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 11, color: '#4a6fa5', marginTop: 8, textDecoration: 'none' }}
+      >
+        {d.phone}
+      </a>
       {d.website && (
         <a
-          href={d.website} target="_blank" rel="noopener noreferrer"
-          className="block text-center text-[10px] tracking-wider text-[#4a6fa5] border border-[#1a2840] py-1 hover:border-[#FF4500] hover:text-[#FF4500] transition-colors"
+          href={d.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block', textAlign: 'center', marginTop: 12,
+            fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13,
+            letterSpacing: '0.1em', textDecoration: 'none',
+            color: '#4a6fa5', border: '1px solid #1a2840',
+            padding: '6px 0', borderRadius: 3,
+            transition: 'border-color 0.15s, color 0.15s',
+          }}
         >
           SITE WEB →
         </a>

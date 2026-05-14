@@ -2,9 +2,13 @@ import type { GeoPoint } from '@/lib/types'
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between text-[11px]">
-      <span className="text-[#4a6fa5] tracking-wider">{label}</span>
-      <span className="text-[#a0c4d8]">{value}</span>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
+        {label}
+      </span>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
+        {value}
+      </span>
     </div>
   )
 }
@@ -29,10 +33,16 @@ export default function BasejumpPanel({ point }: { point: GeoPoint }) {
   const d = point.data as unknown as BJData
   const cond = COND[d.condition]
   return (
-    <div className="space-y-2">
-      <p className="text-[#FF0080] text-sm font-bold">{d.name}</p>
-      <p className="text-[11px] font-bold" style={{ color: cond.color }}>{cond.label}</p>
-      <p className="text-[11px]">{LEGAL[d.legal] ?? d.legal}</p>
+    <div>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF0080', marginBottom: 4, lineHeight: 1.2 }}>
+        {d.name}
+      </p>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+        {cond.label}
+      </p>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
+        {LEGAL[d.legal] ?? d.legal}
+      </p>
       <Row label="PAYS" value={d.country} />
       <Row label="TYPE" value={d.type} />
       <Row label="HAUTEUR" value={`${d.heightM} m`} />
