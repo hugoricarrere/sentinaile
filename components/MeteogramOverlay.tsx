@@ -206,7 +206,7 @@ export default function MeteogramOverlay({
       backdropFilter: 'blur(10px)',
       borderTop: `1px solid ${meta.color}50`,
       zIndex: 10, display: 'flex', flexDirection: 'column',
-      maxHeight: 460, userSelect: 'none',
+      maxHeight: 560, userSelect: 'none',
     }}>
 
       {/* ── Header ───────────────────────────────────────────────────────── */}
@@ -304,7 +304,7 @@ export default function MeteogramOverlay({
 
       {/* ── SVG Chart ────────────────────────────────────────────────────── */}
       {h && d && (
-        <div style={{ flex:1, minHeight:0, overflow:'hidden' }}>
+        <div style={{ flex:1, minHeight: SVG_H, overflow:'hidden' }}>
           <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} preserveAspectRatio="none"
             style={{ width:'100%', height:'100%', display:'block' }}>
 
