@@ -5,7 +5,7 @@ import { skydiveCondition, type ConditionStatus } from '@/lib/weather'
 
 interface DZ {
   id: string; name: string; longitude: number; latitude: number
-  icao: string; altitudeM: number; radio: string; phone: string
+  country: string; icao: string; altitudeM: number; radio: string; phone: string
   website: string; aircraft: string[]; maxAltitudeM: number
 }
 

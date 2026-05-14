@@ -1,139 +1,2191 @@
 [
-  { "id": "dz-pontoise",    "name": "Skydive Paris – Pontoise",             "longitude":  2.041, "latitude": 49.097, "icao": "LFPT", "altitudeM": 100, "radio": "123.5", "phone": "+33 1 34 66 00 00", "website": "https://skydiveparis.com",          "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-etampes",     "name": "Parachutisme Étampes-Mondésir",       "longitude":  2.069, "latitude": 48.391, "icao": "LFOX", "altitudeM": 185, "radio": "123.5", "phone": "+33 1 64 94 01 01", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-ferte",       "name": "Parachutisme La Ferté-Gaucher",        "longitude":  3.305, "latitude": 48.765, "icao": "LFFG", "altitudeM": 115, "radio": "123.5", "phone": "+33 1 64 20 07 07", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 182"],         "maxAltitudeM": 4200 },
-  { "id": "dz-chartres",    "name": "Parachutisme Chartres",                 "longitude":  1.522, "latitude": 48.459, "icao": "LFOR", "altitudeM": 155, "radio": "123.5", "phone": "+33 2 37 84 50 50", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3000 },
-  { "id": "dz-tours",       "name": "Parachutisme Touraine – Tours",         "longitude":  0.727, "latitude": 47.432, "icao": "LFOT", "altitudeM": 108, "radio": "123.5", "phone": "+33 2 47 54 60 60", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-chateauroux", "name": "Parachutisme Châteauroux",              "longitude":  1.730, "latitude": 46.862, "icao": "LFLX", "altitudeM": 155, "radio": "123.5", "phone": "+33 2 54 22 10 10", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-amiens",      "name": "Parachutisme Picardie – Amiens",        "longitude":  2.387, "latitude": 49.873, "icao": "LFAY", "altitudeM":  53, "radio": "123.5", "phone": "+33 3 22 33 44 55", "website": "",                                  "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4000 },
-  { "id": "dz-lens",        "name": "Parachutisme Artois – Lens",            "longitude":  2.833, "latitude": 50.469, "icao": "LFQT", "altitudeM":  51, "radio": "122.5", "phone": "+33 3 21 43 00 00", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 182"],         "maxAltitudeM": 4200 },
-  { "id": "dz-reims",       "name": "Parachutisme Champagne – Reims",        "longitude":  3.950, "latitude": 49.310, "icao": "LFSR", "altitudeM":  83, "radio": "123.5", "phone": "+33 3 26 49 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-troyes",      "name": "Parachutisme Aube – Troyes",            "longitude":  4.017, "latitude": 48.323, "icao": "LFQB", "altitudeM": 111, "radio": "123.5", "phone": "+33 3 25 71 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-haguenau",    "name": "Parachutisme Alsace – Haguenau",        "longitude":  7.817, "latitude": 48.793, "icao": "LFSH", "altitudeM": 150, "radio": "123.5", "phone": "+33 3 88 73 50 50", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-colmar",      "name": "Parachutisme Alsace – Colmar",          "longitude":  7.358, "latitude": 48.109, "icao": "LFGB", "altitudeM": 200, "radio": "123.5", "phone": "+33 3 89 24 10 10", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-nancy",       "name": "Parachutisme Lorraine – Nancy",         "longitude":  6.100, "latitude": 48.560, "icao": "LFSG", "altitudeM": 288, "radio": "123.5", "phone": "+33 3 83 26 20 20", "website": "",                                  "aircraft": ["Cessna 182", "PC-6 Pilatus Porter"],         "maxAltitudeM": 4200 },
-  { "id": "dz-dijon",       "name": "Parachutisme Bourgogne – Dijon",        "longitude":  4.899, "latitude": 47.381, "icao": "LFGI", "altitudeM": 417, "radio": "123.5", "phone": "+33 3 80 35 69 69", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-dole",        "name": "Parachutisme Franche-Comté – Dole",     "longitude":  5.435, "latitude": 47.043, "icao": "LFGJ", "altitudeM": 220, "radio": "123.5", "phone": "+33 3 84 82 10 10", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 3500 },
-  { "id": "dz-stbrieuc",    "name": "Parachutisme Bretagne – Saint-Brieuc",  "longitude": -2.854, "latitude": 48.538, "icao": "LFRT", "altitudeM": 138, "radio": "123.5", "phone": "+33 2 96 94 80 80", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-lorient",     "name": "Parachutisme Morbihan – Lorient",       "longitude": -3.440, "latitude": 47.760, "icao": "LFRH", "altitudeM": 160, "radio": "123.5", "phone": "+33 2 97 87 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-vannes",      "name": "Parachutisme Bretagne – Vannes",        "longitude": -2.718, "latitude": 47.721, "icao": "LFRV", "altitudeM": 140, "radio": "123.5", "phone": "+33 2 97 60 77 77", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 182"],         "maxAltitudeM": 4200 },
-  { "id": "dz-angers",      "name": "Parachutisme Anjou – Angers",           "longitude": -0.313, "latitude": 47.561, "icao": "LFJR", "altitudeM":  73, "radio": "123.5", "phone": "+33 2 41 33 50 50", "website": "",                                  "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4000 },
-  { "id": "dz-lemans",      "name": "Parachutisme Sarthe – Le Mans",         "longitude":  0.202, "latitude": 47.949, "icao": "LFRM", "altitudeM":  60, "radio": "123.5", "phone": "+33 2 43 86 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-romorantin",  "name": "Parachutisme Val de Loire – Romorantin","longitude":  1.688, "latitude": 47.358, "icao": "LFYR", "altitudeM":  93, "radio": "123.5", "phone": "+33 2 54 76 01 01", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-feurs",       "name": "Parachutisme Loire – Feurs",            "longitude":  4.242, "latitude": 45.727, "icao": "LFHF", "altitudeM": 395, "radio": "123.5", "phone": "+33 4 77 26 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-versoud",     "name": "Parachutisme Isère – Grenoble Versoud", "longitude":  5.930, "latitude": 45.222, "icao": "LFLG", "altitudeM": 247, "radio": "123.5", "phone": "+33 4 76 45 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4200 },
-  { "id": "dz-issoire",     "name": "Parachutisme Auvergne – Issoire",       "longitude":  3.245, "latitude": 45.519, "icao": "LFHA", "altitudeM": 391, "radio": "123.5", "phone": "+33 4 73 55 30 30", "website": "https://parachutisme-auvergne.com", "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-aubenas",     "name": "Parachutisme Ardèche – Aubenas",        "longitude":  4.372, "latitude": 44.544, "icao": "LFHO", "altitudeM": 266, "radio": "123.5", "phone": "+33 4 75 35 10 10", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-gap",         "name": "Skydive Gap-Tallard",                   "longitude":  6.037, "latitude": 44.454, "icao": "LFNA", "altitudeM": 792, "radio": "123.5", "phone": "+33 4 92 54 40 40", "website": "https://skydive-gap.com",          "aircraft": ["PC-6 Pilatus Porter", "Twin Otter DHC-6"],   "maxAltitudeM": 4500 },
-  { "id": "dz-aspres",      "name": "Parachutisme Buëch – Aspres",           "longitude":  5.742, "latitude": 44.522, "icao": "LFNJ", "altitudeM": 778, "radio": "123.5", "phone": "+33 4 92 58 60 60", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-nimes",       "name": "Parachutisme Gard – Nîmes",             "longitude":  4.416, "latitude": 43.757, "icao": "LFTW", "altitudeM": 100, "radio": "123.5", "phone": "+33 4 66 70 10 10", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-beziers",     "name": "Parachutisme Hérault – Béziers",        "longitude":  3.353, "latitude": 43.323, "icao": "LFMU", "altitudeM":  56, "radio": "123.5", "phone": "+33 4 67 90 10 10", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-albi",        "name": "Parachutisme Tarn – Albi",              "longitude":  2.113, "latitude": 43.913, "icao": "LFCI", "altitudeM": 174, "radio": "123.5", "phone": "+33 5 63 54 30 30", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-montauban",   "name": "Parachutisme Tarn-et-Garonne – Montauban","longitude": 1.378,"latitude": 44.026, "icao": "LFDB", "altitudeM": 113, "radio": "123.5", "phone": "+33 5 63 63 40 40", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-toulouse",    "name": "Parachutisme Toulouse-Lasbordes",       "longitude":  1.499, "latitude": 43.586, "icao": "LFCL", "altitudeM": 159, "radio": "122.5", "phone": "+33 5 61 52 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4200 },
-  { "id": "dz-pamiers",     "name": "Parachutisme Ariège – Pamiers",         "longitude":  1.695, "latitude": 43.099, "icao": "LFDP", "altitudeM": 289, "radio": "123.5", "phone": "+33 5 61 67 70 70", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-pau",         "name": "Parachutisme Pyrénées – Pau",           "longitude": -0.418, "latitude": 43.380, "icao": "LFBP", "altitudeM": 198, "radio": "123.5", "phone": "+33 5 59 32 70 70", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4200 },
-  { "id": "dz-agen",        "name": "Parachutisme Lot-et-Garonne – Agen",    "longitude":  0.591, "latitude": 44.175, "icao": "LFBA", "altitudeM":  58, "radio": "123.5", "phone": "+33 5 53 96 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-perigueux",   "name": "Parachutisme Dordogne – Périgueux",     "longitude":  0.813, "latitude": 45.198, "icao": "LFBG", "altitudeM": 200, "radio": "123.5", "phone": "+33 5 53 04 50 50", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-sarlat",      "name": "Parachutisme Sarlat",                   "longitude":  1.221, "latitude": 44.892, "icao": "LFDS", "altitudeM": 174, "radio": "123.5", "phone": "+33 5 53 59 00 00", "website": "https://parachutisme-sarlat.fr",   "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-saintes",     "name": "Parachutisme Atlantique – Saintes",     "longitude": -0.543, "latitude": 45.785, "icao": "LFXS", "altitudeM":  46, "radio": "123.5", "phone": "+33 5 46 74 00 00", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-empuriabrava","name": "Skydive Empuriabrava",                  "longitude":  3.121, "latitude": 42.259, "icao": "LEEP", "altitudeM":  17, "radio": "118.45","phone": "+34 972 45 01 11", "website": "https://skydiveempuriabrava.com", "aircraft": ["CASA 212", "Cessna 208 Caravan", "Twin Otter DHC-6"], "maxAltitudeM": 4500 },
-  { "id": "dz-lodi",        "name": "Skydive Lodi",                          "longitude":  9.730, "latitude": 45.234, "icao": "LIPL", "altitudeM":  79, "radio": "130.0", "phone": "+39 0371 80 20 20", "website": "https://skydiveitaly.it",          "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4500 },
-  { "id": "dz-schaffen",    "name": "Skydive Schaffen – Belgique",           "longitude":  5.044, "latitude": 50.996, "icao": "EBDT", "altitudeM":  20, "radio": "122.0", "phone": "+32 13 77 00 00", "website": "https://skydiveschaffen.be",       "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-hinton",      "name": "UK Parachuting Hinton",                 "longitude": -1.290, "latitude": 51.982, "icao": "EGBH", "altitudeM":  71, "radio": "130.1", "phone": "+44 1295 750555",   "website": "https://ukparachuting.co.uk",      "aircraft": ["BN2 Islander"],                               "maxAltitudeM": 4270 },
-
-  { "id": "dz-caen",        "name": "Parachutisme Normandie – Caen",         "longitude": -0.450, "latitude": 49.173, "icao": "LFRK", "altitudeM":  67, "radio": "123.5", "phone": "+33 2 31 71 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-evreux",      "name": "Parachutisme Eure – Évreux",            "longitude":  1.220, "latitude": 49.029, "icao": "LFOE", "altitudeM": 152, "radio": "123.5", "phone": "+33 2 32 39 50 50", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-rouen",       "name": "Parachutisme Seine-Maritime – Rouen",   "longitude":  1.175, "latitude": 49.384, "icao": "LFOP", "altitudeM": 157, "radio": "123.5", "phone": "+33 2 35 79 40 40", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-brest",       "name": "Parachutisme Finistère – Brest",        "longitude": -4.419, "latitude": 48.447, "icao": "LFRB", "altitudeM": 100, "radio": "123.5", "phone": "+33 2 98 32 70 70", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-quimper",     "name": "Parachutisme Finistère Sud – Quimper",  "longitude": -4.168, "latitude": 47.974, "icao": "LFOQ", "altitudeM":  85, "radio": "123.5", "phone": "+33 2 98 94 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-lognes",      "name": "Parachutisme Seine-et-Marne – Lognes",  "longitude":  2.623, "latitude": 48.825, "icao": "LFPL", "altitudeM":  90, "radio": "123.5", "phone": "+33 1 64 80 30 30", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 182"],         "maxAltitudeM": 4200 },
-  { "id": "dz-maubeuge",    "name": "Parachutisme Nord – Maubeuge",          "longitude":  4.033, "latitude": 50.280, "icao": "LFQM", "altitudeM": 137, "radio": "122.5", "phone": "+33 3 27 67 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-orleans",     "name": "Parachutisme Loiret – Orléans",         "longitude":  1.760, "latitude": 47.988, "icao": "LFOJ", "altitudeM": 125, "radio": "123.5", "phone": "+33 2 38 64 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-bourges",     "name": "Parachutisme Cher – Bourges",           "longitude":  2.371, "latitude": 47.058, "icao": "LFLD", "altitudeM": 161, "radio": "123.5", "phone": "+33 2 48 50 40 40", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-auxerre",     "name": "Parachutisme Yonne – Auxerre",          "longitude":  3.497, "latitude": 47.850, "icao": "LFLA", "altitudeM": 204, "radio": "123.5", "phone": "+33 3 86 53 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-macon",       "name": "Parachutisme Saône-et-Loire – Mâcon",   "longitude":  4.796, "latitude": 46.295, "icao": "LFLM", "altitudeM": 216, "radio": "123.5", "phone": "+33 3 85 36 10 10", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-bourg",       "name": "Parachutisme Ain – Bourg-en-Bresse",    "longitude":  5.292, "latitude": 46.202, "icao": "LFHS", "altitudeM": 232, "radio": "123.5", "phone": "+33 4 74 22 40 40", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-vichy",       "name": "Parachutisme Allier – Vichy",           "longitude":  3.403, "latitude": 46.169, "icao": "LFLV", "altitudeM": 249, "radio": "123.5", "phone": "+33 4 70 32 20 20", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-valence",     "name": "Parachutisme Drôme – Valence",          "longitude":  4.970, "latitude": 44.921, "icao": "LFLU", "altitudeM": 166, "radio": "123.5", "phone": "+33 4 75 57 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-avignon",     "name": "Parachutisme Vaucluse – Avignon",       "longitude":  4.902, "latitude": 43.906, "icao": "LFMV", "altitudeM":  36, "radio": "123.5", "phone": "+33 4 90 81 50 50", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-leluc",       "name": "Parachutisme Var – Le Luc",             "longitude":  6.387, "latitude": 43.384, "icao": "LFMC", "altitudeM": 264, "radio": "123.5", "phone": "+33 4 94 60 80 80", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4200 },
-  { "id": "dz-carcassonne", "name": "Parachutisme Aude – Carcassonne",       "longitude":  2.306, "latitude": 43.216, "icao": "LFMK", "altitudeM": 127, "radio": "123.5", "phone": "+33 4 68 71 50 50", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-rodez",       "name": "Parachutisme Aveyron – Rodez",          "longitude":  2.483, "latitude": 44.408, "icao": "LFCR", "altitudeM": 534, "radio": "123.5", "phone": "+33 5 65 42 50 50", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-tarbes",      "name": "Parachutisme Hautes-Pyrénées – Tarbes", "longitude":  0.006, "latitude": 43.186, "icao": "LFBT", "altitudeM": 360, "radio": "123.5", "phone": "+33 5 62 32 70 70", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-marmande",    "name": "Parachutisme Gironde – Marmande",       "longitude":  0.244, "latitude": 44.273, "icao": "LFID", "altitudeM":  51, "radio": "123.5", "phone": "+33 5 53 64 20 20", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-bergerac",    "name": "Parachutisme Périgord – Bergerac",      "longitude":  0.519, "latitude": 44.825, "icao": "LFBE", "altitudeM":  53, "radio": "123.5", "phone": "+33 5 53 57 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-zwartberg",   "name": "Skydive Zwartberg – Belgique",          "longitude":  5.658, "latitude": 50.982, "icao": "EBZW", "altitudeM":  57, "radio": "122.0", "phone": "+32 89 35 00 00", "website": "https://skydivezwartberg.be",       "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-spa",         "name": "Skydive Spa – Belgique",                "longitude":  5.910, "latitude": 50.480, "icao": "EBSP", "altitudeM": 513, "radio": "122.0", "phone": "+32 87 79 22 22", "website": "https://skydivespa.be",            "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4200 },
-
-  { "id": "dz-persan",        "name": "Skydive Paris Nord – Persan-Beaumont",    "longitude":  2.561, "latitude": 49.095, "icao": "LFPA", "altitudeM":  39, "radio": "123.5", "phone": "+33 1 30 34 11 11", "website": "https://skydiveparis.com",          "aircraft": ["PC-6 Pilatus Porter", "Twin Otter DHC-6"],   "maxAltitudeM": 4200 },
-  { "id": "dz-coulommiers",   "name": "Parachutisme Seine-et-Marne – Coulommiers","longitude":  3.012, "latitude": 48.834, "icao": "LFPK", "altitudeM":  89, "radio": "123.5", "phone": "+33 1 64 03 01 01", "website": "",                                  "aircraft": ["Cessna 182", "PC-6 Pilatus Porter"],         "maxAltitudeM": 4000 },
-  { "id": "dz-chateaudun",    "name": "Parachutisme Eure-et-Loir – Châteaudun",  "longitude":  1.376, "latitude": 48.058, "icao": "LFCO", "altitudeM": 155, "radio": "123.5", "phone": "+33 2 37 45 50 50", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-rennes",        "name": "Parachutisme Bretagne Est – Rennes",      "longitude": -1.735, "latitude": 48.069, "icao": "LFRN", "altitudeM":  36, "radio": "123.5", "phone": "+33 2 99 29 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-labaule",       "name": "Parachutisme Loire-Atlantique – La Baule","longitude": -2.318, "latitude": 47.290, "icao": "LFRE", "altitudeM":  13, "radio": "123.5", "phone": "+33 2 40 60 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-saumur",        "name": "Parachutisme Maine-et-Loire – Saumur",    "longitude": -0.115, "latitude": 47.260, "icao": "LFED", "altitudeM":  65, "radio": "123.5", "phone": "+33 2 41 50 20 20", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-larochelle",    "name": "Parachutisme Charente-Maritime – La Rochelle","longitude": -1.195,"latitude": 46.179,"icao": "LFBH","altitudeM":  22, "radio": "123.5", "phone": "+33 5 46 42 30 30", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-poitiers",      "name": "Parachutisme Vienne – Poitiers",          "longitude":  0.307, "latitude": 46.588, "icao": "LFBI", "altitudeM": 127, "radio": "123.5", "phone": "+33 5 49 58 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-angouleme",     "name": "Parachutisme Charente – Angoulême",       "longitude":  0.221, "latitude": 45.729, "icao": "LFBU", "altitudeM": 133, "radio": "123.5", "phone": "+33 5 45 69 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-limoges",       "name": "Parachutisme Haute-Vienne – Limoges",     "longitude":  1.179, "latitude": 45.862, "icao": "LFBL", "altitudeM": 402, "radio": "123.5", "phone": "+33 5 55 43 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-biscarrosse",   "name": "Parachutisme Landes – Biscarrosse",       "longitude": -1.256, "latitude": 44.341, "icao": "LFBS", "altitudeM":  43, "radio": "123.5", "phone": "+33 5 58 09 30 30", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 4000 },
-  { "id": "dz-dax",           "name": "Parachutisme Landes – Dax",               "longitude": -1.068, "latitude": 43.688, "icao": "LFBY", "altitudeM":  35, "radio": "123.5", "phone": "+33 5 58 74 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-metz",          "name": "Parachutisme Moselle – Metz",             "longitude":  6.251, "latitude": 48.983, "icao": "LFJL", "altitudeM": 265, "radio": "123.5", "phone": "+33 3 87 56 30 30", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-annecy",        "name": "Parachutisme Haute-Savoie – Annecy",      "longitude":  6.098, "latitude": 45.930, "icao": "LFLP", "altitudeM": 455, "radio": "123.5", "phone": "+33 4 50 22 20 20", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-amberieu",      "name": "Parachutisme Ain – Ambérieu-en-Bugey",    "longitude":  5.332, "latitude": 45.987, "icao": "LFXA", "altitudeM": 253, "radio": "123.5", "phone": "+33 4 74 38 20 20", "website": "",                                  "aircraft": ["Cessna 182", "PC-6 Pilatus Porter"],         "maxAltitudeM": 4200 },
-  { "id": "dz-challes",       "name": "Parachutisme Savoie – Chambéry-Challes",  "longitude":  5.973, "latitude": 45.558, "icao": "LFLE", "altitudeM": 235, "radio": "123.5", "phone": "+33 4 79 26 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-clermont",      "name": "Parachutisme Auvergne – Clermont-Ferrand","longitude":  3.169, "latitude": 45.787, "icao": "LFLC", "altitudeM": 332, "radio": "123.5", "phone": "+33 4 73 62 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4200 },
-  { "id": "dz-andernos",      "name": "Parachutisme Gironde – Andernos",         "longitude": -1.063, "latitude": 44.748, "icao": "LFGD", "altitudeM":  16, "radio": "123.5", "phone": "+33 5 56 82 30 30", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-cahors",        "name": "Parachutisme Lot – Cahors-Lalbenque",     "longitude":  1.475, "latitude": 44.351, "icao": "LFCC", "altitudeM": 265, "radio": "123.5", "phone": "+33 5 65 31 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-brive",         "name": "Parachutisme Corrèze – Brive",            "longitude":  1.469, "latitude": 45.151, "icao": "LFSL", "altitudeM": 114, "radio": "123.5", "phone": "+33 5 55 86 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-muret",         "name": "Parachutisme Haute-Garonne – Muret",      "longitude":  1.264, "latitude": 43.449, "icao": "LFBR", "altitudeM": 188, "radio": "123.5", "phone": "+33 5 61 56 30 30", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-castres",       "name": "Parachutisme Tarn – Castres",             "longitude":  2.289, "latitude": 43.556, "icao": "LFCK", "altitudeM": 350, "radio": "123.5", "phone": "+33 5 63 72 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-perpignan",     "name": "Parachutisme Pyrénées-Orientales – Perpignan","longitude": 2.871,"latitude": 42.740,"icao": "LFMP","altitudeM":  42, "radio": "123.5", "phone": "+33 4 68 52 60 60", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 3500 },
-  { "id": "dz-montpellier",   "name": "Parachutisme Hérault – Montpellier",      "longitude":  4.071, "latitude": 43.620, "icao": "LFNG", "altitudeM":   5, "radio": "123.5", "phone": "+33 4 67 29 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-fayence",       "name": "Parachutisme Var – Fayence",              "longitude":  6.700, "latitude": 43.615, "icao": "LFMF", "altitudeM": 474, "radio": "123.5", "phone": "+33 4 94 76 00 00", "website": "https://parachutisme-var.fr",       "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-salon",         "name": "Parachutisme Provence – Salon-de-Provence","longitude": 5.108,"latitude": 43.606, "icao": "LFMY", "altitudeM":  52, "radio": "123.5", "phone": "+33 4 90 53 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4000 },
-  { "id": "dz-ghisonaccia",   "name": "Parachutisme Corse – Ghisonaccia",        "longitude":  9.405, "latitude": 41.933, "icao": "LFKG", "altitudeM":   5, "radio": "123.5", "phone": "+33 4 95 56 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-
-  { "id": "dz-teuge",         "name": "Skydive Teuge – Pays-Bas",                "longitude":  6.047, "latitude": 52.244, "icao": "EHTE", "altitudeM":  17, "radio": "122.0", "phone": "+31 578 61 25 25", "website": "https://skydiveteuge.nl",          "aircraft": ["Twin Otter DHC-6", "CASA 212", "PC-6 Pilatus Porter"], "maxAltitudeM": 4000 },
-  { "id": "dz-seppe",         "name": "Skydive Seppe – Pays-Bas",                "longitude":  4.554, "latitude": 51.554, "icao": "EHSE", "altitudeM":   3, "radio": "122.0", "phone": "+31 76 596 72 76", "website": "https://skydiveseppe.nl",          "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4000 },
-  { "id": "dz-sibson",        "name": "UK Parachuting – Sibson",                 "longitude": -0.373, "latitude": 52.553, "icao": "EGSP", "altitudeM":  24, "radio": "130.1", "phone": "+44 1832 280490",   "website": "https://ukparachuting.co.uk",      "aircraft": ["BN2 Islander", "PC-6 Pilatus Porter"],       "maxAltitudeM": 4270 },
-  { "id": "dz-langar",        "name": "Skydive Langar",                          "longitude": -0.911, "latitude": 52.876, "icao": "EGBN", "altitudeM":  70, "radio": "130.1", "phone": "+44 1949 860878",   "website": "https://skydivelangar.co.uk",      "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4270 },
-  { "id": "dz-netheravon",    "name": "Army Parachute Association – Netheravon", "longitude": -1.747, "latitude": 51.234, "icao": "EGDN", "altitudeM": 136, "radio": "130.1", "phone": "+44 1980 628120",   "website": "https://apa.org.uk",               "aircraft": ["Twin Otter DHC-6"],                           "maxAltitudeM": 4270 },
-  { "id": "dz-headcorn",      "name": "Skydive Headcorn",                        "longitude":  0.641, "latitude": 51.156, "icao": "EGKH", "altitudeM":  28, "radio": "130.1", "phone": "+44 1622 890862",   "website": "https://headcorn.com",             "aircraft": ["Cessna 208 Caravan", "BN2 Islander"],        "maxAltitudeM": 4270 },
-  { "id": "dz-bremgarten",    "name": "Skydive Freiburg – Bremgarten",           "longitude":  7.618, "latitude": 47.903, "icao": "EDTG", "altitudeM": 225, "radio": "122.0", "phone": "+49 7666 93930",    "website": "https://skydive-freiburg.de",      "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4500 },
-  { "id": "dz-hahnweide",     "name": "Skydive Hahnweide – Stuttgart",           "longitude":  9.462, "latitude": 48.607, "icao": "EDST", "altitudeM": 393, "radio": "122.0", "phone": "+49 7021 83020",    "website": "https://fallschirmsprungen-hahnweide.de", "aircraft": ["PC-6 Pilatus Porter"],                      "maxAltitudeM": 4000 },
-  { "id": "dz-leutkirch",     "name": "Skydive Allgäu – Leutkirch",              "longitude": 10.036, "latitude": 47.836, "icao": "EDHU", "altitudeM": 700, "radio": "122.0", "phone": "+49 7561 72050",    "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 182"],         "maxAltitudeM": 4200 },
-  { "id": "dz-locarno",       "name": "Skydive Ticino – Locarno",                "longitude":  8.878, "latitude": 46.161, "icao": "LSZL", "altitudeM": 197, "radio": "122.0", "phone": "+41 91 751 10 10",  "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4500 },
-  { "id": "dz-beromunster",   "name": "Skydive Lucerne – Beromünster",           "longitude":  8.204, "latitude": 47.191, "icao": "LSME", "altitudeM": 601, "radio": "122.0", "phone": "+41 62 771 20 20",  "website": "https://skydivelucerne.ch",        "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4200 },
-  { "id": "dz-evora",         "name": "Skydive Portugal – Évora",                "longitude": -7.886, "latitude": 38.533, "icao": "LPEV", "altitudeM": 309, "radio": "122.0", "phone": "+351 266 731 300",  "website": "https://skydiveportugal.com",      "aircraft": ["Twin Otter DHC-6", "Cessna 208 Caravan"],    "maxAltitudeM": 4500 },
-  { "id": "dz-ocana",         "name": "Skydive Madrid – Ocaña",                  "longitude": -3.504, "latitude": 39.937, "icao": "LEOC", "altitudeM": 700, "radio": "122.0", "phone": "+34 925 120 300",   "website": "https://skydivedropzone.es",       "aircraft": ["Twin Otter DHC-6", "Cessna 208 Caravan"],    "maxAltitudeM": 4500 },
-
-  { "id": "dz-lessay",       "name": "A'Air Parachutisme – Lessay",              "longitude": -1.548, "latitude": 49.117, "icao": "LFOM", "altitudeM":  35, "radio": "123.5", "phone": "+33 6 98 86 04 33", "website": "https://aair-parachutisme.fr",      "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3200 },
-  { "id": "dz-vimory",       "name": "Fly Attitude Parachutisme – Montargis-Vimory","longitude": 2.672,"latitude": 47.996, "icao": "LFYN", "altitudeM":  89, "radio": "123.5", "phone": "+33 6 13 53 80 48", "website": "https://flyattitude.com",           "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 4000 },
-  { "id": "dz-cosne",        "name": "Fly Attitude – Cosne-sur-Loire",           "longitude":  2.926, "latitude": 47.405, "icao": "LFGN", "altitudeM": 175, "radio": "123.5", "phone": "+33 6 13 53 80 48", "website": "https://flyattitude.com",           "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 4000 },
-  { "id": "dz-lannion",      "name": "Septième Ciel Parachutisme – Lannion",     "longitude": -3.471, "latitude": 48.754, "icao": "LFRO", "altitudeM":  46, "radio": "123.5", "phone": "+33 7 61 36 15 16", "website": "https://septiemeciel-parachutisme.fr","aircraft": ["Cessna 208 Caravan"],                        "maxAltitudeM": 4000 },
-  { "id": "dz-charleville",  "name": "Para Club Ardennes – Charleville-Mézières","longitude":  4.611, "latitude": 49.787, "icao": "LFQV", "altitudeM": 247, "radio": "123.5", "phone": "+33 3 24 37 30 30", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 4000 },
-  { "id": "dz-peronne",      "name": "Parachutisme Somme – Péronne",             "longitude":  3.026, "latitude": 49.868, "icao": "LFAG", "altitudeM":  66, "radio": "123.5", "phone": "+33 3 22 84 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3500 },
-  { "id": "dz-lille",        "name": "EFPLB – Parachutisme Lille Bondues",       "longitude":  3.073, "latitude": 50.691, "icao": "LFQO", "altitudeM":  26, "radio": "122.5", "phone": "+33 3 20 98 20 16", "website": "https://parachutisme-lille.fr",     "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4000 },
-  { "id": "dz-saintnazaire", "name": "Atlantic Parachute – Saint-Nazaire",       "longitude": -2.148, "latitude": 47.313, "icao": "LFRZ", "altitudeM":   8, "radio": "123.5", "phone": "+33 6 11 01 64 70", "website": "https://atlantic-parachute.fr",     "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3200 },
-  { "id": "dz-niort",        "name": "DémenCiel Parachutisme – Niort",           "longitude": -0.406, "latitude": 46.319, "icao": "LFBN", "altitudeM":  59, "radio": "123.5", "phone": "+33 5 49 24 30 30", "website": "https://demencielparachutisme.com", "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-aix",          "name": "Parachute Club d'Aix – Aix-les-Milles",   "longitude":  5.366, "latitude": 43.505, "icao": "LFMA", "altitudeM": 151, "radio": "123.5", "phone": "+33 4 42 24 30 30", "website": "https://paraclubaix.com",           "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-vendee",       "name": "Vendée Évasion – Les Sables d'Olonne",    "longitude": -1.723, "latitude": 46.716, "icao": "LFOL", "altitudeM":  29, "radio": "123.5", "phone": "+33 2 51 21 30 30", "website": "https://vendee-evasion.fr",         "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-
-  { "id": "dz-aurillac",     "name": "Para Club Aurillac – Cantal",             "longitude":  2.421, "latitude": 44.892, "icao": "LFLW", "altitudeM": 641, "radio": "123.5", "phone": "+33 4 71 64 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3500 },
-  { "id": "dz-stetienne",    "name": "CEP Saint-Étienne – Saint-Galmier",       "longitude":  4.297, "latitude": 45.541, "icao": "LFMH", "altitudeM": 400, "radio": "123.5", "phone": "+33 4 77 36 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-lepuy",        "name": "Para Club du Puy-en-Velay",               "longitude":  3.763, "latitude": 45.079, "icao": "LFHP", "altitudeM": 834, "radio": "123.5", "phone": "+33 4 71 09 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-besancon",     "name": "EP Besançon Franche-Comté",               "longitude":  6.083, "latitude": 47.208, "icao": "LFGC", "altitudeM": 434, "radio": "123.5", "phone": "+33 3 81 52 30 30", "website": "",                                  "aircraft": ["Cessna 182", "Cessna 208 Caravan"],           "maxAltitudeM": 4000 },
-  { "id": "dz-valinco",      "name": "EP du Valinco – Propriano, Corse du Sud", "longitude":  8.905, "latitude": 41.678, "icao": "LFKQ", "altitudeM":   9, "radio": "123.5", "phone": "+33 4 95 76 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-cognac",       "name": "Parachutisme Sportif Cognacais",          "longitude": -0.317, "latitude": 45.658, "icao": "LFBU", "altitudeM":  28, "radio": "123.5", "phone": "+33 5 45 82 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-royan",        "name": "Royan Océan Parachutisme",                "longitude": -0.972, "latitude": 45.628, "icao": "LFCY", "altitudeM":  56, "radio": "123.5", "phone": "+33 5 46 39 30 30", "website": "",                                  "aircraft": ["PC-6 Pilatus Porter", "Cessna 208 Caravan"], "maxAltitudeM": 4200 },
-  { "id": "dz-mimizan",      "name": "Skydive Mimizan – Landes",                "longitude": -1.167, "latitude": 44.131, "icao": "LFIJ", "altitudeM":  20, "radio": "123.5", "phone": "+33 5 58 09 20 20", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "Cessna 182"],           "maxAltitudeM": 4000 },
-  { "id": "dz-sarreguemines","name": "Para Club Sportif de Sarreguemines",      "longitude":  7.063, "latitude": 49.098, "icao": "LFGZ", "altitudeM": 306, "radio": "123.5", "phone": "+33 3 87 98 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-laval",        "name": "Parachutisme Laval – Centre École Mayenne","longitude": -0.743, "latitude": 48.032, "icao": "LFOV", "altitudeM":  82, "radio": "123.5", "phone": "+33 2 43 53 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-dunkerque",    "name": "Para Groupe Jean Bart – Dunkerque",       "longitude":  2.351, "latitude": 50.938, "icao": "LFAK", "altitudeM":   6, "radio": "122.5", "phone": "+33 3 28 66 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3500 },
-  { "id": "dz-compiegne",    "name": "Para Sport Compiégnois – Compiègne",      "longitude":  2.863, "latitude": 49.435, "icao": "LFCE", "altitudeM":  61, "radio": "123.5", "phone": "+33 3 44 86 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-dieppe",       "name": "Parachutisme Côte d'Albâtre – Dieppe",   "longitude":  1.085, "latitude": 49.884, "icao": "LFAB", "altitudeM":  73, "radio": "123.5", "phone": "+33 2 35 84 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-lehavre",      "name": "Aéro Club Jean Maridor – Le Havre",      "longitude":  0.087, "latitude": 49.534, "icao": "LFOH", "altitudeM": 103, "radio": "123.5", "phone": "+33 2 35 54 30 30", "website": "",                                  "aircraft": ["Cessna 182"],                                 "maxAltitudeM": 3000 },
-  { "id": "dz-nice",         "name": "Cercle Parachutiste de Nice – Côte d'Azur","longitude": 6.953, "latitude": 43.543, "icao": "LFMD", "altitudeM":  11, "radio": "123.5", "phone": "+33 4 93 48 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan", "PC-6 Pilatus Porter"], "maxAltitudeM": 4200 },
-  { "id": "dz-pujaut",       "name": "Skydive Pujaut – Gard",                   "longitude":  4.780, "latitude": 43.994, "icao": "LFNI", "altitudeM":  50, "radio": "123.5", "phone": "+33 4 66 39 30 30", "website": "",                                  "aircraft": ["Cessna 208 Caravan"],                         "maxAltitudeM": 4000 }
+  {
+    "id": "dz-pontoise",
+    "name": "Skydive Paris – Pontoise",
+    "longitude": 2.041,
+    "latitude": 49.097,
+    "country": "France",
+    "icao": "LFPT",
+    "altitudeM": 100,
+    "radio": "123.5",
+    "phone": "+33 1 34 66 00 00",
+    "website": "https://skydiveparis.com",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-etampes",
+    "name": "Parachutisme Étampes-Mondésir",
+    "longitude": 2.069,
+    "latitude": 48.391,
+    "country": "France",
+    "icao": "LFOX",
+    "altitudeM": 185,
+    "radio": "123.5",
+    "phone": "+33 1 64 94 01 01",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-ferte",
+    "name": "Parachutisme La Ferté-Gaucher",
+    "longitude": 3.305,
+    "latitude": 48.765,
+    "country": "France",
+    "icao": "LFFG",
+    "altitudeM": 115,
+    "radio": "123.5",
+    "phone": "+33 1 64 20 07 07",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-chartres",
+    "name": "Parachutisme Chartres",
+    "longitude": 1.522,
+    "latitude": 48.459,
+    "country": "France",
+    "icao": "LFOR",
+    "altitudeM": 155,
+    "radio": "123.5",
+    "phone": "+33 2 37 84 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-tours",
+    "name": "Parachutisme Touraine – Tours",
+    "longitude": 0.727,
+    "latitude": 47.432,
+    "country": "France",
+    "icao": "LFOT",
+    "altitudeM": 108,
+    "radio": "123.5",
+    "phone": "+33 2 47 54 60 60",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-chateauroux",
+    "name": "Parachutisme Châteauroux",
+    "longitude": 1.73,
+    "latitude": 46.862,
+    "country": "France",
+    "icao": "LFLX",
+    "altitudeM": 155,
+    "radio": "123.5",
+    "phone": "+33 2 54 22 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-amiens",
+    "name": "Parachutisme Picardie – Amiens",
+    "longitude": 2.387,
+    "latitude": 49.873,
+    "country": "France",
+    "icao": "LFAY",
+    "altitudeM": 53,
+    "radio": "123.5",
+    "phone": "+33 3 22 33 44 55",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-lens",
+    "name": "Parachutisme Artois – Lens",
+    "longitude": 2.833,
+    "latitude": 50.469,
+    "country": "France",
+    "icao": "LFQT",
+    "altitudeM": 51,
+    "radio": "122.5",
+    "phone": "+33 3 21 43 00 00",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-reims",
+    "name": "Parachutisme Champagne – Reims",
+    "longitude": 3.95,
+    "latitude": 49.31,
+    "country": "France",
+    "icao": "LFSR",
+    "altitudeM": 83,
+    "radio": "123.5",
+    "phone": "+33 3 26 49 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-troyes",
+    "name": "Parachutisme Aube – Troyes",
+    "longitude": 4.017,
+    "latitude": 48.323,
+    "country": "France",
+    "icao": "LFQB",
+    "altitudeM": 111,
+    "radio": "123.5",
+    "phone": "+33 3 25 71 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-haguenau",
+    "name": "Parachutisme Alsace – Haguenau",
+    "longitude": 7.817,
+    "latitude": 48.793,
+    "country": "France",
+    "icao": "LFSH",
+    "altitudeM": 150,
+    "radio": "123.5",
+    "phone": "+33 3 88 73 50 50",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-colmar",
+    "name": "Parachutisme Alsace – Colmar",
+    "longitude": 7.358,
+    "latitude": 48.109,
+    "country": "France",
+    "icao": "LFGB",
+    "altitudeM": 200,
+    "radio": "123.5",
+    "phone": "+33 3 89 24 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-nancy",
+    "name": "Parachutisme Lorraine – Nancy",
+    "longitude": 6.1,
+    "latitude": 48.56,
+    "country": "France",
+    "icao": "LFSG",
+    "altitudeM": 288,
+    "radio": "123.5",
+    "phone": "+33 3 83 26 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-dijon",
+    "name": "Parachutisme Bourgogne – Dijon",
+    "longitude": 4.899,
+    "latitude": 47.381,
+    "country": "France",
+    "icao": "LFGI",
+    "altitudeM": 417,
+    "radio": "123.5",
+    "phone": "+33 3 80 35 69 69",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-dole",
+    "name": "Parachutisme Franche-Comté – Dole",
+    "longitude": 5.435,
+    "latitude": 47.043,
+    "country": "France",
+    "icao": "LFGJ",
+    "altitudeM": 220,
+    "radio": "123.5",
+    "phone": "+33 3 84 82 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-stbrieuc",
+    "name": "Parachutisme Bretagne – Saint-Brieuc",
+    "longitude": -2.854,
+    "latitude": 48.538,
+    "country": "France",
+    "icao": "LFRT",
+    "altitudeM": 138,
+    "radio": "123.5",
+    "phone": "+33 2 96 94 80 80",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-lorient",
+    "name": "Parachutisme Morbihan – Lorient",
+    "longitude": -3.44,
+    "latitude": 47.76,
+    "country": "France",
+    "icao": "LFRH",
+    "altitudeM": 160,
+    "radio": "123.5",
+    "phone": "+33 2 97 87 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-vannes",
+    "name": "Parachutisme Bretagne – Vannes",
+    "longitude": -2.718,
+    "latitude": 47.721,
+    "country": "France",
+    "icao": "LFRV",
+    "altitudeM": 140,
+    "radio": "123.5",
+    "phone": "+33 2 97 60 77 77",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-angers",
+    "name": "Parachutisme Anjou – Angers",
+    "longitude": -0.313,
+    "latitude": 47.561,
+    "country": "France",
+    "icao": "LFJR",
+    "altitudeM": 73,
+    "radio": "123.5",
+    "phone": "+33 2 41 33 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-lemans",
+    "name": "Parachutisme Sarthe – Le Mans",
+    "longitude": 0.202,
+    "latitude": 47.949,
+    "country": "France",
+    "icao": "LFRM",
+    "altitudeM": 60,
+    "radio": "123.5",
+    "phone": "+33 2 43 86 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-romorantin",
+    "name": "Parachutisme Val de Loire – Romorantin",
+    "longitude": 1.688,
+    "latitude": 47.358,
+    "country": "France",
+    "icao": "LFYR",
+    "altitudeM": 93,
+    "radio": "123.5",
+    "phone": "+33 2 54 76 01 01",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-feurs",
+    "name": "Parachutisme Loire – Feurs",
+    "longitude": 4.242,
+    "latitude": 45.727,
+    "country": "France",
+    "icao": "LFHF",
+    "altitudeM": 395,
+    "radio": "123.5",
+    "phone": "+33 4 77 26 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-versoud",
+    "name": "Parachutisme Isère – Grenoble Versoud",
+    "longitude": 5.93,
+    "latitude": 45.222,
+    "country": "France",
+    "icao": "LFLG",
+    "altitudeM": 247,
+    "radio": "123.5",
+    "phone": "+33 4 76 45 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-issoire",
+    "name": "Parachutisme Auvergne – Issoire",
+    "longitude": 3.245,
+    "latitude": 45.519,
+    "country": "France",
+    "icao": "LFHA",
+    "altitudeM": 391,
+    "radio": "123.5",
+    "phone": "+33 4 73 55 30 30",
+    "website": "https://parachutisme-auvergne.com",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-aubenas",
+    "name": "Parachutisme Ardèche – Aubenas",
+    "longitude": 4.372,
+    "latitude": 44.544,
+    "country": "France",
+    "icao": "LFHO",
+    "altitudeM": 266,
+    "radio": "123.5",
+    "phone": "+33 4 75 35 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-gap",
+    "name": "Skydive Gap-Tallard",
+    "longitude": 6.037,
+    "latitude": 44.454,
+    "country": "France",
+    "icao": "LFNA",
+    "altitudeM": 792,
+    "radio": "123.5",
+    "phone": "+33 4 92 54 40 40",
+    "website": "https://skydive-gap.com",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Twin Otter DHC-6"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-aspres",
+    "name": "Parachutisme Buëch – Aspres",
+    "longitude": 5.742,
+    "latitude": 44.522,
+    "country": "France",
+    "icao": "LFNJ",
+    "altitudeM": 778,
+    "radio": "123.5",
+    "phone": "+33 4 92 58 60 60",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-nimes",
+    "name": "Parachutisme Gard – Nîmes",
+    "longitude": 4.416,
+    "latitude": 43.757,
+    "country": "France",
+    "icao": "LFTW",
+    "altitudeM": 100,
+    "radio": "123.5",
+    "phone": "+33 4 66 70 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-beziers",
+    "name": "Parachutisme Hérault – Béziers",
+    "longitude": 3.353,
+    "latitude": 43.323,
+    "country": "France",
+    "icao": "LFMU",
+    "altitudeM": 56,
+    "radio": "123.5",
+    "phone": "+33 4 67 90 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-albi",
+    "name": "Parachutisme Tarn – Albi",
+    "longitude": 2.113,
+    "latitude": 43.913,
+    "country": "France",
+    "icao": "LFCI",
+    "altitudeM": 174,
+    "radio": "123.5",
+    "phone": "+33 5 63 54 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-montauban",
+    "name": "Parachutisme Tarn-et-Garonne – Montauban",
+    "longitude": 1.378,
+    "latitude": 44.026,
+    "country": "France",
+    "icao": "LFDB",
+    "altitudeM": 113,
+    "radio": "123.5",
+    "phone": "+33 5 63 63 40 40",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-toulouse",
+    "name": "Parachutisme Toulouse-Lasbordes",
+    "longitude": 1.499,
+    "latitude": 43.586,
+    "country": "France",
+    "icao": "LFCL",
+    "altitudeM": 159,
+    "radio": "122.5",
+    "phone": "+33 5 61 52 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-pamiers",
+    "name": "Parachutisme Ariège – Pamiers",
+    "longitude": 1.695,
+    "latitude": 43.099,
+    "country": "France",
+    "icao": "LFDP",
+    "altitudeM": 289,
+    "radio": "123.5",
+    "phone": "+33 5 61 67 70 70",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-pau",
+    "name": "Parachutisme Pyrénées – Pau",
+    "longitude": -0.418,
+    "latitude": 43.38,
+    "country": "France",
+    "icao": "LFBP",
+    "altitudeM": 198,
+    "radio": "123.5",
+    "phone": "+33 5 59 32 70 70",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-agen",
+    "name": "Parachutisme Lot-et-Garonne – Agen",
+    "longitude": 0.591,
+    "latitude": 44.175,
+    "country": "France",
+    "icao": "LFBA",
+    "altitudeM": 58,
+    "radio": "123.5",
+    "phone": "+33 5 53 96 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-perigueux",
+    "name": "Parachutisme Dordogne – Périgueux",
+    "longitude": 0.813,
+    "latitude": 45.198,
+    "country": "France",
+    "icao": "LFBG",
+    "altitudeM": 200,
+    "radio": "123.5",
+    "phone": "+33 5 53 04 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-sarlat",
+    "name": "Parachutisme Sarlat",
+    "longitude": 1.221,
+    "latitude": 44.892,
+    "country": "France",
+    "icao": "LFDS",
+    "altitudeM": 174,
+    "radio": "123.5",
+    "phone": "+33 5 53 59 00 00",
+    "website": "https://parachutisme-sarlat.fr",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-saintes",
+    "name": "Parachutisme Atlantique – Saintes",
+    "longitude": -0.543,
+    "latitude": 45.785,
+    "country": "France",
+    "icao": "LFXS",
+    "altitudeM": 46,
+    "radio": "123.5",
+    "phone": "+33 5 46 74 00 00",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-empuriabrava",
+    "name": "Skydive Empuriabrava",
+    "longitude": 3.121,
+    "latitude": 42.259,
+    "country": "Spain",
+    "icao": "LEEP",
+    "altitudeM": 17,
+    "radio": "118.45",
+    "phone": "+34 972 45 01 11",
+    "website": "https://skydiveempuriabrava.com",
+    "aircraft": [
+      "CASA 212",
+      "Cessna 208 Caravan",
+      "Twin Otter DHC-6"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-lodi",
+    "name": "Skydive Lodi",
+    "longitude": 9.73,
+    "latitude": 45.234,
+    "country": "Italy",
+    "icao": "LIPL",
+    "altitudeM": 79,
+    "radio": "130.0",
+    "phone": "+39 0371 80 20 20",
+    "website": "https://skydiveitaly.it",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-schaffen",
+    "name": "Skydive Schaffen – Belgique",
+    "longitude": 5.044,
+    "latitude": 50.996,
+    "country": "Belgium",
+    "icao": "EBDT",
+    "altitudeM": 20,
+    "radio": "122.0",
+    "phone": "+32 13 77 00 00",
+    "website": "https://skydiveschaffen.be",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-hinton",
+    "name": "UK Parachuting Hinton",
+    "longitude": -1.29,
+    "latitude": 51.982,
+    "country": "United Kingdom",
+    "icao": "EGBH",
+    "altitudeM": 71,
+    "radio": "130.1",
+    "phone": "+44 1295 750555",
+    "website": "https://ukparachuting.co.uk",
+    "aircraft": [
+      "BN2 Islander"
+    ],
+    "maxAltitudeM": 4270
+  },
+  {
+    "id": "dz-caen",
+    "name": "Parachutisme Normandie – Caen",
+    "longitude": -0.45,
+    "latitude": 49.173,
+    "country": "France",
+    "icao": "LFRK",
+    "altitudeM": 67,
+    "radio": "123.5",
+    "phone": "+33 2 31 71 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-evreux",
+    "name": "Parachutisme Eure – Évreux",
+    "longitude": 1.22,
+    "latitude": 49.029,
+    "country": "France",
+    "icao": "LFOE",
+    "altitudeM": 152,
+    "radio": "123.5",
+    "phone": "+33 2 32 39 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-rouen",
+    "name": "Parachutisme Seine-Maritime – Rouen",
+    "longitude": 1.175,
+    "latitude": 49.384,
+    "country": "France",
+    "icao": "LFOP",
+    "altitudeM": 157,
+    "radio": "123.5",
+    "phone": "+33 2 35 79 40 40",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-brest",
+    "name": "Parachutisme Finistère – Brest",
+    "longitude": -4.419,
+    "latitude": 48.447,
+    "country": "France",
+    "icao": "LFRB",
+    "altitudeM": 100,
+    "radio": "123.5",
+    "phone": "+33 2 98 32 70 70",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-quimper",
+    "name": "Parachutisme Finistère Sud – Quimper",
+    "longitude": -4.168,
+    "latitude": 47.974,
+    "country": "France",
+    "icao": "LFOQ",
+    "altitudeM": 85,
+    "radio": "123.5",
+    "phone": "+33 2 98 94 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-lognes",
+    "name": "Parachutisme Seine-et-Marne – Lognes",
+    "longitude": 2.623,
+    "latitude": 48.825,
+    "country": "France",
+    "icao": "LFPL",
+    "altitudeM": 90,
+    "radio": "123.5",
+    "phone": "+33 1 64 80 30 30",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-maubeuge",
+    "name": "Parachutisme Nord – Maubeuge",
+    "longitude": 4.033,
+    "latitude": 50.28,
+    "country": "France",
+    "icao": "LFQM",
+    "altitudeM": 137,
+    "radio": "122.5",
+    "phone": "+33 3 27 67 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-orleans",
+    "name": "Parachutisme Loiret – Orléans",
+    "longitude": 1.76,
+    "latitude": 47.988,
+    "country": "France",
+    "icao": "LFOJ",
+    "altitudeM": 125,
+    "radio": "123.5",
+    "phone": "+33 2 38 64 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-bourges",
+    "name": "Parachutisme Cher – Bourges",
+    "longitude": 2.371,
+    "latitude": 47.058,
+    "country": "France",
+    "icao": "LFLD",
+    "altitudeM": 161,
+    "radio": "123.5",
+    "phone": "+33 2 48 50 40 40",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-auxerre",
+    "name": "Parachutisme Yonne – Auxerre",
+    "longitude": 3.497,
+    "latitude": 47.85,
+    "country": "France",
+    "icao": "LFLA",
+    "altitudeM": 204,
+    "radio": "123.5",
+    "phone": "+33 3 86 53 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-macon",
+    "name": "Parachutisme Saône-et-Loire – Mâcon",
+    "longitude": 4.796,
+    "latitude": 46.295,
+    "country": "France",
+    "icao": "LFLM",
+    "altitudeM": 216,
+    "radio": "123.5",
+    "phone": "+33 3 85 36 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-bourg",
+    "name": "Parachutisme Ain – Bourg-en-Bresse",
+    "longitude": 5.292,
+    "latitude": 46.202,
+    "country": "France",
+    "icao": "LFHS",
+    "altitudeM": 232,
+    "radio": "123.5",
+    "phone": "+33 4 74 22 40 40",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-vichy",
+    "name": "Parachutisme Allier – Vichy",
+    "longitude": 3.403,
+    "latitude": 46.169,
+    "country": "France",
+    "icao": "LFLV",
+    "altitudeM": 249,
+    "radio": "123.5",
+    "phone": "+33 4 70 32 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-valence",
+    "name": "Parachutisme Drôme – Valence",
+    "longitude": 4.97,
+    "latitude": 44.921,
+    "country": "France",
+    "icao": "LFLU",
+    "altitudeM": 166,
+    "radio": "123.5",
+    "phone": "+33 4 75 57 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-avignon",
+    "name": "Parachutisme Vaucluse – Avignon",
+    "longitude": 4.902,
+    "latitude": 43.906,
+    "country": "France",
+    "icao": "LFMV",
+    "altitudeM": 36,
+    "radio": "123.5",
+    "phone": "+33 4 90 81 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-leluc",
+    "name": "Parachutisme Var – Le Luc",
+    "longitude": 6.387,
+    "latitude": 43.384,
+    "country": "France",
+    "icao": "LFMC",
+    "altitudeM": 264,
+    "radio": "123.5",
+    "phone": "+33 4 94 60 80 80",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-carcassonne",
+    "name": "Parachutisme Aude – Carcassonne",
+    "longitude": 2.306,
+    "latitude": 43.216,
+    "country": "France",
+    "icao": "LFMK",
+    "altitudeM": 127,
+    "radio": "123.5",
+    "phone": "+33 4 68 71 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-rodez",
+    "name": "Parachutisme Aveyron – Rodez",
+    "longitude": 2.483,
+    "latitude": 44.408,
+    "country": "France",
+    "icao": "LFCR",
+    "altitudeM": 534,
+    "radio": "123.5",
+    "phone": "+33 5 65 42 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-tarbes",
+    "name": "Parachutisme Hautes-Pyrénées – Tarbes",
+    "longitude": 0.006,
+    "latitude": 43.186,
+    "country": "France",
+    "icao": "LFBT",
+    "altitudeM": 360,
+    "radio": "123.5",
+    "phone": "+33 5 62 32 70 70",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-marmande",
+    "name": "Parachutisme Gironde – Marmande",
+    "longitude": 0.244,
+    "latitude": 44.273,
+    "country": "France",
+    "icao": "LFID",
+    "altitudeM": 51,
+    "radio": "123.5",
+    "phone": "+33 5 53 64 20 20",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-bergerac",
+    "name": "Parachutisme Périgord – Bergerac",
+    "longitude": 0.519,
+    "latitude": 44.825,
+    "country": "France",
+    "icao": "LFBE",
+    "altitudeM": 53,
+    "radio": "123.5",
+    "phone": "+33 5 53 57 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-zwartberg",
+    "name": "Skydive Zwartberg – Belgique",
+    "longitude": 5.658,
+    "latitude": 50.982,
+    "country": "Belgium",
+    "icao": "EBZW",
+    "altitudeM": 57,
+    "radio": "122.0",
+    "phone": "+32 89 35 00 00",
+    "website": "https://skydivezwartberg.be",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-spa",
+    "name": "Skydive Spa – Belgique",
+    "longitude": 5.91,
+    "latitude": 50.48,
+    "country": "Belgium",
+    "icao": "EBSP",
+    "altitudeM": 513,
+    "radio": "122.0",
+    "phone": "+32 87 79 22 22",
+    "website": "https://skydivespa.be",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-persan",
+    "name": "Skydive Paris Nord – Persan-Beaumont",
+    "longitude": 2.561,
+    "latitude": 49.095,
+    "country": "France",
+    "icao": "LFPA",
+    "altitudeM": 39,
+    "radio": "123.5",
+    "phone": "+33 1 30 34 11 11",
+    "website": "https://skydiveparis.com",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Twin Otter DHC-6"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-coulommiers",
+    "name": "Parachutisme Seine-et-Marne – Coulommiers",
+    "longitude": 3.012,
+    "latitude": 48.834,
+    "country": "France",
+    "icao": "LFPK",
+    "altitudeM": 89,
+    "radio": "123.5",
+    "phone": "+33 1 64 03 01 01",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-chateaudun",
+    "name": "Parachutisme Eure-et-Loir – Châteaudun",
+    "longitude": 1.376,
+    "latitude": 48.058,
+    "country": "France",
+    "icao": "LFCO",
+    "altitudeM": 155,
+    "radio": "123.5",
+    "phone": "+33 2 37 45 50 50",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-rennes",
+    "name": "Parachutisme Bretagne Est – Rennes",
+    "longitude": -1.735,
+    "latitude": 48.069,
+    "country": "France",
+    "icao": "LFRN",
+    "altitudeM": 36,
+    "radio": "123.5",
+    "phone": "+33 2 99 29 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-labaule",
+    "name": "Parachutisme Loire-Atlantique – La Baule",
+    "longitude": -2.318,
+    "latitude": 47.29,
+    "country": "France",
+    "icao": "LFRE",
+    "altitudeM": 13,
+    "radio": "123.5",
+    "phone": "+33 2 40 60 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-saumur",
+    "name": "Parachutisme Maine-et-Loire – Saumur",
+    "longitude": -0.115,
+    "latitude": 47.26,
+    "country": "France",
+    "icao": "LFED",
+    "altitudeM": 65,
+    "radio": "123.5",
+    "phone": "+33 2 41 50 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-larochelle",
+    "name": "Parachutisme Charente-Maritime – La Rochelle",
+    "longitude": -1.195,
+    "latitude": 46.179,
+    "country": "France",
+    "icao": "LFBH",
+    "altitudeM": 22,
+    "radio": "123.5",
+    "phone": "+33 5 46 42 30 30",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-poitiers",
+    "name": "Parachutisme Vienne – Poitiers",
+    "longitude": 0.307,
+    "latitude": 46.588,
+    "country": "France",
+    "icao": "LFBI",
+    "altitudeM": 127,
+    "radio": "123.5",
+    "phone": "+33 5 49 58 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-angouleme",
+    "name": "Parachutisme Charente – Angoulême",
+    "longitude": 0.221,
+    "latitude": 45.729,
+    "country": "France",
+    "icao": "LFBU",
+    "altitudeM": 133,
+    "radio": "123.5",
+    "phone": "+33 5 45 69 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-limoges",
+    "name": "Parachutisme Haute-Vienne – Limoges",
+    "longitude": 1.179,
+    "latitude": 45.862,
+    "country": "France",
+    "icao": "LFBL",
+    "altitudeM": 402,
+    "radio": "123.5",
+    "phone": "+33 5 55 43 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-biscarrosse",
+    "name": "Parachutisme Landes – Biscarrosse",
+    "longitude": -1.256,
+    "latitude": 44.341,
+    "country": "France",
+    "icao": "LFBS",
+    "altitudeM": 43,
+    "radio": "123.5",
+    "phone": "+33 5 58 09 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-dax",
+    "name": "Parachutisme Landes – Dax",
+    "longitude": -1.068,
+    "latitude": 43.688,
+    "country": "France",
+    "icao": "LFBY",
+    "altitudeM": 35,
+    "radio": "123.5",
+    "phone": "+33 5 58 74 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-metz",
+    "name": "Parachutisme Moselle – Metz",
+    "longitude": 6.251,
+    "latitude": 48.983,
+    "country": "France",
+    "icao": "LFJL",
+    "altitudeM": 265,
+    "radio": "123.5",
+    "phone": "+33 3 87 56 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-annecy",
+    "name": "Parachutisme Haute-Savoie – Annecy",
+    "longitude": 6.098,
+    "latitude": 45.93,
+    "country": "France",
+    "icao": "LFLP",
+    "altitudeM": 455,
+    "radio": "123.5",
+    "phone": "+33 4 50 22 20 20",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-amberieu",
+    "name": "Parachutisme Ain – Ambérieu-en-Bugey",
+    "longitude": 5.332,
+    "latitude": 45.987,
+    "country": "France",
+    "icao": "LFXA",
+    "altitudeM": 253,
+    "radio": "123.5",
+    "phone": "+33 4 74 38 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-challes",
+    "name": "Parachutisme Savoie – Chambéry-Challes",
+    "longitude": 5.973,
+    "latitude": 45.558,
+    "country": "France",
+    "icao": "LFLE",
+    "altitudeM": 235,
+    "radio": "123.5",
+    "phone": "+33 4 79 26 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-clermont",
+    "name": "Parachutisme Auvergne – Clermont-Ferrand",
+    "longitude": 3.169,
+    "latitude": 45.787,
+    "country": "France",
+    "icao": "LFLC",
+    "altitudeM": 332,
+    "radio": "123.5",
+    "phone": "+33 4 73 62 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-andernos",
+    "name": "Parachutisme Gironde – Andernos",
+    "longitude": -1.063,
+    "latitude": 44.748,
+    "country": "France",
+    "icao": "LFGD",
+    "altitudeM": 16,
+    "radio": "123.5",
+    "phone": "+33 5 56 82 30 30",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-cahors",
+    "name": "Parachutisme Lot – Cahors-Lalbenque",
+    "longitude": 1.475,
+    "latitude": 44.351,
+    "country": "France",
+    "icao": "LFCC",
+    "altitudeM": 265,
+    "radio": "123.5",
+    "phone": "+33 5 65 31 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-brive",
+    "name": "Parachutisme Corrèze – Brive",
+    "longitude": 1.469,
+    "latitude": 45.151,
+    "country": "France",
+    "icao": "LFSL",
+    "altitudeM": 114,
+    "radio": "123.5",
+    "phone": "+33 5 55 86 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-muret",
+    "name": "Parachutisme Haute-Garonne – Muret",
+    "longitude": 1.264,
+    "latitude": 43.449,
+    "country": "France",
+    "icao": "LFBR",
+    "altitudeM": 188,
+    "radio": "123.5",
+    "phone": "+33 5 61 56 30 30",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-castres",
+    "name": "Parachutisme Tarn – Castres",
+    "longitude": 2.289,
+    "latitude": 43.556,
+    "country": "France",
+    "icao": "LFCK",
+    "altitudeM": 350,
+    "radio": "123.5",
+    "phone": "+33 5 63 72 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-perpignan",
+    "name": "Parachutisme Pyrénées-Orientales – Perpignan",
+    "longitude": 2.871,
+    "latitude": 42.74,
+    "country": "France",
+    "icao": "LFMP",
+    "altitudeM": 42,
+    "radio": "123.5",
+    "phone": "+33 4 68 52 60 60",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-montpellier",
+    "name": "Parachutisme Hérault – Montpellier",
+    "longitude": 4.071,
+    "latitude": 43.62,
+    "country": "France",
+    "icao": "LFNG",
+    "altitudeM": 5,
+    "radio": "123.5",
+    "phone": "+33 4 67 29 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-fayence",
+    "name": "Parachutisme Var – Fayence",
+    "longitude": 6.7,
+    "latitude": 43.615,
+    "country": "France",
+    "icao": "LFMF",
+    "altitudeM": 474,
+    "radio": "123.5",
+    "phone": "+33 4 94 76 00 00",
+    "website": "https://parachutisme-var.fr",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-salon",
+    "name": "Parachutisme Provence – Salon-de-Provence",
+    "longitude": 5.108,
+    "latitude": 43.606,
+    "country": "France",
+    "icao": "LFMY",
+    "altitudeM": 52,
+    "radio": "123.5",
+    "phone": "+33 4 90 53 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-ghisonaccia",
+    "name": "Parachutisme Corse – Ghisonaccia",
+    "longitude": 9.405,
+    "latitude": 41.933,
+    "country": "France",
+    "icao": "LFKG",
+    "altitudeM": 5,
+    "radio": "123.5",
+    "phone": "+33 4 95 56 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-teuge",
+    "name": "Skydive Teuge – Pays-Bas",
+    "longitude": 6.047,
+    "latitude": 52.244,
+    "country": "Netherlands",
+    "icao": "EHTE",
+    "altitudeM": 17,
+    "radio": "122.0",
+    "phone": "+31 578 61 25 25",
+    "website": "https://skydiveteuge.nl",
+    "aircraft": [
+      "Twin Otter DHC-6",
+      "CASA 212",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-seppe",
+    "name": "Skydive Seppe – Pays-Bas",
+    "longitude": 4.554,
+    "latitude": 51.554,
+    "country": "Netherlands",
+    "icao": "EHSE",
+    "altitudeM": 3,
+    "radio": "122.0",
+    "phone": "+31 76 596 72 76",
+    "website": "https://skydiveseppe.nl",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-sibson",
+    "name": "UK Parachuting – Sibson",
+    "longitude": -0.373,
+    "latitude": 52.553,
+    "country": "United Kingdom",
+    "icao": "EGSP",
+    "altitudeM": 24,
+    "radio": "130.1",
+    "phone": "+44 1832 280490",
+    "website": "https://ukparachuting.co.uk",
+    "aircraft": [
+      "BN2 Islander",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4270
+  },
+  {
+    "id": "dz-langar",
+    "name": "Skydive Langar",
+    "longitude": -0.911,
+    "latitude": 52.876,
+    "country": "United Kingdom",
+    "icao": "EGBN",
+    "altitudeM": 70,
+    "radio": "130.1",
+    "phone": "+44 1949 860878",
+    "website": "https://skydivelangar.co.uk",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4270
+  },
+  {
+    "id": "dz-netheravon",
+    "name": "Army Parachute Association – Netheravon",
+    "longitude": -1.747,
+    "latitude": 51.234,
+    "country": "United Kingdom",
+    "icao": "EGDN",
+    "altitudeM": 136,
+    "radio": "130.1",
+    "phone": "+44 1980 628120",
+    "website": "https://apa.org.uk",
+    "aircraft": [
+      "Twin Otter DHC-6"
+    ],
+    "maxAltitudeM": 4270
+  },
+  {
+    "id": "dz-headcorn",
+    "name": "Skydive Headcorn",
+    "longitude": 0.641,
+    "latitude": 51.156,
+    "country": "United Kingdom",
+    "icao": "EGKH",
+    "altitudeM": 28,
+    "radio": "130.1",
+    "phone": "+44 1622 890862",
+    "website": "https://headcorn.com",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "BN2 Islander"
+    ],
+    "maxAltitudeM": 4270
+  },
+  {
+    "id": "dz-bremgarten",
+    "name": "Skydive Freiburg – Bremgarten",
+    "longitude": 7.618,
+    "latitude": 47.903,
+    "country": "Germany",
+    "icao": "EDTG",
+    "altitudeM": 225,
+    "radio": "122.0",
+    "phone": "+49 7666 93930",
+    "website": "https://skydive-freiburg.de",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-hahnweide",
+    "name": "Skydive Hahnweide – Stuttgart",
+    "longitude": 9.462,
+    "latitude": 48.607,
+    "country": "Germany",
+    "icao": "EDST",
+    "altitudeM": 393,
+    "radio": "122.0",
+    "phone": "+49 7021 83020",
+    "website": "https://fallschirmsprungen-hahnweide.de",
+    "aircraft": [
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-leutkirch",
+    "name": "Skydive Allgäu – Leutkirch",
+    "longitude": 10.036,
+    "latitude": 47.836,
+    "country": "Germany",
+    "icao": "EDHU",
+    "altitudeM": 700,
+    "radio": "122.0",
+    "phone": "+49 7561 72050",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-locarno",
+    "name": "Skydive Ticino – Locarno",
+    "longitude": 8.878,
+    "latitude": 46.161,
+    "country": "Switzerland",
+    "icao": "LSZL",
+    "altitudeM": 197,
+    "radio": "122.0",
+    "phone": "+41 91 751 10 10",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-beromunster",
+    "name": "Skydive Lucerne – Beromünster",
+    "longitude": 8.204,
+    "latitude": 47.191,
+    "country": "Switzerland",
+    "icao": "LSME",
+    "altitudeM": 601,
+    "radio": "122.0",
+    "phone": "+41 62 771 20 20",
+    "website": "https://skydivelucerne.ch",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-evora",
+    "name": "Skydive Portugal – Évora",
+    "longitude": -7.886,
+    "latitude": 38.533,
+    "country": "Portugal",
+    "icao": "LPEV",
+    "altitudeM": 309,
+    "radio": "122.0",
+    "phone": "+351 266 731 300",
+    "website": "https://skydiveportugal.com",
+    "aircraft": [
+      "Twin Otter DHC-6",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-ocana",
+    "name": "Skydive Madrid – Ocaña",
+    "longitude": -3.504,
+    "latitude": 39.937,
+    "country": "Spain",
+    "icao": "LEOC",
+    "altitudeM": 700,
+    "radio": "122.0",
+    "phone": "+34 925 120 300",
+    "website": "https://skydivedropzone.es",
+    "aircraft": [
+      "Twin Otter DHC-6",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4500
+  },
+  {
+    "id": "dz-lessay",
+    "name": "A'Air Parachutisme – Lessay",
+    "longitude": -1.548,
+    "latitude": 49.117,
+    "country": "France",
+    "icao": "LFOM",
+    "altitudeM": 35,
+    "radio": "123.5",
+    "phone": "+33 6 98 86 04 33",
+    "website": "https://aair-parachutisme.fr",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3200
+  },
+  {
+    "id": "dz-vimory",
+    "name": "Fly Attitude Parachutisme – Montargis-Vimory",
+    "longitude": 2.672,
+    "latitude": 47.996,
+    "country": "France",
+    "icao": "LFYN",
+    "altitudeM": 89,
+    "radio": "123.5",
+    "phone": "+33 6 13 53 80 48",
+    "website": "https://flyattitude.com",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-cosne",
+    "name": "Fly Attitude – Cosne-sur-Loire",
+    "longitude": 2.926,
+    "latitude": 47.405,
+    "country": "France",
+    "icao": "LFGN",
+    "altitudeM": 175,
+    "radio": "123.5",
+    "phone": "+33 6 13 53 80 48",
+    "website": "https://flyattitude.com",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-lannion",
+    "name": "Septième Ciel Parachutisme – Lannion",
+    "longitude": -3.471,
+    "latitude": 48.754,
+    "country": "France",
+    "icao": "LFRO",
+    "altitudeM": 46,
+    "radio": "123.5",
+    "phone": "+33 7 61 36 15 16",
+    "website": "https://septiemeciel-parachutisme.fr",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-charleville",
+    "name": "Para Club Ardennes – Charleville-Mézières",
+    "longitude": 4.611,
+    "latitude": 49.787,
+    "country": "France",
+    "icao": "LFQV",
+    "altitudeM": 247,
+    "radio": "123.5",
+    "phone": "+33 3 24 37 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-peronne",
+    "name": "Parachutisme Somme – Péronne",
+    "longitude": 3.026,
+    "latitude": 49.868,
+    "country": "France",
+    "icao": "LFAG",
+    "altitudeM": 66,
+    "radio": "123.5",
+    "phone": "+33 3 22 84 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-lille",
+    "name": "EFPLB – Parachutisme Lille Bondues",
+    "longitude": 3.073,
+    "latitude": 50.691,
+    "country": "France",
+    "icao": "LFQO",
+    "altitudeM": 26,
+    "radio": "122.5",
+    "phone": "+33 3 20 98 20 16",
+    "website": "https://parachutisme-lille.fr",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-saintnazaire",
+    "name": "Atlantic Parachute – Saint-Nazaire",
+    "longitude": -2.148,
+    "latitude": 47.313,
+    "country": "France",
+    "icao": "LFRZ",
+    "altitudeM": 8,
+    "radio": "123.5",
+    "phone": "+33 6 11 01 64 70",
+    "website": "https://atlantic-parachute.fr",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3200
+  },
+  {
+    "id": "dz-niort",
+    "name": "DémenCiel Parachutisme – Niort",
+    "longitude": -0.406,
+    "latitude": 46.319,
+    "country": "France",
+    "icao": "LFBN",
+    "altitudeM": 59,
+    "radio": "123.5",
+    "phone": "+33 5 49 24 30 30",
+    "website": "https://demencielparachutisme.com",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-aix",
+    "name": "Parachute Club d'Aix – Aix-les-Milles",
+    "longitude": 5.366,
+    "latitude": 43.505,
+    "country": "France",
+    "icao": "LFMA",
+    "altitudeM": 151,
+    "radio": "123.5",
+    "phone": "+33 4 42 24 30 30",
+    "website": "https://paraclubaix.com",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-vendee",
+    "name": "Vendée Évasion – Les Sables d'Olonne",
+    "longitude": -1.723,
+    "latitude": 46.716,
+    "country": "France",
+    "icao": "LFOL",
+    "altitudeM": 29,
+    "radio": "123.5",
+    "phone": "+33 2 51 21 30 30",
+    "website": "https://vendee-evasion.fr",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-aurillac",
+    "name": "Para Club Aurillac – Cantal",
+    "longitude": 2.421,
+    "latitude": 44.892,
+    "country": "France",
+    "icao": "LFLW",
+    "altitudeM": 641,
+    "radio": "123.5",
+    "phone": "+33 4 71 64 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-stetienne",
+    "name": "CEP Saint-Étienne – Saint-Galmier",
+    "longitude": 4.297,
+    "latitude": 45.541,
+    "country": "France",
+    "icao": "LFMH",
+    "altitudeM": 400,
+    "radio": "123.5",
+    "phone": "+33 4 77 36 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-lepuy",
+    "name": "Para Club du Puy-en-Velay",
+    "longitude": 3.763,
+    "latitude": 45.079,
+    "country": "France",
+    "icao": "LFHP",
+    "altitudeM": 834,
+    "radio": "123.5",
+    "phone": "+33 4 71 09 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-besancon",
+    "name": "EP Besançon Franche-Comté",
+    "longitude": 6.083,
+    "latitude": 47.208,
+    "country": "France",
+    "icao": "LFGC",
+    "altitudeM": 434,
+    "radio": "123.5",
+    "phone": "+33 3 81 52 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-valinco",
+    "name": "EP du Valinco – Propriano, Corse du Sud",
+    "longitude": 8.905,
+    "latitude": 41.678,
+    "country": "France",
+    "icao": "LFKQ",
+    "altitudeM": 9,
+    "radio": "123.5",
+    "phone": "+33 4 95 76 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-cognac",
+    "name": "Parachutisme Sportif Cognacais",
+    "longitude": -0.317,
+    "latitude": 45.658,
+    "country": "France",
+    "icao": "LFBU",
+    "altitudeM": 28,
+    "radio": "123.5",
+    "phone": "+33 5 45 82 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-royan",
+    "name": "Royan Océan Parachutisme",
+    "longitude": -0.972,
+    "latitude": 45.628,
+    "country": "France",
+    "icao": "LFCY",
+    "altitudeM": 56,
+    "radio": "123.5",
+    "phone": "+33 5 46 39 30 30",
+    "website": "",
+    "aircraft": [
+      "PC-6 Pilatus Porter",
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-mimizan",
+    "name": "Skydive Mimizan – Landes",
+    "longitude": -1.167,
+    "latitude": 44.131,
+    "country": "France",
+    "icao": "LFIJ",
+    "altitudeM": 20,
+    "radio": "123.5",
+    "phone": "+33 5 58 09 20 20",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 4000
+  },
+  {
+    "id": "dz-sarreguemines",
+    "name": "Para Club Sportif de Sarreguemines",
+    "longitude": 7.063,
+    "latitude": 49.098,
+    "country": "France",
+    "icao": "LFGZ",
+    "altitudeM": 306,
+    "radio": "123.5",
+    "phone": "+33 3 87 98 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-laval",
+    "name": "Parachutisme Laval – Centre École Mayenne",
+    "longitude": -0.743,
+    "latitude": 48.032,
+    "country": "France",
+    "icao": "LFOV",
+    "altitudeM": 82,
+    "radio": "123.5",
+    "phone": "+33 2 43 53 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-dunkerque",
+    "name": "Para Groupe Jean Bart – Dunkerque",
+    "longitude": 2.351,
+    "latitude": 50.938,
+    "country": "France",
+    "icao": "LFAK",
+    "altitudeM": 6,
+    "radio": "122.5",
+    "phone": "+33 3 28 66 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3500
+  },
+  {
+    "id": "dz-compiegne",
+    "name": "Para Sport Compiégnois – Compiègne",
+    "longitude": 2.863,
+    "latitude": 49.435,
+    "country": "France",
+    "icao": "LFCE",
+    "altitudeM": 61,
+    "radio": "123.5",
+    "phone": "+33 3 44 86 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-dieppe",
+    "name": "Parachutisme Côte d'Albâtre – Dieppe",
+    "longitude": 1.085,
+    "latitude": 49.884,
+    "country": "France",
+    "icao": "LFAB",
+    "altitudeM": 73,
+    "radio": "123.5",
+    "phone": "+33 2 35 84 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-lehavre",
+    "name": "Aéro Club Jean Maridor – Le Havre",
+    "longitude": 0.087,
+    "latitude": 49.534,
+    "country": "France",
+    "icao": "LFOH",
+    "altitudeM": 103,
+    "radio": "123.5",
+    "phone": "+33 2 35 54 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 182"
+    ],
+    "maxAltitudeM": 3000
+  },
+  {
+    "id": "dz-nice",
+    "name": "Cercle Parachutiste de Nice – Côte d'Azur",
+    "longitude": 6.953,
+    "latitude": 43.543,
+    "country": "France",
+    "icao": "LFMD",
+    "altitudeM": 11,
+    "radio": "123.5",
+    "phone": "+33 4 93 48 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan",
+      "PC-6 Pilatus Porter"
+    ],
+    "maxAltitudeM": 4200
+  },
+  {
+    "id": "dz-pujaut",
+    "name": "Skydive Pujaut – Gard",
+    "longitude": 4.78,
+    "latitude": 43.994,
+    "country": "France",
+    "icao": "LFNI",
+    "altitudeM": 50,
+    "radio": "123.5",
+    "phone": "+33 4 66 39 30 30",
+    "website": "",
+    "aircraft": [
+      "Cessna 208 Caravan"
+    ],
+    "maxAltitudeM": 4000
+  }
 ]
