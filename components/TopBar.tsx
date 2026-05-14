@@ -83,6 +83,33 @@ export default function TopBar({ layerStates }: Props) {
 
   return (
     <header style={S.bar}>
+      {/* Wing logo */}
+      <svg width="34" height="26" viewBox="0 0 34 26" fill="none" style={{ flexShrink: 0, filter: 'drop-shadow(0 0 6px rgba(200,220,255,0.5))' }}>
+        {/* Main wing surface — swept back silhouette */}
+        <path
+          d="M2 22 C7 17 16 10 32 3 C28 9 22 15 15 19 C10 21 6 22 2 22Z"
+          fill="white"
+          fillOpacity="0.92"
+        />
+        {/* Secondary feather line for depth */}
+        <path
+          d="M2 22 C7 19 12 18 17 17"
+          stroke="white"
+          strokeWidth="0.8"
+          strokeOpacity="0.35"
+          fill="none"
+        />
+        {/* Wingtip highlight */}
+        <path
+          d="M28 5 C30 4 32 3 32 3"
+          stroke="white"
+          strokeWidth="1.2"
+          strokeOpacity="0.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </svg>
+
       <span style={S.logo}>SentinAile</span>
 
       <span style={S.divider} />
