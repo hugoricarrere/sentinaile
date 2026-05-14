@@ -27,9 +27,9 @@ export interface LayerConfig {
 }
 
 interface ShipPoint {
-  id: string; name: string; flag: string; type: string
+  id: string; name: string; callSign: string; shipType: string
   longitude: number; latitude: number
-  speedKnots: number; courseDeg: number; destination: string; eta: string
+  speedKnots: number; courseDeg: number; headingDeg: number; destination: string
 }
 
 interface AirPoint {

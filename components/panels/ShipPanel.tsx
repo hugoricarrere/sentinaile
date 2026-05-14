@@ -14,8 +14,9 @@ function Row({ label, value }: { label: string; value: string | number }) {
 }
 
 interface ShipData {
-  name: string; flag: string; type: string
-  speedKnots: number; courseDeg: number; destination: string; eta: string
+  name: string; callSign: string; shipType: string
+  speedKnots: number; courseDeg: number; headingDeg: number
+  destination: string
 }
 
 export default function ShipPanel({ point }: { point: GeoPoint }) {
@@ -26,14 +27,14 @@ export default function ShipPanel({ point }: { point: GeoPoint }) {
         {d.name}
       </p>
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
-        {d.type}
+        {d.shipType}
       </p>
-      <Row label="MMSI" value={point.id} />
-      <Row label="PAVILLON" value={d.flag || '—'} />
-      <Row label="VITESSE" value={`${d.speedKnots.toFixed(1)} nœuds`} />
-      <Row label="CAP" value={`${Math.round(d.courseDeg)}°`} />
+      <Row label="MMSI"        value={point.id} />
+      {d.callSign && <Row label="INDICATIF"  value={d.callSign} />}
+      <Row label="VITESSE"     value={`${d.speedKnots.toFixed(1)} nœuds`} />
+      <Row label="CAP"         value={`${Math.round(d.courseDeg)}°`} />
+      <Row label="CAP PROUE"   value={`${Math.round(d.headingDeg)}°`} />
       {d.destination && <Row label="DESTINATION" value={d.destination} />}
-      {d.eta && <Row label="ETA" value={d.eta} />}
     </div>
   )
 }
