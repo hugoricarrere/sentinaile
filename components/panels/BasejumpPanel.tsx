@@ -2,11 +2,11 @@ import type { GeoPoint } from '@/lib/types'
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, letterSpacing: '0.05em', color: '#5a7a9a' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
         {label}
       </span>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc', textAlign: 'right', maxWidth: '55%' }}>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
         {value}
       </span>
     </div>
@@ -40,7 +40,7 @@ export default function BasejumpPanel({ point }: { point: GeoPoint }) {
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 14, color: '#5a7a9a', marginBottom: 10 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
         {LEGAL[d.legal] ?? d.legal}
       </p>
       <Row label="PAYS" value={d.country} />

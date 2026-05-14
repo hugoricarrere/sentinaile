@@ -17,15 +17,15 @@ export default function ContextPanel({ point, onClose }: Props) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '12px 18px 10px',
+        padding: '10px 16px 8px',
         background: '#040810',
         borderBottom: '1px solid #111c2e',
       }}>
         <span style={{
           fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 700,
-          fontSize: 11,
-          letterSpacing: '0.28em',
+          fontWeight: 600,
+          fontSize: 10,
+          letterSpacing: '0.25em',
           color: layer?.color ?? '#00D4FF',
           textTransform: 'uppercase',
         }}>
@@ -36,12 +36,12 @@ export default function ContextPanel({ point, onClose }: Props) {
           style={{
             background: 'none',
             border: '1px solid #1a2840',
-            color: '#4a6a8a',
-            width: 26,
-            height: 26,
-            borderRadius: 4,
+            color: '#2a4a6a',
+            width: 22,
+            height: 22,
+            borderRadius: 3,
             cursor: 'pointer',
-            fontSize: 16,
+            fontSize: 14,
             lineHeight: 1,
             display: 'flex',
             alignItems: 'center',
@@ -55,7 +55,7 @@ export default function ContextPanel({ point, onClose }: Props) {
           }}
           onMouseLeave={e => {
             (e.target as HTMLButtonElement).style.borderColor = '#1a2840'
-            ;(e.target as HTMLButtonElement).style.color = '#4a6a8a'
+            ;(e.target as HTMLButtonElement).style.color = '#2a4a6a'
           }}
           aria-label="Fermer"
         >
@@ -64,11 +64,11 @@ export default function ContextPanel({ point, onClose }: Props) {
       </div>
 
       {/* Panel content */}
-      <div style={{ padding: '16px 18px', fontSize: 13 }}>
+      <div style={{ padding: '14px 16px', fontSize: 12 }}>
         {layer ? (
           layer.renderContextPanel(point)
         ) : (
-          <span style={{ fontFamily: 'var(--font-rajdhani)', color: '#4a6a8a', fontSize: 14 }}>
+          <span style={{ fontFamily: 'var(--font-rajdhani)', color: '#2a4a6a' }}>
             Données non disponibles
           </span>
         )}

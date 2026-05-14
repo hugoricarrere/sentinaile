@@ -91,15 +91,15 @@ export const LAYERS: LayerConfig[] = [
     renderContextPanel: (point) => {
       const d = point.data as { name: string; aqi: number; parameter: string }
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 16, color: '#FF6B35', marginBottom: 4, lineHeight: 1.2 }}>{d.name}</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, color: '#5a7a9a' }}>PARAMÈTRE</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc' }}>{d.parameter.toUpperCase()}</span>
+        <div className="space-y-2">
+          <p className="text-[#FF6B35] text-sm font-bold">{d.name}</p>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-[#4a6fa5]">PARAMÈTRE</span>
+            <span className="text-[#a0c4d8]">{d.parameter.toUpperCase()}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, color: '#5a7a9a' }}>VALEUR</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc' }}>{d.aqi} µg/m³</span>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-[#4a6fa5]">VALEUR</span>
+            <span className="text-[#a0c4d8]">{d.aqi} µg/m³</span>
           </div>
         </div>
       )
@@ -146,19 +146,19 @@ export const LAYERS: LayerConfig[] = [
     renderContextPanel: (point) => {
       const d = point.data as { name: string; tempC: number; windKmh: number; precipitation: number }
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 16, color: '#B388FF', marginBottom: 8, lineHeight: 1.2 }}>{d.name}</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, color: '#5a7a9a' }}>TEMPÉRATURE</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc' }}>{Math.round(d.tempC)}°C</span>
+        <div className="space-y-2">
+          <p className="text-[#B388FF] text-sm font-bold">{d.name}</p>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-[#4a6fa5]">TEMPÉRATURE</span>
+            <span className="text-[#a0c4d8]">{Math.round(d.tempC)}°C</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, color: '#5a7a9a' }}>VENT</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc' }}>{Math.round(d.windKmh)} km/h</span>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-[#4a6fa5]">VENT</span>
+            <span className="text-[#a0c4d8]">{Math.round(d.windKmh)} km/h</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, color: '#5a7a9a' }}>PRÉCIP</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc' }}>{d.precipitation} mm</span>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-[#4a6fa5]">PRÉCIP</span>
+            <span className="text-[#a0c4d8]">{d.precipitation} mm</span>
           </div>
         </div>
       )

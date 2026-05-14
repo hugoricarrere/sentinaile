@@ -2,11 +2,11 @@ import type { GeoPoint } from '@/lib/types'
 
 function Row({ label, value }: { label: string; value: string | number }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '6px 0', borderBottom: '1px solid #0d1826' }}>
-      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13, letterSpacing: '0.05em', color: '#5a7a9a' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
         {label}
       </span>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#a0c4dc', textAlign: 'right', maxWidth: '55%' }}>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
         {value}
       </span>
     </div>
@@ -44,7 +44,7 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       {/* Barre go/no-go horaire */}
       {d.hourlyConditions && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#4a6a8a', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
             FENÊTRE DE VOL — AUJOURD&apos;HUI
           </div>
           <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}>

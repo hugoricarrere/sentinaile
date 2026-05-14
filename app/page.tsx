@@ -63,7 +63,7 @@ export default function Home() {
 
         {/* Right sidebar — layer toggles + context panel */}
         <aside style={{
-          width: 290,
+          width: 272,
           flexShrink: 0,
           borderLeft: '1px solid #1a2840',
           background: '#0B1120',

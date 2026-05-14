@@ -27,13 +27,13 @@ function Chip({
       style={{
         fontFamily: 'var(--font-rajdhani)',
         fontWeight: 600,
-        fontSize: 13,
-        letterSpacing: '0.06em',
-        padding: '4px 12px',
+        fontSize: 11,
+        letterSpacing: '0.08em',
+        padding: '3px 9px',
         border: `1px solid ${active ? color : '#1e3050'}`,
-        borderRadius: 4,
+        borderRadius: 3,
         background: active ? `${color}22` : 'transparent',
-        color: active ? color : '#4a6a8a',
+        color: active ? color : '#2a4a6a',
         cursor: 'pointer',
         transition: 'all 0.12s',
         textTransform: 'uppercase',
@@ -50,12 +50,12 @@ function Label({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
       fontFamily: 'var(--font-rajdhani)',
-      fontWeight: 700,
-      fontSize: 11,
+      fontWeight: 600,
+      fontSize: 9,
       letterSpacing: '0.22em',
-      color: '#4a6a8a',
+      color: '#2a4a6a',
       textTransform: 'uppercase',
-      marginBottom: 8,
+      marginBottom: 6,
     }}>
       {children}
     </div>
@@ -75,7 +75,7 @@ function AltitudeSlider({
   onChange: (v: number) => void
 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <input
         type="range"
         min={0}
@@ -87,9 +87,9 @@ function AltitudeSlider({
       />
       <span style={{
         fontFamily: 'var(--font-mono)',
-        fontSize: 12,
-        color: value > 0 ? color : '#4a6a8a',
-        minWidth: 52,
+        fontSize: 10,
+        color: value > 0 ? color : '#2a4a6a',
+        minWidth: 44,
         textAlign: 'right',
         letterSpacing: '0.04em',
       }}>
@@ -118,19 +118,19 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
   return (
     <div style={{
       background: '#060c18',
-      borderTop: `1px solid ${color}35`,
+      borderTop: `1px solid ${color}30`,
       borderBottom: '1px solid #0d1826',
-      padding: '14px 18px 16px',
+      padding: '12px 16px 14px',
       display: 'flex',
       flexDirection: 'column',
-      gap: 14,
+      gap: 12,
     }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{
           fontFamily: 'var(--font-rajdhani)',
           fontWeight: 700,
-          fontSize: 13,
+          fontSize: 11,
           letterSpacing: '0.2em',
           color: color,
           textTransform: 'uppercase',
@@ -143,8 +143,8 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: '#4a6a8a',
-            fontSize: 16,
+            color: '#2a4a6a',
+            fontSize: 14,
             lineHeight: 1,
             padding: '0 2px',
           }}
@@ -156,7 +156,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
       {/* Global: France only */}
       <div>
         <Label>Pays</Label>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           <Chip
             label="🌍 Europe"
             active={!filters.global.franceOnly}
@@ -177,7 +177,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
         <>
           <div>
             <Label>Conditions météo</Label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {(['green', 'yellow', 'red'] as const).map((c) => (
                 <Chip
                   key={c}
@@ -206,7 +206,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
         <>
           <div>
             <Label>Niveau pilote</Label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {[
                 { val: 'all',          label: '🔰 Tous niveaux' },
                 { val: 'beginner',     label: '🟢 Débutant' },
@@ -241,7 +241,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
         <>
           <div>
             <Label>Difficulté</Label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {[
                 { val: 'intermediate', label: '🟡 Intermédiaire' },
                 { val: 'advanced',     label: '🟠 Avancé' },
@@ -259,7 +259,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
           </div>
           <div>
             <Label>Statut légal</Label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {[
                 { val: 'authorized', label: '✅ Autorisé' },
                 { val: 'tolerated',  label: '⚠️ Toléré' },
@@ -276,7 +276,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
           </div>
           <div>
             <Label>Type de sortie</Label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {[
                 { val: 'cliff',   label: '🏔 Falaise' },
                 { val: 'bridge',  label: '🌉 Pont' },

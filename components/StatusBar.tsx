@@ -13,19 +13,19 @@ export default function StatusBar({ layerStates, viewState }: Props) {
 
   return (
     <footer style={{
-      height: 36,
+      height: 34,
       flexShrink: 0,
       display: 'flex',
       alignItems: 'center',
-      gap: 22,
-      padding: '0 22px',
+      gap: 20,
+      padding: '0 20px',
       background: '#040810',
       borderTop: '1px solid #1a2840',
     }}>
       <span style={{
         fontFamily: 'var(--font-rajdhani)',
-        fontWeight: 700,
-        fontSize: 13,
+        fontWeight: 600,
+        fontSize: 12,
         letterSpacing: '0.12em',
         color: '#00c87a',
         textTransform: 'uppercase',
@@ -36,8 +36,8 @@ export default function StatusBar({ layerStates, viewState }: Props) {
       {staleCount > 0 && (
         <span style={{
           fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 700,
-          fontSize: 13,
+          fontWeight: 600,
+          fontSize: 12,
           letterSpacing: '0.1em',
           color: '#cc8820',
         }}>
@@ -47,8 +47,8 @@ export default function StatusBar({ layerStates, viewState }: Props) {
 
       <span style={{
         fontFamily: 'var(--font-mono)',
-        fontSize: 12,
-        color: '#2d4a65',
+        fontSize: 11,
+        color: '#243a55',
         marginLeft: 'auto',
         letterSpacing: '0.06em',
       }}>

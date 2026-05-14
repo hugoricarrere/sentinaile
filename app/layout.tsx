@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { JetBrains_Mono, Rajdhani, Orbitron } from 'next/font/google'
+import { JetBrains_Mono, Rajdhani } from 'next/font/google'
 import './globals.css'
 
 const mono = JetBrains_Mono({
@@ -13,12 +13,6 @@ const rajdhani = Rajdhani({
   variable: '--font-rajdhani',
 })
 
-const orbitron = Orbitron({
-  subsets: ['latin'],
-  weight: ['700', '800', '900'],
-  variable: '--font-orbitron',
-})
-
 export const metadata: Metadata = {
   title: 'SentinAile',
   description: 'Plateforme d\'intelligence géospatiale',
@@ -27,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className={`${mono.variable} ${rajdhani.variable} ${orbitron.variable}`}>{children}</body>
+      <body className={`${mono.variable} ${rajdhani.variable}`}>{children}</body>
     </html>
   )
 }
