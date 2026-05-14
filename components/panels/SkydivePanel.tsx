@@ -16,7 +16,7 @@ function Row({ label, value, highlight }: { label: string; value: string | numbe
 const COND = {
   green: { label: '🟢 Favorable', color: '#00FF88' },
   yellow: { label: '🟡 Attention', color: '#FFB347' },
-  red: { label: '🔴 Fermé', color: '#FF6B35' },
+  red: { label: '🔴 Défavorable', color: '#FF6B35' },
 }
 
 interface SkydiveData {

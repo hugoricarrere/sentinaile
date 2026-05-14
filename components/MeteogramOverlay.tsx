@@ -6,23 +6,23 @@ import { LAYERS } from '@/lib/layers-registry'
 // ── Layout constants ───────────────────────────────────────────────────────
 const N          = 120      // 5 days × 24 h
 const PX         = 8        // px per hour
-const ML         = 46       // left margin  (Y-axis labels)
-const MR         = 42       // right margin (secondary axis)
+const ML         = 46       // left margin  (m/s labels)
+const MR         = 46       // right margin (knots labels)
 const CHART_W    = N * PX   // 960
 const X0         = ML
 const X1         = ML + CHART_W
-const SVG_W      = ML + CHART_W + MR  // 1048
+const SVG_W      = ML + CHART_W + MR  // 1052
 
-// Section Y bounds (top → bottom)
-const CLD_Y0 = 2,  CLD_Y1 = 74   // cloud bands   72 px (3 × 24)
+// Section Y bounds (top → bottom)  — vent AU-DESSUS de la température
+const CLD_Y0 = 2,  CLD_Y1 = 74   // nuages        72 px
 const SEP1   = 77
-const TMP_Y0 = 82, TMP_Y1 = 172  // temperature   90 px
-const SEP2   = 175
-const WND_Y0 = 180, WND_Y1 = 230 // wind          50 px
-const SEP3   = 233
-const PRC_Y0 = 238, PRC_Y1 = 264 // precipitation 26 px
-const XAX_Y  = 274               // x-axis labels
-const SVG_H  = 285
+const WND_Y0 = 82, WND_Y1 = 195  // vent          113 px  (agrandi)
+const SEP2   = 198
+const TMP_Y0 = 203, TMP_Y1 = 253 // température   50 px  (réduit)
+const SEP3   = 256
+const PRC_Y0 = 261, PRC_Y1 = 285 // précipitations 24 px
+const XAX_Y  = 295               // x-axis labels
+const SVG_H  = 306
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 const hx = (i: number) => X0 + (i + 0.5) * PX  // centre of hour column
@@ -290,10 +290,10 @@ export default function MeteogramOverlay({
         <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap',
           padding:'4px 14px', borderBottom:'1px solid #0d1826',
           background:'#030609', flexShrink:0 }}>
-          <Leg color="#ff8844" label="Température (°C)" />
           <Leg color="#44aaff" label="Vent surface" />
           {showAlti && <Leg color="#44ffaa" label="Vent 3 000m" />}
           {showAlti && <Leg color="#ffcc44" label="Vent 4 000m" />}
+          <Leg color="#ff8844" label="Température (°C)" />
           <span style={{ marginLeft:'auto', display:'flex', gap:8 }}>
             <Leg color="rgba(140,185,225,0.8)"  label="Cirrus (>6km)"       rect />
             <Leg color="rgba(80,120,165,0.85)"  label="Altocumulus (2-6km)" rect />
@@ -310,8 +310,8 @@ export default function MeteogramOverlay({
 
             {/* ── Section backgrounds ── */}
             <rect x={X0} y={CLD_Y0} width={CHART_W} height={CLD_Y1 - CLD_Y0 + 1} fill="#07101c" />
-            <rect x={X0} y={TMP_Y0} width={CHART_W} height={TMP_Y1 - TMP_Y0 + 1} fill="#060910" />
             <rect x={X0} y={WND_Y0} width={CHART_W} height={WND_Y1 - WND_Y0 + 1} fill="#060910" />
+            <rect x={X0} y={TMP_Y0} width={CHART_W} height={TMP_Y1 - TMP_Y0 + 1} fill="#060910" />
             <rect x={X0} y={PRC_Y0} width={CHART_W} height={PRC_Y1 - PRC_Y0 + 1} fill="#060910" />
 
             {/* ── Cloud bands (3 altitude layers per hour) ── */}
@@ -360,9 +360,34 @@ export default function MeteogramOverlay({
 
             {/* ── Section separators ── */}
             {[SEP1, SEP2, SEP3].map((y, i) => (
-              <line key={i} x1={X0} y1={y} x2={X1} y2={y}
+              <line key={i} x1={0} y1={y} x2={SVG_W} y2={y}
                 stroke="#1a2840" strokeWidth={1} />
             ))}
+
+            {/* ── Wind — axe gauche (m/s) + axe droit (nœuds) ── */}
+            <ALabel x={X0 - 3} y={WND_Y0 - 3} v="m/s" />
+            <ALabel x={X1 + 3} y={WND_Y0 - 3} v="kt" anchor="start" />
+            {windTickVals.map(w => {
+              const y = vy(w, 0, maxW, WND_Y0, WND_Y1)
+              if (y < WND_Y0 || y > WND_Y1) return null
+              const ms  = (w / 3.6).toFixed(1)
+              const kts = (w / 1.852).toFixed(1)
+              return (
+                <g key={w}>
+                  <line x1={X0} y1={y} x2={X1} y2={y}
+                    stroke="#0d1826" strokeWidth={0.8} />
+                  <ALabel x={X0 - 3} y={y + 3} v={ms} />
+                  <ALabel x={X1 + 3} y={y + 3} v={kts} anchor="start" />
+                </g>
+              )
+            })}
+            {showAlti && w4Path && (
+              <path d={w4Path} fill="none" stroke="#ffcc44" strokeWidth={1.2} opacity={0.75} />
+            )}
+            {showAlti && w3Path && (
+              <path d={w3Path} fill="none" stroke="#44ffaa" strokeWidth={1.5} opacity={0.85} />
+            )}
+            {wSPath && <path d={wSPath} fill="none" stroke="#44aaff" strokeWidth={2} />}
 
             {/* ── Temperature — Y axis (left) ── */}
             <ALabel x={X0 - 3} y={TMP_Y0 - 3} v="°C" />
@@ -390,27 +415,6 @@ export default function MeteogramOverlay({
             )}
             {/* Temp curve */}
             {tPath && <path d={tPath} fill="none" stroke="#ff8844" strokeWidth={2} />}
-
-            {/* ── Wind — Y axis (right) ── */}
-            <ALabel x={X1 + 3} y={WND_Y0 - 3} v="km/h" anchor="start" />
-            {windTickVals.map(w => {
-              const y = vy(w, 0, maxW, WND_Y0, WND_Y1)
-              if (y < WND_Y0 || y > WND_Y1) return null
-              return (
-                <g key={w}>
-                  <line x1={X0} y1={y} x2={X1} y2={y}
-                    stroke="#0d1826" strokeWidth={0.8} />
-                  <ALabel x={X1 + 3} y={y + 3} v={`${w}`} anchor="start" />
-                </g>
-              )
-            })}
-            {showAlti && w4Path && (
-              <path d={w4Path} fill="none" stroke="#ffcc44" strokeWidth={1.2} opacity={0.75} />
-            )}
-            {showAlti && w3Path && (
-              <path d={w3Path} fill="none" stroke="#44ffaa" strokeWidth={1.5} opacity={0.85} />
-            )}
-            {wSPath && <path d={wSPath} fill="none" stroke="#44aaff" strokeWidth={2} />}
 
             {/* ── Precipitation — Y axis (right) ── */}
             <ALabel x={X1 + 3} y={PRC_Y0 - 3} v="mm" anchor="start" />
