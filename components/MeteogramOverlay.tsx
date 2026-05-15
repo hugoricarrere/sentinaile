@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import type { GeoPoint } from '@/lib/types'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import { skydiveCondition, paraglideCondition, basejumpCondition } from '@/lib/weather'
 import { parisHour } from '@/lib/time'
 
@@ -205,24 +205,10 @@ export default function MeteogramOverlay({
       return
     }
     setLoading(true); setError(null); setFc(null)
-    const p = new URLSearchParams({
-      latitude:  lat.toString(),
-      longitude: lon.toString(),
-      hourly: [
-        'temperature_2m','precipitation',
-        'windspeed_10m','windgusts_10m',
-        'windspeed_700hPa','windspeed_600hPa',
-        'cloudcover_low','cloudcover_mid','cloudcover_high','weathercode',
-        'visibility','cape','boundary_layer_height','lifted_index','shortwave_radiation',
-      ].join(','),
-      daily:         'weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max',
-      forecast_days: '7',
-      timezone:      'Europe/Paris',
-      windspeed_unit:'kmh',
-    })
-    fetch(`https://api.open-meteo.com/v1/forecast?${p}`)
+    const params = new URLSearchParams({ lat: lat.toString(), lon: lon.toString() })
+    fetch(`/api/meteogram?${params}`)
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
-      .then(data => { setFc(data as Forecast); setLoading(false) })
+      .then(json => { setFc((json.data ?? json) as Forecast); setLoading(false) })
       .catch(() => { setError('Météo indisponible'); setLoading(false) })
   }, [lat, lon]) // validCoords is derived from lat/lon — no need to list separately
 

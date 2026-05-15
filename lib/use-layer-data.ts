@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import type { GeoPoint, LayerDataState } from './types'
-import type { LayerConfig } from './layers-registry'
+import type { LayerConfig } from './layers'
 
 export type LayerStates = Record<string, LayerDataState>
 

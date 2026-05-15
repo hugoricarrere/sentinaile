@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 
 interface Props {
@@ -29,40 +29,15 @@ export default function StatusBar({ layerStates, viewState }: Props) {
   )
 
   return (
-    <footer style={{
-      height: 34,
-      flexShrink: 0,
-      display: 'flex',
-      alignItems: 'center',
-      gap: 16,
-      padding: '0 20px',
-      background: '#040810',
-      borderTop: '1px solid #1a2840',
-      overflow: 'hidden',
-    }}>
+    <footer className="h-[34px] shrink-0 flex items-center gap-4 px-5 bg-header border-t border-border overflow-hidden">
       {/* Sources connectées */}
-      <span style={{
-        fontFamily: 'var(--font-rajdhani)',
-        fontWeight: 600,
-        fontSize: 12,
-        letterSpacing: '0.12em',
-        color: '#00c87a',
-        textTransform: 'uppercase',
-        flexShrink: 0,
-      }}>
+      <span className="font-display font-semibold text-[12px] tracking-[0.12em] text-[#00c87a] uppercase shrink-0">
         ● Sources {connected}/{LAYERS.length}
       </span>
 
       {/* Données périmées */}
       {staleCount > 0 && (
-        <span title={`${staleCount} source(s) avec données périmées`} style={{
-          fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 600,
-          fontSize: 12,
-          letterSpacing: '0.1em',
-          color: '#d4a030',
-          flexShrink: 0,
-        }}>
+        <span title={`${staleCount} source(s) avec données périmées`} className="font-display font-semibold text-[12px] tracking-[0.1em] text-stale shrink-0">
           ⚠ {staleCount} Stale
         </span>
       )}
@@ -71,15 +46,7 @@ export default function StatusBar({ layerStates, viewState }: Props) {
       {errorCount > 0 && (
         <span
           title={LAYERS.filter(l => !!layerStates[l.id]?.error).map(l => `${l.label}: ${layerStates[l.id]?.error}`).join('\n')}
-          style={{
-            fontFamily: 'var(--font-rajdhani)',
-            fontWeight: 600,
-            fontSize: 12,
-            letterSpacing: '0.1em',
-            color: '#cc3a20',
-            cursor: 'help',
-            flexShrink: 0,
-          }}
+          className="font-display font-semibold text-[12px] tracking-[0.1em] text-[#cc3a20] cursor-help shrink-0"
         >
           ✕ {errorCount} Erreur{errorCount > 1 ? 's' : ''}
         </span>
@@ -89,28 +56,14 @@ export default function StatusBar({ layerStates, viewState }: Props) {
       {emptyLayers.length > 0 && (
         <span
           title={`Couches actives sans données : ${emptyLayers.map(l => l.label).join(', ')}`}
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 9,
-            color: '#1e3a5a',
-            letterSpacing: '0.04em',
-            cursor: 'help',
-            flexShrink: 0,
-          }}
+          className="font-code text-[9px] text-[#1e3a5a] tracking-[0.04em] cursor-help shrink-0"
         >
           {emptyLayers.map(l => l.icon).join(' ')} vide{emptyLayers.length > 1 ? 's' : ''}
         </span>
       )}
 
       {/* Coordonnées / zoom */}
-      <span style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: 11,
-        color: '#4a7aa0',
-        marginLeft: 'auto',
-        letterSpacing: '0.06em',
-        flexShrink: 0,
-      }}>
+      <span className="font-code text-[11px] text-label ml-auto tracking-[0.06em] shrink-0">
         {displayVs.latitude.toFixed(4)}°N &nbsp;
         {Math.abs(displayVs.longitude).toFixed(4)}°{displayVs.longitude >= 0 ? 'E' : 'O'} &nbsp;
         z{displayVs.zoom.toFixed(1)}

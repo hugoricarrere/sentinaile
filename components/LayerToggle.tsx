@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { AllFilters } from '@/lib/filters'
 import { applyFilters } from '@/lib/filters'

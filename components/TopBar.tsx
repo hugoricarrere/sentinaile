@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
 

@@ -3,9 +3,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Tailwind v4 design tokens ───────────────────────────────────────────── */
+@theme {
+  /* Backgrounds */
+  --color-page:    #070B14;
+  --color-sidebar: #0B1120;
+  --color-header:  #040810;
+  --color-filter:  #060c18;
+
+  /* Borders */
+  --color-border:    #1a2840;
+  --color-border-sm: #0d1826;
+  --color-border-md: #111c2e;
+
+  /* Text */
+  --color-data:   #8aaccc;
+  --color-label:  #4a7aa0;
+  --color-muted:  #2a4a6a;
+  --color-dim:    #1a3a58;
+  --color-accent: #00D4FF;
+
+  /* Conditions */
+  --color-ok:     #00FF88;
+  --color-warn:   #FFB347;
+  --color-danger: #FF6B35;
+  --color-stale:  #d4a030;
+
+  /* Fonts — defined as static fallbacks; CSS vars injected by next/font on <body> */
+  --font-display: var(--font-rajdhani, 'Rajdhani'), system-ui, sans-serif;
+  --font-code:    var(--font-jetbrains, 'JetBrains Mono'), monospace;
+}
+
+/* ── Base reset ──────────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
 
+/* ── Animations ──────────────────────────────────────────────────────────── */
 @keyframes pulse-glow {
   0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
   50%       { opacity: 0.4; box-shadow: 0 0 2px currentColor; }
@@ -14,14 +47,6 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-.live-dot {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.panel-fade-in {
-  animation: fade-in 0.15s ease-out;
 }
 
 @keyframes pulse {
@@ -34,6 +59,28 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 
+/* ── Utility classes ─────────────────────────────────────────────────────── */
+.live-dot {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.panel-fade-in {
+  animation: fade-in 0.15s ease-out;
+}
+
 .meteogram-slide-up {
   animation: slide-up 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-pulse-custom {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ── Font family utilities ────────────────────────────────────────────────── */
+/* --font-rajdhani and --font-mono are injected on <body> by next/font.      */
+/* We expose them as Tailwind utilities (font-display, font-code) so          */
+/* components can use className instead of style={{ fontFamily: 'var(...)' }} */
+@layer utilities {
+  .font-display { font-family: var(--font-rajdhani, 'Rajdhani'), system-ui, sans-serif; }
+  .font-code    { font-family: var(--font-mono, 'JetBrains Mono'), monospace; }
 }

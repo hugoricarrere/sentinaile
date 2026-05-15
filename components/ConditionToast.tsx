@@ -1,17 +1,10 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 
-interface Toast {
-  id: string
-  message: string
-  color: string
-}
-
-interface Props {
-  layerStates: LayerStates
-}
+interface Toast { id: string; message: string; color: string }
+interface Props { layerStates: LayerStates }
 
 /** Layers that expose a condition field worth monitoring */
 const MONITORED = new Set(['skydive', 'paragliding', 'basejump', 'surf'])
@@ -26,32 +19,27 @@ export default function ConditionToast({ layerStates }: Props) {
 
   useEffect(() => {
     const added: Toast[] = []
-
     for (const layer of LAYERS) {
       if (!MONITORED.has(layer.id)) continue
       const state = layerStates[layer.id]
       const points = state?.points ?? []
       if (points.length === 0) continue
 
-      // Determine dominant condition for the layer
-      let redCount = 0
-      let greenCount = 0
+      let redCount = 0, greenCount = 0
       for (const pt of points) {
-        const c = (pt.data as { condition?: string; score?: number }).condition
+        const c = (pt.data as { condition?: string }).condition
         const s = (pt.data as { score?: number }).score
-        if (c === 'red' || (s !== undefined && s <= 0)) redCount++
+        if (c === 'red'   || (s !== undefined && s <= 0)) redCount++
         else if (c === 'green' || (s !== undefined && s > 5)) greenCount++
       }
-      const dominant = redCount > points.length * 0.8
-        ? 'red'
-        : greenCount > points.length * 0.6
-          ? 'green'
-          : 'mixed'
+      const dominant =
+        redCount > points.length * 0.8 ? 'red'
+        : greenCount > points.length * 0.6 ? 'green'
+        : 'mixed'
 
       const prev = prevConditions.current[layer.id]
       prevConditions.current[layer.id] = dominant
 
-      // Only fire when transitioning to all-red from a better state
       if (dominant === 'red' && prev && prev !== 'red') {
         added.push({
           id: `${layer.id}-${Date.now()}`,
@@ -63,7 +51,6 @@ export default function ConditionToast({ layerStates }: Props) {
 
     if (added.length > 0) {
       setToasts(prev => [...prev, ...added])
-      // Auto-dismiss after 6 s
       added.forEach(t => {
         setTimeout(() => setToasts(p => p.filter(x => x.id !== t.id)), 6000)
       })
@@ -73,47 +60,28 @@ export default function ConditionToast({ layerStates }: Props) {
   if (toasts.length === 0) return null
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 'calc(48px + env(safe-area-inset-bottom))',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      zIndex: 1000,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 8,
-      alignItems: 'center',
-      pointerEvents: 'none',
-    }}
-    role="status"
-    aria-live="polite"
-    aria-atomic="false"
+    <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="false"
+      className="fixed left-1/2 -translate-x-1/2 z-[1000] flex flex-col gap-2 items-center pointer-events-none"
+      style={{ bottom: 'calc(48px + env(safe-area-inset-bottom))' }}
     >
       {toasts.map(t => (
-        <div key={t.id} style={{
-          background: '#0a0e1a',
-          border: `1px solid ${t.color}60`,
-          borderRadius: 4,
-          padding: '8px 16px',
-          fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 600,
-          fontSize: 13,
-          letterSpacing: '0.06em',
-          color: t.color,
-          boxShadow: `0 4px 24px ${t.color}30`,
-          whiteSpace: 'nowrap',
-          animation: 'toastIn 0.3s ease-out',
-          pointerEvents: 'auto',
-        }}>
+        <div
+          key={t.id}
+          className="font-display font-semibold text-[13px] tracking-[0.06em] whitespace-nowrap rounded-[4px] px-4 py-2 pointer-events-auto"
+          style={{
+            background: '#0a0e1a',
+            border: `1px solid ${t.color}60`,
+            color: t.color,
+            boxShadow: `0 4px 24px ${t.color}30`,
+            animation: 'fade-in 0.3s ease-out',
+          }}
+        >
           ⛔ {t.message}
         </div>
       ))}
-      <style>{`
-        @keyframes toastIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   )
 }

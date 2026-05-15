@@ -1,5 +1,5 @@
 'use client'
-import { LAYERS } from '@/lib/layers-registry'
+import { LAYERS } from '@/lib/layers'
 import type { GeoPoint } from '@/lib/types'
 import { ErrorBoundary } from './ErrorBoundary'
 

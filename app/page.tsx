@@ -1,12 +1,11 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { LAYERS } from '@/lib/layers-registry'
+import { useCallback, useEffect, useState } from 'react'
+import { LAYERS } from '@/lib/layers'
 import { DEFAULT_FILTERS } from '@/lib/filters'
 import { usePersistedState } from '@/lib/use-persisted-state'
-import { encodeUrlState, decodeUrlState } from '@/lib/url-state'
-// enabledMap default — computed once (not inside render)
-const DEFAULT_ENABLED = Object.fromEntries(LAYERS.map(l => [l.id, l.defaultEnabled]))
+import { decodeUrlState } from '@/lib/url-state'
+import { useMobile, useGeolocation, useUrlHash } from '@/lib/hooks'
 import TopBar from '@/components/TopBar'
 import StatusBar from '@/components/StatusBar'
 import LayerToggle from '@/components/LayerToggle'
@@ -20,54 +19,46 @@ import type { FlyToTarget } from '@/components/MapCanvas'
 
 const MapCanvas = dynamic(() => import('@/components/MapCanvas'), { ssr: false })
 
+// enabledMap default — computed once outside render
+const DEFAULT_ENABLED = Object.fromEntries(LAYERS.map(l => [l.id, l.defaultEnabled]))
+
 // ── Shared map button style ────────────────────────────────────────────────
-const mapBtnStyle: React.CSSProperties = {
-  position: 'absolute',
-  zIndex: 5,
-  width: 40,
-  height: 40,
-  background: '#0B1120',
-  border: '1px solid #1a2840',
-  borderRadius: 4,
-  color: '#4a7aa0',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+const mapBtnBase: React.CSSProperties = {
+  position: 'absolute', zIndex: 5, width: 40, height: 40,
+  background: '#0B1120', border: '1px solid #1a2840', borderRadius: 4,
+  color: '#4a7aa0', cursor: 'pointer',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
   transition: 'border-color 0.15s, color 0.15s',
 }
 function onBtnHover(e: React.MouseEvent<HTMLButtonElement>, enter: boolean) {
-  const el = e.currentTarget as HTMLButtonElement
+  const el = e.currentTarget
   el.style.borderColor = enter ? '#00D4FF' : '#1a2840'
   el.style.color        = enter ? '#00D4FF' : '#4a7aa0'
 }
 
 export default function Home() {
+  // ── Persisted state ───────────────────────────────────────────────────────
   const [enabledMap, setEnabledMap] = usePersistedState<Record<string, boolean>>(
-    'sentinaile-enabled-layers',
-    DEFAULT_ENABLED,
+    'sentinaile-enabled-layers', DEFAULT_ENABLED,
   )
-  const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
-  const [viewState, setViewState] = usePersistedState('sentinaile-view-state', { longitude: 2.3, latitude: 46.8, zoom: 5.6 })
-  const [layerStates, setLayerStates] = useState<LayerStates>({})
+  const [viewState, setViewState] = usePersistedState(
+    'sentinaile-view-state', { longitude: 2.3, latitude: 46.8, zoom: 5.6 },
+  )
   const [filters, setFilters] = usePersistedState('sentinaile-filters', DEFAULT_FILTERS)
-  const [activeFilterLayer, setActiveFilterLayer] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sentinaile-sidebar-open', true)
+
+  // ── Transient state ───────────────────────────────────────────────────────
+  const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
+  const [layerStates, setLayerStates] = useState<LayerStates>({})
   const [flyTo, setFlyTo] = useState<FlyToTarget | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [geoError, setGeoError] = useState<string | null>(null)
   const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({})
-  const [isMobile, setIsMobile] = useState(false)
-  const hashWriteRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const geoToastRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [activeFilterLayer, setActiveFilterLayer] = useState<string | null>(null)
 
-  // Mobile detection
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
+  // ── Custom hooks ──────────────────────────────────────────────────────────
+  const isMobile = useMobile()
+  const { geoError, handleGeolocate, clearGeoError } = useGeolocation(setFlyTo)
+  useUrlHash({ viewState, enabledMap, franceOnly: filters.global.franceOnly })
 
   // On mount: if URL has a valid hash, apply it (overrides persisted state)
   useEffect(() => {
@@ -76,7 +67,7 @@ export default function Home() {
     setViewState({ longitude: parsed.longitude, latitude: parsed.latitude, zoom: parsed.zoom })
     if (parsed.layers.length > 0) {
       const layerIds = new Set(LAYERS.map(l => l.id))
-      const next: Record<string, boolean> = { ...DEFAULT_ENABLED }
+      const next = { ...DEFAULT_ENABLED }
       LAYERS.forEach(l => { next[l.id] = false })
       parsed.layers.filter(id => layerIds.has(id)).forEach(id => { next[id] = true })
       setEnabledMap(next)
@@ -86,43 +77,10 @@ export default function Home() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Debounced URL hash update — includes franceOnly filter
-  useEffect(() => {
-    if (hashWriteRef.current) clearTimeout(hashWriteRef.current)
-    hashWriteRef.current = setTimeout(() => {
-      const activeLayers = LAYERS.filter(l => enabledMap[l.id]).map(l => l.id)
-      window.history.replaceState(null, '', encodeUrlState(viewState, activeLayers, filters.global.franceOnly))
-    }, 500)
-    return () => { if (hashWriteRef.current) clearTimeout(hashWriteRef.current) }
-  }, [viewState, enabledMap, filters.global.franceOnly]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Stable onPointClick — avoids recreating DeckGL layers on every parent render
+  // ── Stable callbacks ──────────────────────────────────────────────────────
   const handlePointClick = useCallback((pt: GeoPoint | null) => {
     setSelectedPoint(pt)
     if (pt) setFlyTo({ longitude: pt.longitude, latitude: pt.latitude })
-  }, [])
-
-  // Geolocation with user-facing error feedback
-  const handleGeolocate = useCallback(() => {
-    if (!navigator.geolocation) {
-      setGeoError('Géolocalisation non supportée par ce navigateur.')
-      return
-    }
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setFlyTo({ longitude: coords.longitude, latitude: coords.latitude, zoom: 11 })
-        setGeoError(null)
-      },
-      (err) => {
-        const msg = err.code === 1
-          ? '📍 Permission refusée — autorisez la géolocalisation dans les paramètres du navigateur.'
-          : '📍 Position indisponible. Réessayez.'
-        setGeoError(msg)
-        if (geoToastRef.current) clearTimeout(geoToastRef.current)
-        geoToastRef.current = setTimeout(() => setGeoError(null), 6000)
-      },
-      { timeout: 8000 },
-    )
   }, [])
 
   const handleRefreshLayer = useCallback((id: string) => {
@@ -133,13 +91,11 @@ export default function Home() {
     setEnabledMap(DEFAULT_ENABLED)
   }, [setEnabledMap])
 
-  // Tighter bbox: excludes Madrid (lat≈40.4), north Italy (lon≈12+), and Channel Islands
+  // ── Derived state ─────────────────────────────────────────────────────────
   const isFranceView =
     viewState.zoom >= 5 &&
-    viewState.longitude > -4.8 &&
-    viewState.longitude < 8.2 &&
-    viewState.latitude > 42.3 &&
-    viewState.latitude < 51.2
+    viewState.longitude > -4.8 && viewState.longitude < 8.2 &&
+    viewState.latitude  > 42.3 && viewState.latitude  < 51.2
 
   const sidebarContent = (
     <>
@@ -154,47 +110,32 @@ export default function Home() {
         onRefreshLayer={handleRefreshLayer}
         onResetLayers={handleResetLayers}
       />
-      {selectedPoint && (
-        <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />
-      )}
+      {selectedPoint && <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />}
       {isFranceView && <FrancePanel />}
     </>
   )
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', background: '#070B14', overflow: 'hidden' }}>
+    <div className="flex flex-col h-screen w-screen bg-page overflow-hidden">
 
-      {/* Initial loading overlay — fades out once Mapbox map is ready */}
+      {/* Loading overlay */}
       {!mapLoaded && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 100,
-          background: '#040810',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          gap: 16,
-          transition: 'opacity 0.4s',
-        }}>
+        <div className="fixed inset-0 z-[100] bg-header flex flex-col items-center justify-center gap-4">
           <svg width="48" height="38" viewBox="0 0 34 26" fill="none" style={{ opacity: 0.9, animation: 'pulse 1.8s ease-in-out infinite' }}>
             <path d="M2 22 C7 17 16 10 32 3 C28 9 22 15 15 19 C10 21 6 22 2 22Z" fill="#00D4FF" fillOpacity="0.9" />
           </svg>
-          <span style={{
-            fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 13,
-            letterSpacing: '0.3em', color: '#2a4a6a', textTransform: 'uppercase',
-          }}>
+          <span className="font-display font-bold text-[13px] tracking-[0.3em] text-muted uppercase">
             Chargement…
           </span>
-          <style>{`@keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }`}</style>
         </div>
       )}
 
-      {/* Top bar — full width, fixed height */}
       <TopBar layerStates={layerStates} onFlyTo={setFlyTo} />
 
-      {/* Middle row: map + right sidebar */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative' }}>
+      <div className="flex flex-1 overflow-hidden relative">
 
-        {/* Map — fills remaining space */}
-        <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+        {/* Map */}
+        <div className="flex-1 relative overflow-hidden">
           <MapCanvas
             enabledMap={enabledMap}
             onPointClick={handlePointClick}
@@ -207,57 +148,39 @@ export default function Home() {
           />
 
           {selectedPoint && ['skydive', 'paragliding', 'basejump'].includes(selectedPoint.layerId) && (
-            <MeteogramOverlay
-              point={selectedPoint}
-              onClose={() => setSelectedPoint(null)}
-            />
+            <MeteogramOverlay point={selectedPoint} onClose={() => setSelectedPoint(null)} />
           )}
 
           {/* Geolocation error toast */}
           {geoError && (
             <div
-              onClick={() => setGeoError(null)}
+              onClick={clearGeoError}
               role="alert"
-              style={{
-                position: 'absolute', bottom: 48, left: '50%',
-                transform: 'translateX(-50%)',
-                background: '#0a0e1a',
-                border: '1px solid #cc3a2060',
-                borderRadius: 4,
-                padding: '8px 16px',
-                fontFamily: 'var(--font-rajdhani)',
-                fontWeight: 600,
-                fontSize: 12,
-                color: '#cc8820',
-                zIndex: 10,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
-              }}
+              className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-page border border-[#cc3a2060] rounded-[4px] px-4 py-2 font-display font-semibold text-xs text-warn z-10 cursor-pointer whitespace-nowrap shadow-lg"
             >
               {geoError}
             </div>
           )}
 
-          {/* Bouton géolocalisation */}
+          {/* Geolocation button */}
           <button
             onClick={handleGeolocate}
             title="Ma position"
             aria-label="Centrer sur ma position"
-            style={{ ...mapBtnStyle, top: 60, right: 12 }}
+            style={{ ...mapBtnBase, top: 60, right: 12 }}
             onMouseEnter={e => onBtnHover(e, true)}
             onMouseLeave={e => onBtnHover(e, false)}
           >
             ◎
           </button>
 
-          {/* Bouton collapse/expand sidebar */}
+          {/* Sidebar toggle */}
           <button
             onClick={() => setSidebarOpen(o => !o)}
             title={sidebarOpen ? 'Réduire la barre latérale' : 'Afficher la barre latérale'}
             aria-label={sidebarOpen ? 'Réduire la barre latérale' : 'Afficher la barre latérale'}
             aria-expanded={sidebarOpen}
-            style={{ ...mapBtnStyle, top: 12, right: 12, fontSize: 14 }}
+            style={{ ...mapBtnBase, top: 12, right: 12, fontSize: 14 }}
             onMouseEnter={e => onBtnHover(e, true)}
             onMouseLeave={e => onBtnHover(e, false)}
           >
@@ -265,46 +188,26 @@ export default function Home() {
           </button>
         </div>
 
-        {/* ── Desktop sidebar: fixed-width panel on the right ── */}
+        {/* Desktop sidebar */}
         {!isMobile && sidebarOpen && (
-          <aside style={{
-            width: 272,
-            flexShrink: 0,
-            borderLeft: '1px solid #1a2840',
-            background: '#0B1120',
-            display: 'flex',
-            flexDirection: 'column',
-            overflowY: 'auto',
-          }}>
+          <aside className="w-[272px] shrink-0 border-l border-border bg-sidebar flex flex-col overflow-y-auto">
             {sidebarContent}
           </aside>
         )}
 
-        {/* ── Mobile sidebar: slide-in overlay from right ── */}
+        {/* Mobile sidebar (slide-in overlay) */}
         {isMobile && (
           <>
-            {/* Backdrop */}
             {sidebarOpen && (
               <div
                 onClick={() => setSidebarOpen(false)}
-                style={{
-                  position: 'absolute', inset: 0, zIndex: 15,
-                  background: 'rgba(0,0,0,0.6)',
-                }}
+                className="absolute inset-0 z-[15] bg-black/60"
               />
             )}
             <aside
               aria-hidden={!sidebarOpen}
-              style={{
-                position: 'absolute', top: 0, right: 0, bottom: 0, zIndex: 20,
-                width: '85vw', maxWidth: 320,
-                background: '#0B1120',
-                borderLeft: '1px solid #1a2840',
-                display: 'flex', flexDirection: 'column',
-                overflowY: 'auto',
-                transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
-              }}
+              className="absolute top-0 right-0 bottom-0 z-[20] w-[85vw] max-w-[320px] bg-sidebar border-l border-border flex flex-col overflow-y-auto transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+              style={{ transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)' }}
             >
               {sidebarContent}
             </aside>
@@ -312,10 +215,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* Status bar — full width, fixed height */}
       <StatusBar layerStates={layerStates} viewState={viewState} />
-
-      {/* Condition alerts */}
       <ConditionToast layerStates={layerStates} />
     </div>
   )
