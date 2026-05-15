@@ -64,15 +64,15 @@ export const paraglidingLayer: LayerConfig = {
         },
         getRadius: (d) => {
           const { isCluster, count } = d.data as { isCluster?: boolean; count?: number }
-          if (!isCluster) return 18_000
+          if (!isCluster) return 7_000
           const n = count ?? 1
-          if (n < 5)   return 25_000
-          if (n < 20)  return 40_000
-          if (n < 100) return 60_000
-          return 80_000
+          if (n < 5)   return 10_000
+          if (n < 20)  return 14_000
+          if (n < 100) return 18_000
+          return 22_000
         },
-        radiusMinPixels: showIndividual ? 5 : 8,
-        radiusMaxPixels: showIndividual ? 12 : 40,
+        radiusMinPixels: showIndividual ? 4 : 6,
+        radiusMaxPixels: showIndividual ? 8 : 18,
         pickable: true,
         onClick: ({ object }) => {
           if (!object || (object.data as { isCluster?: boolean }).isCluster) return

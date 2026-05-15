@@ -66,14 +66,14 @@ export const basejumpLayer: LayerConfig = {
         },
         getRadius: (d) => {
           const { isCluster, count } = d.data as { isCluster?: boolean; count?: number }
-          if (!isCluster) return 22_000
+          if (!isCluster) return 8_000
           const n = count ?? 1
-          if (n < 5)  return 25_000
-          if (n < 20) return 40_000
-          return 60_000
+          if (n < 5)  return 10_000
+          if (n < 20) return 14_000
+          return 18_000
         },
-        radiusMinPixels: showIndividual ? 6 : 8,
-        radiusMaxPixels: showIndividual ? 14 : 40,
+        radiusMinPixels: showIndividual ? 4 : 6,
+        radiusMaxPixels: showIndividual ? 9 : 18,
         pickable: true,
         onClick: ({ object }) => {
           if (!object || (object.data as { isCluster?: boolean }).isCluster) return
