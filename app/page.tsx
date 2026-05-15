@@ -58,6 +58,7 @@ export default function Home() {
   // ── Transient state ───────────────────────────────────────────────────────
   const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
   const [layerStates, setLayerStates] = useState<LayerStates>({})
+  const [pendingSpotId, setPendingSpotId] = useState<string | null>(null)
   const [flyTo, setFlyTo] = useState<FlyToTarget | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({})
@@ -108,6 +109,35 @@ export default function Home() {
       setFilters(prev => ({ ...prev, global: { ...prev.global, franceOnly: parsed.franceOnly! } }))
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // On mount: if URL has spot/lat/lng query params (from /spot/[id] redirect), fly there
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search)
+    const spotId = sp.get('spot')
+    const lat = parseFloat(sp.get('lat') ?? '')
+    const lng = parseFloat(sp.get('lng') ?? '')
+    if (!spotId || isNaN(lat) || isNaN(lng)) return
+    // Clean URL immediately
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+    setFlyTo({ longitude: lng, latitude: lat, zoom: 12 })
+    // Find and select the matching point once layer data is available
+    // We store the pending spot id; it will be resolved once layerStates have data
+    setPendingSpotId(spotId)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Resolve pending spot from URL params once layer data is loaded
+  useEffect(() => {
+    if (!pendingSpotId) return
+    for (const state of Object.values(layerStates)) {
+      if (!state?.points?.length) continue
+      const match = state.points.find(p => p.id === pendingSpotId)
+      if (match) {
+        setSelectedPoint(match)
+        setPendingSpotId(null)
+        break
+      }
+    }
+  }, [pendingSpotId, layerStates])
 
   // ── Stable callbacks ──────────────────────────────────────────────────────
   const handlePointClick = useCallback((pt: GeoPoint | null) => {

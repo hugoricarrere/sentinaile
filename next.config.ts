@@ -1,4 +1,6 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from '@sentry/nextjs'
+import withPWA from '@ducanh2912/next-pwa'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -14,8 +16,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   // Polices Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
-  // APIs externes : Open-Meteo, Mapbox, Nominatim (geocoding)
-  "connect-src 'self' https://api.open-meteo.com https://marine-api.open-meteo.com https://api.mapbox.com https://events.mapbox.com https://nominatim.openstreetmap.org",
+  // APIs externes : Open-Meteo, Mapbox, Nominatim (geocoding), Sentry
+  "connect-src 'self' https://api.open-meteo.com https://marine-api.open-meteo.com https://api.mapbox.com https://events.mapbox.com https://nominatim.openstreetmap.org https://*.sentry.io https://o*.ingest.sentry.io",
   // Tuiles images Mapbox
   "img-src 'self' data: blob: https://*.mapbox.com",
   // Workers Mapbox GL (blob: requis)
@@ -42,4 +44,22 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withPWAConfig = withPWA({
+  dest: 'public',
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  disable: process.env.NODE_ENV === 'development',
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+})
+
+export default withSentryConfig(withPWAConfig(nextConfig), {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: true,
+  widenClientFileUpload: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+})

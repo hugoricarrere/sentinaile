@@ -3,7 +3,7 @@ import type { GeoPoint } from '@/lib/types'
 import { hexToRgb } from '@/lib/color'
 import { POLL_WEATHER_MS } from '@/lib/constants'
 import ParaglidingPanel from '@/components/panels/ParaglidingPanel'
-import { getClusterIndex, EU_BBOX } from './_cluster'
+import { getClusterIndex, EU_BBOX, dominantConditionColor } from './_cluster'
 import type { LayerConfig } from './_types'
 import Supercluster from 'supercluster'
 
@@ -31,6 +31,11 @@ export const paraglidingLayer: LayerConfig = {
     const sc = getClusterIndex(points)
     const tileZoom = Math.max(0, Math.min(Math.round(zoom), 20))
     const features = sc.getClusters(EU_BBOX, tileZoom)
+
+    type ClusterFeature = Supercluster.ClusterFeature<Supercluster.AnyProps>
+    const clusterPoints = features.filter(
+      (f): f is ClusterFeature => 'cluster' in f.properties && !!f.properties.cluster
+    )
 
     const displayPoints: GeoPoint[] = features.map(f => {
       const [lng, lat] = f.geometry.coordinates
@@ -94,6 +99,32 @@ export const paraglidingLayer: LayerConfig = {
         fontFamily: 'monospace',
         getTextAnchor: 'middle',
         getAlignmentBaseline: 'center',
+      }),
+      new ScatterplotLayer({
+        id: 'paragliding-cluster-ring',
+        data: clusterPoints,
+        getPosition: (f: ClusterFeature) => f.geometry.coordinates as [number, number],
+        getRadius: (f: ClusterFeature) => Math.sqrt(f.properties.point_count) * 12 + 10,
+        getFillColor: [0, 0, 0, 0],
+        getLineColor: (f: ClusterFeature) => dominantConditionColor(sc, f.id as number),
+        stroked: true,
+        filled: false,
+        lineWidthMinPixels: 2,
+        pickable: false,
+        radiusUnits: 'pixels',
+      }),
+      new TextLayer({
+        id: 'paragliding-cluster-count',
+        data: clusterPoints,
+        getPosition: (f: ClusterFeature) => f.geometry.coordinates as [number, number],
+        getText: (f: ClusterFeature) => String(f.properties.point_count),
+        getSize: 11,
+        getColor: [255, 255, 255, 200],
+        fontFamily: 'monospace',
+        fontWeight: 'bold' as const,
+        getTextAnchor: 'middle' as const,
+        getAlignmentBaseline: 'center' as const,
+        pickable: false,
       }),
     ]
   },

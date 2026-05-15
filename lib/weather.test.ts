@@ -138,6 +138,53 @@ describe('basejumpCondition', () => {
   })
 })
 
+// ── Additional edge cases ─────────────────────────────────────────────────
+
+describe('skydiveCondition – edge cases', () => {
+  it('storm always red regardless of other conditions', () => {
+    expect(skydiveCondition(5, 20, 10, 0, 10, true)).toBe('red')
+  })
+  it('wind exactly above surface limit (35.1 km/h) is red', () => {
+    expect(skydiveCondition(35.1, 20, 10, 0, 10, false)).toBe('red')
+  })
+  it('wind at 26 km/h (above yellow threshold 25) is yellow', () => {
+    expect(skydiveCondition(26, 20, 10, 0, 10, false)).toBe('yellow')
+  })
+  it('green conditions with zero CAPE', () => {
+    expect(skydiveCondition(10, 30, 15, 0, 20, false, 0)).toBe('green')
+  })
+})
+
+describe('paraglideCondition – edge cases', () => {
+  it('zero wind is red (no lift)', () => {
+    expect(paraglideCondition(0, 0, 20, 400, false)).toBe('red')
+  })
+  it('wind exactly at lower good threshold (10 km/h) is green', () => {
+    expect(paraglideCondition(10, 5, 20, 400, false, 0, 500, 0)).toBe('green')
+  })
+  it('wind at 9 km/h (below 10) is yellow', () => {
+    expect(paraglideCondition(9, 5, 20, 400, false, 0, 500, 0)).toBe('yellow')
+  })
+  it('severe CAPE (>2000) is red', () => {
+    expect(paraglideCondition(15, 10, 20, 400, false, 2001, 1000, 0)).toBe('red')
+  })
+  it('storm always red', () => {
+    expect(paraglideCondition(10, 5, 20, 400, true)).toBe('red')
+  })
+})
+
+describe('basejumpCondition – edge cases', () => {
+  it('precipitation is red', () => {
+    expect(basejumpCondition(10, 5, 10, true, 1000)).toBe('red')
+  })
+  it('wind above limit (20.1 km/h) is red', () => {
+    expect(basejumpCondition(20.1, 5, 10, false, 1000)).toBe('red')
+  })
+  it('wind at 14 km/h (≤15) with good visibility is green', () => {
+    expect(basejumpCondition(14, 5, 10, false, 1000)).toBe('green')
+  })
+})
+
 describe('surfScore', () => {
   it('returns high score for ideal conditions', () => {
     expect(surfScore(2, 14, 12, true)).toBeGreaterThan(7)
@@ -176,5 +223,33 @@ describe('surfScore', () => {
     const withTrue  = surfScore(2, 12, 10, true)
     const withFalse = surfScore(2, 12, 10, false)
     expect(withTrue).toBeGreaterThanOrEqual(withFalse)
+  })
+
+  // ── Additional surf edge cases ──────────────────────────────────────────
+  it('cross-shore wind (90° off offshore) triggers wind penalty', () => {
+    // facingDeg=270 (west-facing), offshoreDir=(270+180)%360=90
+    // wind at 0°: angleDiff(0, 90)=90 ≥ 70 → NOT offshore → penalty applied
+    // score: 5 +2(swell 1.8) +2(period 13) -2(not offshore) = 7
+    const score = surfScore(1.8, 13, 15, false, 0, 270)
+    expect(score).toBeLessThanOrEqual(7)
+    // Also verify it's worse than true-offshore with same inputs
+    const offshoreScore = surfScore(1.8, 13, 15, true, undefined, undefined)
+    expect(score).toBeLessThanOrEqual(offshoreScore)
+  })
+  it('wind within 70° of offshore direction is treated as offshore', () => {
+    // facingDeg=270, offshoreDir=90, wind at 120° — angleDiff(120,90)=30° < 70 → offshore
+    const score = surfScore(1.8, 13, 12, false, 120, 270)
+    // Same as explicit true offshore with the same swell/wind values
+    const scoreRef = surfScore(1.8, 13, 12, true, undefined, undefined)
+    expect(score).toBe(scoreRef)
+  })
+  it('giant swell (>4m) penalizes score', () => {
+    const score = surfScore(5.0, 15, 5, true)
+    expect(score).toBeLessThan(7)
+  })
+  it('perfect conditions (swell 2m, period 14s, light offshore) score 10', () => {
+    // score: 5 +2(swell 2.0 in 1.5-2.5) +2(period 14 ≥12) +1(offshore & wind<15) = 10 → clamped 10
+    const score = surfScore(2.0, 14, 8, true, 90, 270)
+    expect(score).toBe(10)
   })
 })

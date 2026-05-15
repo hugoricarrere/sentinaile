@@ -7,7 +7,8 @@
     "country": "France",
     "level": "expert",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-hossegor-estagnots",
@@ -17,7 +18,8 @@
     "country": "France",
     "level": "advanced",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-hossegor-centrales",
@@ -27,7 +29,8 @@
     "country": "France",
     "level": "advanced",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-seignosse",
@@ -37,7 +40,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 255
+    "facingDeg": 255,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-capbreton",
@@ -47,7 +51,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 230
+    "facingDeg": 230,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-soorts",
@@ -57,7 +62,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-messanges",
@@ -67,7 +73,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-mimizan",
@@ -77,7 +84,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-contis",
@@ -87,7 +95,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-lacanau",
@@ -97,7 +106,8 @@
     "country": "France",
     "level": "all",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-montalivet",
@@ -127,7 +137,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 315
+    "facingDeg": 315,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-biarritz-cote",
@@ -137,7 +148,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-biarritz-milady",
@@ -147,7 +159,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 270
+    "facingDeg": 270,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-anglet",
@@ -157,7 +170,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 295
+    "facingDeg": 295,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-guethary",
@@ -167,7 +181,8 @@
     "country": "France",
     "level": "expert",
     "breakType": "reef",
-    "facingDeg": 285
+    "facingDeg": 285,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-hendaye",
@@ -177,7 +192,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 280
+    "facingDeg": 280,
+    "shomHarbor": "BAYONNE"
   },
   {
     "id": "surf-la-torche",
@@ -187,7 +203,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 205
+    "facingDeg": 205,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-audierne",
@@ -197,7 +214,8 @@
     "country": "France",
     "level": "beginner",
     "breakType": "beach",
-    "facingDeg": 215
+    "facingDeg": 215,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-quiberon",
@@ -207,7 +225,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 250
+    "facingDeg": 250,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-crozon",
@@ -217,7 +236,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 240
+    "facingDeg": 240,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-plouescat",
@@ -227,7 +247,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 345
+    "facingDeg": 345,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-brignogan",
@@ -237,7 +258,8 @@
     "country": "France",
     "level": "intermediate",
     "breakType": "beach",
-    "facingDeg": 335
+    "facingDeg": 335,
+    "shomHarbor": "BREST"
   },
   {
     "id": "surf-jullouville",

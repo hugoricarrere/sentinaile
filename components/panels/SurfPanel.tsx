@@ -2,6 +2,7 @@ import type { GeoPoint } from '@/lib/types'
 import { Row } from '@/components/ui/Row'
 import { SpotWeather } from '@/components/SpotWeather'
 import { SurfForecast } from '@/components/SurfForecast'
+import { TideForecast } from '@/components/TideForecast'
 
 const getScoreColor = (s: number) => s >= 7 ? '#00FF88' : s >= 4 ? '#FFB347' : '#FF6B35'
 const LEVEL_LABEL: Record<string, string> = {
@@ -15,6 +16,7 @@ interface SurfData {
   windKmh: number; windOffshore: boolean
   windDirDeg?: number; facingDeg?: number
   trend?: 'up' | 'same' | 'down'
+  shomHarbor?: string
 }
 
 function isWindOffshore(windDirDeg: number, facingDeg: number): boolean {
@@ -59,6 +61,11 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
         <SurfForecast lat={point.latitude} lng={point.longitude} color="#00CED1" />
       </div>
+      {d.shomHarbor && (
+        <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
+          <TideForecast harborCode={d.shomHarbor} color="#00D4FF" />
+        </div>
+      )}
     </div>
   )
 }

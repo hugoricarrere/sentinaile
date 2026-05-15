@@ -3,6 +3,7 @@ import DeckGL from '@deck.gl/react'
 import Map from 'react-map-gl/mapbox'
 import { FlyToInterpolator } from '@deck.gl/core'
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
+import type mapboxgl from 'mapbox-gl'
 import { LAYERS } from '@/lib/layers'
 import { useLayerData } from '@/lib/use-layer-data'
 import type { GeoPoint } from '@/lib/types'
@@ -48,6 +49,8 @@ export default function MapCanvas({
   mapStyle = 'mapbox://styles/mapbox/dark-v11',
 }: Props) {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
+  const [terrain3d, setTerrain3d] = useState(false)
+  const mapRef = useRef<mapboxgl.Map | null>(null)
   const deckRef = useRef<HTMLDivElement>(null)
   const layerStates = useLayerData(LAYERS, enabledMap, refreshKeys)
 
@@ -96,6 +99,25 @@ export default function MapCanvas({
     },
     [],
   )
+
+  const handleTerrain3d = useCallback(() => {
+    const map = mapRef.current
+    if (!map) return
+    if (!terrain3d) {
+      if (!map.getSource('mapbox-dem')) {
+        map.addSource('mapbox-dem', {
+          type: 'raster-dem',
+          url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+          tileSize: 512,
+          maxzoom: 14,
+        })
+      }
+      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 })
+    } else {
+      map.setTerrain(null)
+    }
+    setTerrain3d(v => !v)
+  }, [terrain3d])
 
   const deckLayers = useMemo(
     () =>
@@ -152,10 +174,36 @@ export default function MapCanvas({
           mapStyle={mapStyle}
           onLoad={({ target }) => {
             target.setProjection({ name: 'mercator' })
+            mapRef.current = target as unknown as mapboxgl.Map
             onMapLoad?.()
           }}
         />
       </DeckGL>
+
+      {/* 3D Terrain toggle */}
+      <button
+        onClick={handleTerrain3d}
+        title={terrain3d ? 'Désactiver le relief 3D' : 'Activer le relief 3D'}
+        aria-label={terrain3d ? 'Désactiver le relief 3D' : 'Activer le relief 3D'}
+        style={{
+          position: 'absolute',
+          bottom: 80,
+          right: 12,
+          background: terrain3d ? '#0d2137' : '#060c18',
+          border: `1px solid ${terrain3d ? '#00D4FF' : '#1a2840'}`,
+          color: terrain3d ? '#00D4FF' : '#2a4a6a',
+          fontFamily: 'var(--font-rajdhani)',
+          fontWeight: 600,
+          fontSize: 12,
+          letterSpacing: '0.1em',
+          padding: '4px 8px',
+          borderRadius: 3,
+          cursor: 'pointer',
+          zIndex: 10,
+        }}
+      >
+        ⛰ 3D
+      </button>
     </div>
   )
 }
