@@ -52,6 +52,11 @@ export default function MapCanvas({
   const [terrain3d, setTerrain3d] = useState(false)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const deckRef = useRef<HTMLDivElement>(null)
+  // Guard against the 300ms synthetic click that fires after a touch tap.
+  // When a point is clicked, we record the timestamp so the outer DeckGL onClick
+  // (which can fire a second time with object=null due to flyTo moving the dot)
+  // doesn't immediately close the panel.
+  const lastPointClickedAt = useRef(0)
   const layerStates = useLayerData(LAYERS, enabledMap, refreshKeys)
 
   // Propagate layer states up for TopBar/StatusBar
@@ -125,13 +130,20 @@ export default function MapCanvas({
       .catch(() => { /* silent */ })
   }, [])
 
+  // Wrapped click handler that records when a point was last selected.
+  // Passed to every layer so we can debounce the outer DeckGL onClick.
+  const handleLayerPointClick = useCallback((pt: GeoPoint | null) => {
+    if (pt) lastPointClickedAt.current = Date.now()
+    onPointClick(pt)
+  }, [onPointClick])
+
   const deckLayers = useMemo(
     () =>
       LAYERS.filter(l => enabledMap[l.id]).flatMap(l => {
         const state = layerStates[l.id]
         const layers = l.getDeckLayer(
           applyFilters(state?.points ?? [], l.id, filters),
-          onPointClick,
+          handleLayerPointClick,
           viewState.zoom,
           handleClusterFlyTo,
         )
@@ -146,7 +158,7 @@ export default function MapCanvas({
         return layers
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [enabledMap, layerStates, onPointClick, filters, viewState.zoom, handleClusterFlyTo]
+    [enabledMap, layerStates, handleLayerPointClick, filters, viewState.zoom, handleClusterFlyTo]
   )
 
   return (
@@ -180,7 +192,13 @@ export default function MapCanvas({
           }
         }}
         onClick={({ object }) => {
-          if (!object) onPointClick(null)
+          // Ignore null-object clicks that arrive within 600ms of a point selection.
+          // On mobile, a touch tap generates a synthetic click event ~300ms later;
+          // by then the map may have panned (flyTo) and deck.gl finds nothing under
+          // the cursor → without this guard the panel would open and immediately close.
+          if (!object && Date.now() - lastPointClickedAt.current > 600) {
+            onPointClick(null)
+          }
         }}
         style={{ position: 'absolute', inset: '0' }}
       >
