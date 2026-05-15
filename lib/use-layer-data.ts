@@ -5,7 +5,12 @@ import type { LayerConfig } from './layers-registry'
 
 export type LayerStates = Record<string, LayerDataState>
 
-export function useLayerData(layers: LayerConfig[], enabledMap: Record<string, boolean>) {
+export function useLayerData(
+  layers: LayerConfig[],
+  enabledMap: Record<string, boolean>,
+  /** Increment a layer's counter to trigger an immediate manual re-fetch */
+  refreshKeys: Record<string, number> = {},
+) {
   const [states, setStates] = useState<LayerStates>(() =>
     Object.fromEntries(
       layers.map(l => [l.id, { points: [], stale: false, lastUpdated: null, error: null }])
@@ -14,6 +19,8 @@ export function useLayerData(layers: LayerConfig[], enabledMap: Record<string, b
 
   // Track previously enabled layers to diff on each render
   const prevEnabledRef = useRef<Record<string, boolean>>({})
+  // Track previous refresh keys to detect increments
+  const prevRefreshKeysRef = useRef<Record<string, number>>({})
 
   const fetchLayer = useCallback(async (layer: LayerConfig, signal: AbortSignal) => {
     try {
@@ -45,6 +52,25 @@ export function useLayerData(layers: LayerConfig[], enabledMap: Record<string, b
       }))
     }
   }, [])
+
+  // Watch for manual refresh requests (incrementing a layer's refresh key)
+  useEffect(() => {
+    const prevKeys = prevRefreshKeysRef.current
+    prevRefreshKeysRef.current = refreshKeys
+    for (const [layerId, key] of Object.entries(refreshKeys)) {
+      if (key > (prevKeys[layerId] ?? 0) && enabledMap[layerId]) {
+        const layer = layers.find(l => l.id === layerId)
+        if (!layer) continue
+        // Clear error state before re-fetching so the spinner shows
+        setStates(prev => ({
+          ...prev,
+          [layerId]: { ...prev[layerId], error: null, lastUpdated: null },
+        }))
+        const ctrl = new AbortController()
+        void fetchLayer(layer, ctrl.signal)
+      }
+    }
+  }, [refreshKeys, layers, enabledMap, fetchLayer]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const controllers: AbortController[] = []

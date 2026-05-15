@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 /**
  * Merge stored value with defaultValue:
@@ -35,6 +35,7 @@ export function usePersistedState<T>(
 ): [T, (v: T | ((prev: T) => T)) => void] {
   const [state, setState] = useState<T>(defaultValue)
   const [hydrated, setHydrated] = useState(false)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Hydrate from localStorage on client mount
   useEffect(() => {
@@ -51,12 +52,23 @@ export function usePersistedState<T>(
   }, [key]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Persist on every change — only after hydration is complete
+  // Debounced at 500ms to avoid thrashing localStorage during rapid state changes (e.g. map panning)
   useEffect(() => {
     if (!hydrated) return
-    try {
-      localStorage.setItem(key, JSON.stringify(state))
-    } catch {
-      // ignore quota errors
+    if (debounceRef.current !== null) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(key, JSON.stringify(state))
+      } catch {
+        // ignore quota errors
+      }
+      debounceRef.current = null
+    }, 500)
+    return () => {
+      if (debounceRef.current !== null) {
+        clearTimeout(debounceRef.current)
+        debounceRef.current = null
+      }
     }
   }, [key, state, hydrated])
 

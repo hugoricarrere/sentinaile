@@ -34,14 +34,22 @@ export default function WebcamPanel({ point }: { point: GeoPoint }) {
           src={safeUrl}
           style={{ width: '100%', aspectRatio: '16/9', border: '1px solid #1a2840', borderRadius: 3, display: 'block' }}
           allowFullScreen
-          sandbox="allow-scripts allow-same-origin allow-presentation"
+          sandbox="allow-scripts allow-presentation"
           title={d.title}
           referrerPolicy="no-referrer"
         />
       ) : (
-        <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80' }}>
-          {d.streamUrl ? 'Flux non autorisé (origine inconnue)' : 'Flux non disponible'}
-        </p>
+        <>
+          <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80' }}>
+            {d.streamUrl ? 'Flux non autorisé (origine inconnue)' : 'Flux non disponible'}
+          </p>
+          {!d.streamUrl && (
+            <div style={{ fontFamily: 'var(--font-rajdhani)', fontSize: 12, color: '#2a4a6a', padding: '8px 0', lineHeight: 1.5 }}>
+              Clé API Windy manquante.<br/>
+              Ajoutez <code style={{ color: '#00D4FF', fontFamily: 'var(--font-mono)', fontSize: 11 }}>WINDY_API_KEY</code> dans votre fichier <code style={{ color: '#00D4FF', fontFamily: 'var(--font-mono)', fontSize: 11 }}>.env.local</code>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

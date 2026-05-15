@@ -2,7 +2,7 @@
 import DeckGL from '@deck.gl/react'
 import Map from 'react-map-gl/mapbox'
 import { FlyToInterpolator } from '@deck.gl/core'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import { useLayerData } from '@/lib/use-layer-data'
 import type { GeoPoint } from '@/lib/types'
@@ -23,6 +23,8 @@ interface Props {
   onLayerStatesChange?: (states: LayerStates) => void
   filters: AllFilters
   flyTo?: FlyToTarget | null
+  refreshKeys?: Record<string, number>
+  onMapLoad?: () => void
 }
 
 const INITIAL_VIEW_STATE = {
@@ -40,9 +42,12 @@ export default function MapCanvas({
   onLayerStatesChange,
   filters,
   flyTo,
+  refreshKeys = {},
+  onMapLoad,
 }: Props) {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
-  const layerStates = useLayerData(LAYERS, enabledMap)
+  const deckRef = useRef<HTMLDivElement>(null)
+  const layerStates = useLayerData(LAYERS, enabledMap, refreshKeys)
 
   // Propagate layer states up for TopBar/StatusBar
   useEffect(() => {
@@ -61,6 +66,19 @@ export default function MapCanvas({
       transitionInterpolator: new FlyToInterpolator({ speed: 1.6 }),
     }))
   }, [flyTo])
+
+  // Keyboard navigation: arrow keys pan, +/= zoom in, - zoom out
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const PAN = 0.05 * Math.pow(2, 5 - viewState.zoom) // adaptive to zoom level
+    switch (e.key) {
+      case 'ArrowLeft':  e.preventDefault(); setViewState(v => ({ ...v, longitude: v.longitude - PAN })); break
+      case 'ArrowRight': e.preventDefault(); setViewState(v => ({ ...v, longitude: v.longitude + PAN })); break
+      case 'ArrowUp':    e.preventDefault(); setViewState(v => ({ ...v, latitude:  Math.min(85, v.latitude  + PAN) })); break
+      case 'ArrowDown':  e.preventDefault(); setViewState(v => ({ ...v, latitude:  Math.max(-85, v.latitude - PAN) })); break
+      case '+': case '=': e.preventDefault(); setViewState(v => ({ ...v, zoom: Math.min(20, v.zoom + 0.5) })); break
+      case '-':           e.preventDefault(); setViewState(v => ({ ...v, zoom: Math.max(0,  v.zoom - 0.5) })); break
+    }
+  }, [viewState.zoom]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const deckLayers = useMemo(
     () =>
@@ -86,29 +104,40 @@ export default function MapCanvas({
   )
 
   return (
-    <DeckGL
-      viewState={viewState}
-      controller={true}
-      layers={deckLayers}
-      onViewStateChange={({ viewState: vs }) => {
-        const next = vs as typeof INITIAL_VIEW_STATE
-        setViewState(next)
-        onViewStateChange({
-          longitude: next.longitude,
-          latitude: next.latitude,
-          zoom: next.zoom,
-        })
-      }}
-      onClick={({ object }) => {
-        if (!object) onPointClick(null)
-      }}
-      style={{ position: 'absolute', inset: '0' }}
+    <div
+      ref={deckRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label="Carte interactive — utilisez les touches fléchées pour naviguer, + et - pour zoomer"
+      style={{ position: 'absolute', inset: 0, outline: 'none' }}
     >
-      <Map
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/mapbox/dark-v11"
-        onLoad={({ target }) => target.setProjection({ name: 'mercator' })}
-      />
-    </DeckGL>
+      <DeckGL
+        viewState={viewState}
+        controller={true}
+        layers={deckLayers}
+        onViewStateChange={({ viewState: vs }) => {
+          const next = vs as typeof INITIAL_VIEW_STATE
+          setViewState(next)
+          onViewStateChange({
+            longitude: next.longitude,
+            latitude: next.latitude,
+            zoom: next.zoom,
+          })
+        }}
+        onClick={({ object }) => {
+          if (!object) onPointClick(null)
+        }}
+        style={{ position: 'absolute', inset: '0' }}
+      >
+        <Map
+          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/mapbox/dark-v11"
+          onLoad={({ target }) => {
+            target.setProjection({ name: 'mercator' })
+            onMapLoad?.()
+          }}
+        />
+      </DeckGL>
+    </div>
   )
 }

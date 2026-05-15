@@ -29,7 +29,8 @@ export default function ConditionToast({ layerStates }: Props) {
 
     for (const layer of LAYERS) {
       if (!MONITORED.has(layer.id)) continue
-      const points = layerStates[layer.id]?.points ?? []
+      const state = layerStates[layer.id]
+      const points = state?.points ?? []
       if (points.length === 0) continue
 
       // Determine dominant condition for the layer
@@ -74,7 +75,7 @@ export default function ConditionToast({ layerStates }: Props) {
   return (
     <div style={{
       position: 'fixed',
-      bottom: 48,
+      bottom: 'calc(48px + env(safe-area-inset-bottom))',
       left: '50%',
       transform: 'translateX(-50%)',
       zIndex: 1000,
@@ -104,7 +105,7 @@ export default function ConditionToast({ layerStates }: Props) {
           animation: 'toastIn 0.3s ease-out',
           pointerEvents: 'auto',
         }}>
-          ⚠ {t.message}
+          ⛔ {t.message}
         </div>
       ))}
       <style>{`

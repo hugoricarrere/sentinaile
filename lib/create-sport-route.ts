@@ -18,9 +18,17 @@ export function createSportRoute<T>(
     if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
       return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
     try {
-      const { data, stale } = await globalCache.get(cacheKey, fetchFn, ttlMs)
+      const fetchWithTimeout = () =>
+        Promise.race([
+          fetchFn(),
+          new Promise<never>((_, rej) =>
+            setTimeout(() => rej(new Error('timeout')), 12_000),
+          ),
+        ])
+      const { data, stale } = await globalCache.get(cacheKey, fetchWithTimeout, ttlMs)
       return NextResponse.json({ data, stale })
-    } catch {
+    } catch (e) {
+      console.error(`[${cacheKey}] fetch error:`, e)
       return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
     }
   }

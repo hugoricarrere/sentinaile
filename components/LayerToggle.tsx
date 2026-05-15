@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { AllFilters } from '@/lib/filters'
@@ -15,6 +16,8 @@ interface Props {
   onFiltersChange: (f: AllFilters) => void
   activeFilterLayer: string | null
   onFilterLayer: (id: string | null) => void
+  onRefreshLayer?: (id: string) => void
+  onResetLayers?: () => void
 }
 
 const SectionHeader = ({ label }: { label: string }) => (
@@ -36,10 +39,72 @@ const SectionHeader = ({ label }: { label: string }) => (
 export default function LayerToggle({
   enabledMap, onToggle, layerStates,
   filters, onFiltersChange, activeFilterLayer, onFilterLayer,
+  onRefreshLayer, onResetLayers,
 }: Props) {
+  const [errorToast, setErrorToast] = useState<string | null>(null)
+  const disabledCount = LAYERS.filter(l => !(enabledMap[l.id] ?? l.defaultEnabled)).length
+
   return (
-    <div style={{ borderBottom: '1px solid #1a2840' }}>
-      <SectionHeader label="Couches de données" />
+    <div style={{ borderBottom: '1px solid #1a2840', position: 'relative' }}>
+    {/* Error toast overlay */}
+    {errorToast && (
+      <div
+        role="alert"
+        onClick={() => setErrorToast(null)}
+        style={{
+          position: 'absolute', inset: 0, zIndex: 10,
+          background: 'rgba(4,8,16,0.9)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 16, cursor: 'pointer',
+        }}
+      >
+        <div style={{
+          background: '#0a0e1a',
+          border: '1px solid #cc3a2060',
+          borderRadius: 4,
+          padding: '12px 16px',
+          fontFamily: 'var(--font-rajdhani)',
+          fontSize: 13,
+          color: '#cc3a20',
+          textAlign: 'center',
+          lineHeight: 1.5,
+          maxWidth: 220,
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>⚠ Erreur de couche</div>
+          <div style={{ color: '#8aaccc', fontSize: 11 }}>{errorToast}</div>
+          <div style={{ marginTop: 8, fontSize: 10, color: '#2a4a6a' }}>Appuyer pour fermer</div>
+        </div>
+      </div>
+    )}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '10px 16px 8px',
+        borderBottom: '1px solid #111c2e',
+        background: '#040810',
+      }}>
+        <span style={{
+          fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10,
+          letterSpacing: '0.25em', color: '#2a4a6a', textTransform: 'uppercase',
+        }}>Couches de données</span>
+        {disabledCount > 0 && onResetLayers && (
+          <button
+            onClick={onResetLayers}
+            title="Réactiver toutes les couches"
+            style={{
+              background: 'none', border: '1px solid #1a2840', borderRadius: 3,
+              color: '#2a4a6a', cursor: 'pointer',
+              fontFamily: 'var(--font-rajdhani)', fontWeight: 600,
+              fontSize: 9, letterSpacing: '0.12em',
+              padding: '2px 6px', textTransform: 'uppercase',
+              transition: 'border-color 0.12s, color 0.12s',
+            }}
+            onMouseEnter={e => { (e.currentTarget).style.borderColor = '#00D4FF'; (e.currentTarget).style.color = '#00D4FF' }}
+            onMouseLeave={e => { (e.currentTarget).style.borderColor = '#1a2840'; (e.currentTarget).style.color = '#2a4a6a' }}
+          >
+            ↺ Tout activer
+          </button>
+        )}
+      </div>
       {LAYERS.map(l => {
         const state = layerStates[l.id]
         const count = state?.points.length ?? 0
@@ -116,17 +181,22 @@ export default function LayerToggle({
                   </span>
                 )}
 
-                {/* Error indicator */}
+                {/* Error indicator — clickable to show full message + retry */}
                 {hasError && (
-                  <span title={state?.error ?? 'Erreur'} style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 10,
-                    color: '#cc3a20',
-                    flexShrink: 0,
-                    cursor: 'help',
-                  }}>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation()
+                      setErrorToast(state?.error ?? 'Erreur inconnue')
+                    }}
+                    aria-label={`Erreur : ${state?.error ?? 'Erreur inconnue'}. Cliquer pour détails.`}
+                    style={{
+                      background: 'none', border: 'none', padding: 0,
+                      fontFamily: 'var(--font-mono)', fontSize: 10,
+                      color: '#cc3a20', flexShrink: 0, cursor: 'pointer',
+                    }}
+                  >
                     ⚠
-                  </span>
+                  </button>
                 )}
 
                 {/* Empty indicator (layer loaded but 0 points — e.g. webcam without API key) */}
@@ -159,11 +229,34 @@ export default function LayerToggle({
                 )}
               </button>
 
+              {/* Refresh button — only shown when layer has an error */}
+              {hasError && onRefreshLayer && (
+                <button
+                  onClick={e => { e.stopPropagation(); onRefreshLayer(l.id) }}
+                  title="Relancer la récupération des données"
+                  aria-label="Réessayer"
+                  style={{
+                    width: 36,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'none', border: 'none',
+                    borderLeft: '1px solid #0d1826',
+                    cursor: 'pointer', color: '#cc3a20',
+                    fontSize: 13, flexShrink: 0,
+                    transition: 'color 0.15s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget).style.color = '#ff5530' }}
+                  onMouseLeave={e => { (e.currentTarget).style.color = '#cc3a20' }}
+                >
+                  ↺
+                </button>
+              )}
+
               {/* Filter icon button */}
-              {filterable && (
+              {filterable && !hasError && (
                 <button
                   onClick={() => onFilterLayer(filterOpen ? null : l.id)}
                   title="Filtres"
+                  aria-label={`Filtres ${l.label}`}
                   style={{
                     width: 36,
                     display: 'flex',
@@ -199,6 +292,15 @@ export default function LayerToggle({
           </div>
         )
       })}
+
+      {/* Scroll fade indicator — hints that there's more content below */}
+      <div style={{
+        position: 'sticky',
+        bottom: 0,
+        height: 24,
+        background: 'linear-gradient(to bottom, transparent, #0B1120)',
+        pointerEvents: 'none',
+      }} />
     </div>
   )
 }

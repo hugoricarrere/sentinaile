@@ -26,6 +26,10 @@ export function currentHourIndex(times: string[]): number {
   }).format(now)
   const hour = parisHour()
   const prefix = `${dateStr}T${String(hour).padStart(2, '0')}`
+  // Fast path: Open-Meteo arrays start at 00:00 of the day, so the Paris hour
+  // is the direct index for same-day data. Verify before trusting.
+  if (times[hour]?.startsWith(prefix)) return hour
+  // Fallback: linear scan (handles multi-day arrays, edge-of-day, etc.)
   const idx = times.findIndex(t => t.startsWith(prefix))
   return idx >= 0 ? idx : hour   // fallback : heure Paris si le tableau est vide
 }

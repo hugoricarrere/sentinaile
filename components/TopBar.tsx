@@ -132,9 +132,8 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
     debounceRef.current = setTimeout(async () => {
       setSearching(true)
       try {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=fr`
-        const res = await fetch(url, { headers: { 'User-Agent': 'Sentinai-le/1.0' } })
-        const data: NominatimResult[] = await res.json()
+        const res = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`)
+        const data: NominatimResult[] = (await res.json()).data ?? []
         setResults(data)
         setShowResults(true)
       } catch {
@@ -281,6 +280,8 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
             margin: 0,
             zIndex: 100,
             boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+            maxHeight: '50vh',
+            overflowY: 'auto' as const,
           }}>
             {results.map(r => (
               <li key={r.place_id}>

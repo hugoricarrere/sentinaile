@@ -60,7 +60,7 @@ export default function StatusBar({ layerStates, viewState }: Props) {
           fontWeight: 600,
           fontSize: 12,
           letterSpacing: '0.1em',
-          color: '#cc8820',
+          color: '#d4a030',
           flexShrink: 0,
         }}>
           ⚠ {staleCount} Stale
@@ -106,7 +106,7 @@ export default function StatusBar({ layerStates, viewState }: Props) {
       <span style={{
         fontFamily: 'var(--font-mono)',
         fontSize: 11,
-        color: '#243a55',
+        color: '#4a7aa0',
         marginLeft: 'auto',
         letterSpacing: '0.06em',
         flexShrink: 0,

@@ -41,7 +41,25 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className={`${mono.variable} ${rajdhani.variable}`}>{children}</body>
+      <head>
+        {/* Viewport: enables safe-area-inset for iOS notch + disables zoom for map */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#040810" />
+      </head>
+      <body className={`${mono.variable} ${rajdhani.variable}`}>
+        <a
+          href="#main-content"
+          style={{
+            position: 'absolute', left: -9999, top: 'auto',
+            width: 1, height: 1, overflow: 'hidden',
+          }}
+          onFocus={e => { (e.currentTarget as HTMLAnchorElement).style.left = '16px'; (e.currentTarget as HTMLAnchorElement).style.width = 'auto'; (e.currentTarget as HTMLAnchorElement).style.height = 'auto' }}
+          onBlur={e => { (e.currentTarget as HTMLAnchorElement).style.left = '-9999px'; (e.currentTarget as HTMLAnchorElement).style.width = '1px'; (e.currentTarget as HTMLAnchorElement).style.height = '1px' }}
+        >
+          Aller au contenu principal
+        </a>
+        <main id="main-content" style={{ display: 'contents' }}>{children}</main>
+      </body>
     </html>
   )
 }

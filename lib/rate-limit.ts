@@ -38,8 +38,9 @@ export function rateLimit(
   { windowMs = 60_000, max = 60 }: Options = {},
 ): boolean {
   const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    request.headers.get('x-vercel-forwarded-for') ??
     request.headers.get('x-real-ip') ??
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     'unknown'
 
   const now = Date.now()
