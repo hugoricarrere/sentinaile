@@ -22,13 +22,13 @@ export default function BasejumpPanel({ point }: { point: GeoPoint }) {
   const cond = COND[d.condition]
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF0080', marginBottom: 4, lineHeight: 1.2 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 19, color: '#FF0080', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 16, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 14, color: '#3a5a80', marginBottom: 10 }}>
         {LEGAL[d.legal] ?? d.legal}
       </p>
       <Row label="PAYS" value={d.country} />

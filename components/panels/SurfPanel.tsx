@@ -4,7 +4,6 @@ import { SpotWeather } from '@/components/SpotWeather'
 import { SurfForecast } from '@/components/SurfForecast'
 import { TideForecast } from '@/components/TideForecast'
 import { SpotPhoto } from '@/components/SpotPhoto'
-import { PushAlertButton } from '@/components/PushAlertButton'
 
 const getScoreColor = (s: number) => s >= 7 ? '#00FF88' : s >= 4 ? '#FFB347' : '#FF6B35'
 const LEVEL_LABEL: Record<string, string> = {
@@ -35,10 +34,10 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
   return (
     <div>
       {d.photoUrl && <SpotPhoto url={d.photoUrl} alt={d.name} />}
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#00CED1', marginBottom: 4, lineHeight: 1.2 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 19, color: '#00CED1', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 14, color: '#3a5a80', marginBottom: 10 }}>
         {d.country} · {d.breakType}
       </p>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, paddingBottom: 10 }}>
@@ -71,7 +70,7 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
           <TideForecast harborCode={d.shomHarbor} color="#00D4FF" />
         </div>
       )}
-      <PushAlertButton spotId={d.id ?? d.name} minScore={7} color="#00D4FF" />
+      {/* PushAlertButton: requires VAPID keys + persistent store — disabled until configured */}
     </div>
   )
 }

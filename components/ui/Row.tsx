@@ -2,7 +2,12 @@
  * Ligne label / valeur utilisée dans tous les panneaux de détail.
  * Le prop `highlight` colore la valeur en orange (alerte densité altitude, etc.)
  * Le prop `valueColor` permet de forcer une couleur spécifique sur la valeur.
+ *
+ * Design tokens (colors, fonts, spacing) are defined in `lib/styles.ts`.
+ * Other panels still use inline values — migrate gradually as needed.
  */
+import { COLOR, FONT, BORDER, SPACING } from '@/lib/styles'
+
 export function Row({
   label,
   value,
@@ -14,27 +19,27 @@ export function Row({
   highlight?: boolean
   valueColor?: string
 }) {
-  const color = valueColor ?? (highlight ? '#FFB347' : '#8aaccc')
+  const color = valueColor ?? (highlight ? COLOR.yellow : COLOR.valuePrimary)
   return (
     <div style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'baseline',
-      padding: '5px 0',
-      borderBottom: '1px solid #0d1826',
+      padding: SPACING.rowPadding,
+      borderBottom: BORDER.row,
     }}>
       <span style={{
-        fontFamily: 'var(--font-rajdhani)',
+        fontFamily: FONT.rajdhani,
         fontWeight: 500,
-        fontSize: 13,
+        fontSize: 14,
         letterSpacing: '0.06em',
-        color: '#4a6fa5',
+        color: COLOR.labelPrimary,
       }}>
         {label}
       </span>
       <span style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: 11,
+        fontFamily: FONT.mono,
+        fontSize: 13,
         color,
         textAlign: 'right',
         maxWidth: '55%',

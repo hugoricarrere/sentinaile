@@ -34,17 +34,17 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
     : false
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF4500', marginBottom: 4, lineHeight: 1.2 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 19, color: '#FF4500', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 16, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
 
       {/* Barre go/no-go horaire */}
       {d.hourlyConditions && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
             FENÊTRE DE SAUT — AUJOURD&apos;HUI
           </div>
           <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}>
@@ -112,15 +112,15 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
         ]
         return (
           <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid #0d1826' }}>
-            <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
+            <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
               LIMITES PAR NIVEAU
             </div>
             {levels.map(({ label, limit }) => {
               const ok = ws <= limit
               return (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '3px 0', borderBottom: '1px solid #0d1826' }}>
-                  <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 12, letterSpacing: '0.06em', color: '#4a6fa5' }}>{label}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: ok ? '#00FF88' : '#FF6B35', fontWeight: ok ? 400 : 700 }}>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
+                  <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 14, letterSpacing: '0.06em', color: '#4a6fa5' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: ok ? '#00FF88' : '#FF6B35', fontWeight: ok ? 400 : 700 }}>
                     {ok ? `✓ OK (< ${limit})` : `✗ ${ws} km/h`}
                   </span>
                 </div>

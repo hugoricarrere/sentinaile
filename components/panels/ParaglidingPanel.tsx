@@ -2,7 +2,6 @@ import type { GeoPoint } from '@/lib/types'
 import { parisHour } from '@/lib/time'
 import { Row } from '@/components/ui/Row'
 import { FlyForecast } from '@/components/FlyForecast'
-import { PushAlertButton } from '@/components/PushAlertButton'
 
 const COND = {
   green:  { label: '🟢 ● Vol possible',         color: '#00FF88' },
@@ -31,17 +30,17 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
   const cond = COND[d.condition]
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#9B59B6', marginBottom: 4, lineHeight: 1.2 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 19, color: '#9B59B6', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 16, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
 
       {/* Barre go/no-go horaire */}
       {d.hourlyConditions && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 6 }}>
             FENÊTRE DE VOL — AUJOURD&apos;HUI
           </div>
           <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}>
@@ -98,7 +97,7 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
         <FlyForecast lat={point.latitude} lng={point.longitude} />
       </div>
-      <PushAlertButton spotId={d.name} minScore={-1} color="#9B59B6" />
+      {/* PushAlertButton: requires VAPID keys + persistent store — disabled until configured */}
     </div>
   )
 }

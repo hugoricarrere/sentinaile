@@ -67,7 +67,15 @@ export function SurfForecast({ lat, lng, color = '#00CED1' }: SurfForecastProps)
     return () => ctrl.abort()
   }, [lat, lng])
 
-  if (error) return null
+  if (error) return (
+    <div style={{
+      fontFamily: 'var(--font-rajdhani)', fontSize: 12,
+      color: '#3a5a7a', padding: '6px 0',
+      letterSpacing: '0.05em',
+    }}>
+      ⚠ Données indisponibles
+    </div>
+  )
 
   if (loading) {
     return (

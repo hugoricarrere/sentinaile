@@ -14,7 +14,15 @@ export function TideForecast({ harborCode, color }: { harborCode: string; color:
       .catch(() => setError(true))
   }, [harborCode])
 
-  if (error) return null // silent fail
+  if (error) return (
+    <div style={{
+      fontFamily: 'var(--font-rajdhani)', fontSize: 12,
+      color: '#3a5a7a', padding: '6px 0',
+      letterSpacing: '0.05em',
+    }}>
+      ⚠ Données indisponibles
+    </div>
+  )
   if (!tides) return (
     <div style={{ height: 40, background: '#060c18', borderRadius: 3, marginTop: 8, animation: 'pulse 1.5s infinite' }} />
   )
@@ -28,14 +36,30 @@ export function TideForecast({ harborCode, color }: { harborCode: string; color:
 
   if (next12.length === 0) return null
 
+  const highTide = next12.reduce((max, t) => t.heightM > max.heightM ? t : max, next12[0])
+  const lowTide = next12.reduce((min, t) => t.heightM < min.heightM ? t : min, next12[0])
+
+  const formatTime = (isoTime: string) => {
+    const d = new Date(isoTime)
+    return `${d.getHours().toString().padStart(2, '0')}h${d.getMinutes().toString().padStart(2, '0')}`
+  }
+
   const maxH = Math.max(...next12.map(t => t.heightM))
   const minH = Math.min(...next12.map(t => t.heightM))
   const range = maxH - minH || 1
 
   return (
     <div style={{ marginTop: 8 }}>
-      <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 4 }}>
+      <div style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11, letterSpacing: '0.2em', color: '#2a4a6a', marginBottom: 4 }}>
         MARÉES — 12H
+      </div>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 6 }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#00D4FF' }}>
+          ↑ PM {formatTime(highTide.time)} — {highTide.heightM.toFixed(1)}m
+        </span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#2a4a6a' }}>
+          ↓ BM {formatTime(lowTide.time)} — {lowTide.heightM.toFixed(1)}m
+        </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 32 }}>
         {next12.map((t, i) => {

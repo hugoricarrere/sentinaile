@@ -73,7 +73,15 @@ export function SpotWeather({ lat, lng, color }: Props) {
     )
   }
 
-  if (error || !data) return null
+  if (error || !data) return (
+    <div style={{
+      fontFamily: 'var(--font-rajdhani)', fontSize: 12,
+      color: '#3a5a7a', padding: '6px 0',
+      letterSpacing: '0.05em',
+    }}>
+      ⚠ Données indisponibles
+    </div>
+  )
 
   return (
     <div

@@ -28,10 +28,10 @@ export default function WebcamPanel({ point }: { point: GeoPoint }) {
 
   return (
     <div>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FFD700', marginBottom: 4, lineHeight: 1.2 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 19, color: '#FFD700', marginBottom: 4, lineHeight: 1.2 }}>
         {d.title}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>
+      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 14, color: '#3a5a80', marginBottom: 10 }}>
         {d.city}, {d.country}
       </p>
       {safeUrl ? (
