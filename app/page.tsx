@@ -72,6 +72,10 @@ export default function Home() {
   // Pull-to-refresh
   const pullStartY = useRef(0)
   const [isPulling, setIsPulling] = useState(false)
+  // Guard against the 300ms synthetic click (touch → click) hitting the backdrop.
+  // When the detail panel opens, we record the timestamp and ignore close events
+  // that arrive within 500ms (i.e. before the user has a chance to intentionally close).
+  const panelOpenedAt = useRef(0)
 
   // ── Comparator ────────────────────────────────────────────────────────────
   const { spots: comparatorSpots, add: addToComparator, remove: removeFromComparator } = useComparator()
@@ -95,7 +99,10 @@ export default function Home() {
 
   // Sync detail sheet open state with selectedPoint
   useEffect(() => {
-    if (selectedPoint) setMobileDetailOpen(true)
+    if (selectedPoint) {
+      panelOpenedAt.current = Date.now()
+      setMobileDetailOpen(true)
+    }
   }, [selectedPoint])
 
   // On mount: if URL has a valid hash, apply it (overrides persisted state)
@@ -159,6 +166,10 @@ export default function Home() {
   }, [setEnabledMap])
 
   const handleCloseDetail = useCallback(() => {
+    // Ignore close events within 500ms of opening — this prevents the 300ms synthetic
+    // browser click (generated after a touch tap) from immediately closing the panel
+    // via the backdrop overlay.
+    if (Date.now() - panelOpenedAt.current < 500) return
     setMobileDetailOpen(false)
     // Delay clearing point so the close animation can play
     setTimeout(() => setSelectedPoint(null), 250)
