@@ -80,6 +80,21 @@ export default function MapCanvas({
     }
   }, [viewState.zoom]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Cluster click: zoom in by 2 levels, centered on the cluster
+  const handleClusterFlyTo = useCallback(
+    (longitude: number, latitude: number, currentZoom: number) => {
+      setViewState(prev => ({
+        ...prev,
+        longitude,
+        latitude,
+        zoom: Math.min(20, currentZoom + 2),
+        transitionDuration: 600,
+        transitionInterpolator: new FlyToInterpolator({ speed: 1.8 }),
+      }))
+    },
+    [],
+  )
+
   const deckLayers = useMemo(
     () =>
       LAYERS.filter(l => enabledMap[l.id]).flatMap(l => {
@@ -88,6 +103,7 @@ export default function MapCanvas({
           applyFilters(state?.points ?? [], l.id, filters),
           onPointClick,
           viewState.zoom,
+          handleClusterFlyTo,
         )
         // Dim layer when data is stale (cached and not yet refreshed)
         if (state?.stale) {
@@ -100,7 +116,7 @@ export default function MapCanvas({
         return layers
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [enabledMap, layerStates, onPointClick, filters, viewState.zoom]
+    [enabledMap, layerStates, onPointClick, filters, viewState.zoom, handleClusterFlyTo]
   )
 
   return (

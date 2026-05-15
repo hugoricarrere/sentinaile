@@ -115,6 +115,11 @@ export default function LayerToggle({
         const hasError  = enabled && !!state?.error
         const isEmpty   = enabled && state?.lastUpdated !== null && count === 0 && !state?.error
 
+        // Data age badge: show minutes since last update
+        const ageMins = state?.lastUpdated != null
+          ? Math.floor((Date.now() - state.lastUpdated) / 60_000)
+          : null
+
         return (
           <div key={l.id}>
             <div style={{
@@ -225,6 +230,22 @@ export default function LayerToggle({
                     letterSpacing: '0.04em',
                   }}>
                     {count > 999 ? `${(count / 1000).toFixed(1)}k` : count}
+                  </span>
+                )}
+
+                {/* Data age badge */}
+                {ageMins !== null && enabled && !hasError && (
+                  <span
+                    title={`Données mises à jour il y a ${ageMins} min`}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 9,
+                      color: ageMins > 10 ? '#d4a030' : '#1e4060',
+                      letterSpacing: '0.04em',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {ageMins === 0 ? 'MÀJ <1min' : `MÀJ ${ageMins}min`}
                   </span>
                 )}
               </button>

@@ -53,6 +53,9 @@ export function useLayerData(
     }
   }, [])
 
+  // Track per-layer AbortControllers for manual refresh requests
+  const manualRefreshCtrlsRef = useRef<Record<string, AbortController>>({})
+
   // Watch for manual refresh requests (incrementing a layer's refresh key)
   useEffect(() => {
     const prevKeys = prevRefreshKeysRef.current
@@ -61,14 +64,21 @@ export function useLayerData(
       if (key > (prevKeys[layerId] ?? 0) && enabledMap[layerId]) {
         const layer = layers.find(l => l.id === layerId)
         if (!layer) continue
+        // Abort any in-flight manual refresh for this layer
+        manualRefreshCtrlsRef.current[layerId]?.abort()
+        const ctrl = new AbortController()
+        manualRefreshCtrlsRef.current[layerId] = ctrl
         // Clear error state before re-fetching so the spinner shows
         setStates(prev => ({
           ...prev,
           [layerId]: { ...prev[layerId], error: null, lastUpdated: null },
         }))
-        const ctrl = new AbortController()
         void fetchLayer(layer, ctrl.signal)
       }
+    }
+    return () => {
+      // Abort all in-flight manual refreshes on unmount
+      Object.values(manualRefreshCtrlsRef.current).forEach(c => c.abort())
     }
   }, [refreshKeys, layers, enabledMap, fetchLayer]) // eslint-disable-line react-hooks/exhaustive-deps
 

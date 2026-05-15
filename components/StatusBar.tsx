@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 
@@ -17,6 +17,15 @@ export default function StatusBar({ layerStates, viewState }: Props) {
     timerRef.current = setTimeout(() => setDisplayVs(viewState), 300)
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [viewState])
+  const [copied, setCopied] = useState(false)
+  const copyCoords = useCallback(() => {
+    const text = `${displayVs.latitude.toFixed(6)}, ${displayVs.longitude.toFixed(6)}`
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    }).catch(() => {/* clipboard access denied */})
+  }, [displayVs.latitude, displayVs.longitude])
+
   const connected  = LAYERS.filter(l => layerStates[l.id]?.lastUpdated !== null).length
   const staleCount = LAYERS.filter(l => layerStates[l.id]?.stale && !layerStates[l.id]?.error).length
   const errorCount = LAYERS.filter(l => !!layerStates[l.id]?.error).length
@@ -62,12 +71,22 @@ export default function StatusBar({ layerStates, viewState }: Props) {
         </span>
       )}
 
-      {/* Coordonnées / zoom */}
-      <span className="font-code text-[11px] text-label ml-auto tracking-[0.06em] shrink-0">
-        {displayVs.latitude.toFixed(4)}°N &nbsp;
-        {Math.abs(displayVs.longitude).toFixed(4)}°{displayVs.longitude >= 0 ? 'E' : 'O'} &nbsp;
-        z{displayVs.zoom.toFixed(1)}
-      </span>
+      {/* Coordonnées / zoom — cliquable pour copier */}
+      <button
+        onClick={copyCoords}
+        title="Copier les coordonnées"
+        className="font-code text-[11px] text-label ml-auto tracking-[0.06em] shrink-0 bg-transparent border-none cursor-pointer transition-colors duration-150 hover:text-accent"
+        style={{ color: copied ? '#00FF88' : undefined }}
+        aria-label="Copier les coordonnées dans le presse-papiers"
+      >
+        {copied ? '✓ Copié' : (
+          <>
+            {displayVs.latitude.toFixed(4)}°N &nbsp;
+            {Math.abs(displayVs.longitude).toFixed(4)}°{displayVs.longitude >= 0 ? 'E' : 'O'} &nbsp;
+            z{displayVs.zoom.toFixed(1)}
+          </>
+        )}
+      </button>
     </footer>
   )
 }

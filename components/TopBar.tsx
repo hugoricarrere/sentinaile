@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
@@ -162,8 +162,9 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
     setShowResults(false)
   }
 
-  const activeLayers = LAYERS.filter(
-    l => (layerStates[l.id]?.points.length ?? 0) > 0
+  const activeLayers = useMemo(
+    () => LAYERS.filter(l => (layerStates[l.id]?.points.length ?? 0) > 0),
+    [layerStates],
   )
 
   return (

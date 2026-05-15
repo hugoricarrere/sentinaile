@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react'
 import { LAYERS } from '@/lib/layers'
 import type { GeoPoint } from '@/lib/types'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -10,6 +11,13 @@ interface Props {
 
 export default function ContextPanel({ point, onClose }: Props) {
   const layer = LAYERS.find(l => l.id === point.layerId)
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
 
   return (
     <div className="panel-fade-in" style={{ borderTop: '1px solid #1a2840' }}>

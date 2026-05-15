@@ -27,7 +27,7 @@ export const paraglidingLayer: LayerConfig = {
       data: d as Record<string, unknown>,
     }))
   },
-  getDeckLayer: (points, onClick, zoom = 5) => {
+  getDeckLayer: (points, onClick, zoom = 5, onFlyTo) => {
     const sc = getClusterIndex(points)
     const tileZoom = Math.max(0, Math.min(Math.round(zoom), 20))
     const features = sc.getClusters(EU_BBOX, tileZoom)
@@ -75,7 +75,11 @@ export const paraglidingLayer: LayerConfig = {
         radiusMaxPixels: showIndividual ? 8 : 18,
         pickable: true,
         onClick: ({ object }) => {
-          if (!object || (object.data as { isCluster?: boolean }).isCluster) return
+          if (!object) return
+          if ((object.data as { isCluster?: boolean }).isCluster) {
+            onFlyTo?.(object.longitude, object.latitude, zoom)
+            return
+          }
           onClick(object)
         },
       }),

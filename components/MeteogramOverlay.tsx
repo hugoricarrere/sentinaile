@@ -185,6 +185,13 @@ export default function MeteogramOverlay({
     return () => clearInterval(id)
   }, [])
 
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
+
   const meta      = getLayerMeta(point.layerId)
   const name      = (point.data.name  as string) ?? ''
   const icao      = (point.data.icao  as string) ?? ''

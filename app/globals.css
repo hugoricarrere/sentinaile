@@ -76,6 +76,35 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
   animation: pulse 1.2s ease-in-out infinite;
 }
 
+/* ── Skip navigation link ─────────────────────────────────────────────────── */
+/* CSS-only implementation avoids event handlers in the Server Component      */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+.skip-link:focus {
+  left: 16px;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  padding: 8px 20px;
+  background: #0B1120;
+  color: #00D4FF;
+  border: 1px solid #00D4FF;
+  border-radius: 4px;
+  font-family: var(--font-rajdhani, 'Rajdhani'), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  outline: none;
+}
+
 /* ── Font family utilities ────────────────────────────────────────────────── */
 /* --font-rajdhani and --font-mono are injected on <body> by next/font.      */
 /* We expose them as Tailwind utilities (font-display, font-code) so          */
