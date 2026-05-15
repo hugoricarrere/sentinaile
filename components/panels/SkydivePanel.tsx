@@ -1,18 +1,6 @@
 import type { GeoPoint } from '@/lib/types'
 import { parisHour } from '@/lib/time'
-
-function Row({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
-      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
-        {label}
-      </span>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: highlight ? '#FFB347' : '#8aaccc', textAlign: 'right', maxWidth: '55%', fontWeight: highlight ? 700 : 400 }}>
-        {value}
-      </span>
-    </div>
-  )
-}
+import { Row } from '@/components/ui/Row'
 
 const COND = {
   green: { label: '🟢 Favorable', color: '#00FF88' },
@@ -59,8 +47,12 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
               const condH = d.hourlyConditions![h]
               const color = condH === 'green' ? '#00FF88' : condH === 'yellow' ? '#FFB347' : '#FF6B35'
               const isNow = h === parisHour()
+              const showLabel = h % 3 === 0
               return (
                 <div key={h} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                  {isNow && (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 7, color: '#00D4FF', letterSpacing: 0 }}>▼</span>
+                  )}
                   <div style={{
                     width: isNow ? 10 : 8,
                     height: isNow ? 28 : 22,
@@ -70,9 +62,14 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
                     border: isNow ? `1px solid ${color}` : 'none',
                     boxShadow: isNow ? `0 0 6px ${color}80` : 'none',
                   }} />
-                  {(h % 3 === 0) && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: '#3a5a7a' }}>{h}h</span>
-                  )}
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 8,
+                    color: isNow ? '#00D4FF' : showLabel ? '#3a5a7a' : 'transparent',
+                    fontWeight: isNow ? 700 : 400,
+                  }}>
+                    {h}h
+                  </span>
                 </div>
               )
             })}

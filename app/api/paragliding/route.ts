@@ -2,15 +2,8 @@ import { NextResponse } from 'next/server'
 import { globalCache } from '@/lib/cache'
 import pgData from '@/data/paragliding-spots.json'
 import { paraglideCondition, type ConditionStatus } from '@/lib/weather'
-
-function currentHourIndex(times: string[]): number {
-  const now = new Date()
-  const pad = (n: number) => String(n).padStart(2, '0')
-  // Build "YYYY-MM-DDTHH" prefix to match against the times array
-  const prefix = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}`
-  const idx = times.findIndex(t => t.startsWith(prefix))
-  return idx >= 0 ? idx : now.getHours() // fallback to UTC hour if not found
-}
+import { currentHourIndex } from '@/lib/time'
+import { rateLimit } from '@/lib/rate-limit'
 
 interface PGSpot {
   id: string; name: string; longitude: number; latitude: number
@@ -30,7 +23,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
   const list = pgData as PGSpot[]
   const results = await Promise.allSettled(
     list.map(async (s) => {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${s.latitude}&longitude=${s.longitude}&hourly=windspeed_10m,windgusts_10m,temperature_2m,shortwave_radiation,weathercode,cape,boundary_layer_height,lifted_index&forecast_days=2&windspeed_unit=kmh&timezone=auto`
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${s.latitude}&longitude=${s.longitude}&hourly=windspeed_10m,windgusts_10m,temperature_2m,shortwave_radiation,weathercode,cape,boundary_layer_height,lifted_index&forecast_days=2&windspeed_unit=kmh&timezone=Europe/Paris`
       const res = await fetch(url, { next: { revalidate: 0 } })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json: {
@@ -93,12 +86,13 @@ async function fetchParagliding(): Promise<PGResult[]> {
   )
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   try {
     const { data, stale } = await globalCache.get('paragliding', fetchParagliding, 600_000)
     return NextResponse.json({ data, stale })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: message }, { status: 503 })
+  } catch {
+    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
   }
 }

@@ -2,9 +2,11 @@
 import { useEffect, useState } from 'react'
 import type { GeoPoint } from '@/lib/types'
 import { LAYERS } from '@/lib/layers-registry'
+import { skydiveCondition, paraglideCondition, basejumpCondition } from '@/lib/weather'
+import { parisHour } from '@/lib/time'
 
 // ── Layout constants ───────────────────────────────────────────────────────
-const N          = 120      // 5 days × 24 h
+const N          = 168      // 7 days × 24 h
 const PX         = 8        // px per hour
 const ML         = 46       // left margin  (m/s labels)
 const MR         = 46       // right margin (knots labels)
@@ -76,15 +78,21 @@ function fmtDay(iso: string) {
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Hourly {
-  temperature_2m:   number[]
-  precipitation:    number[]
-  windspeed_10m:    number[]
-  windspeed_700hPa: number[]   // ~3 000 m
-  windspeed_600hPa: number[]   // ~4 000 m
-  cloudcover_low:   number[]   // < 2 000 m  (stratus)
-  cloudcover_mid:   number[]   // 2–6 000 m  (altocumulus)
-  cloudcover_high:  number[]   // > 6 000 m  (cirrus)
-  weathercode:      number[]
+  temperature_2m:        number[]
+  precipitation:         number[]
+  windspeed_10m:         number[]
+  windgusts_10m:         number[]
+  windspeed_700hPa:      number[]   // ~3 000 m
+  windspeed_600hPa:      number[]   // ~4 000 m
+  cloudcover_low:        number[]   // < 2 000 m  (stratus)
+  cloudcover_mid:        number[]   // 2–6 000 m  (altocumulus)
+  cloudcover_high:       number[]   // > 6 000 m  (cirrus)
+  weathercode:           number[]
+  visibility:            number[]   // mètres
+  cape:                  number[]   // J/kg
+  boundary_layer_height: number[]   // m
+  lifted_index:          number[]
+  shortwave_radiation:   number[]   // W/m²
 }
 interface Daily {
   time:               string[]
@@ -97,34 +105,36 @@ interface Daily {
 interface Forecast { hourly: Hourly; daily: Daily }
 
 // ── Condition horaire par type de couche ───────────────────────────────────
-// Données en km/h. Retourne 'green' | 'yellow' | 'red' pour chaque heure.
+// Utilise les mêmes fonctions que le back-end (lib/weather.ts).
 function hourlyConditions(layerId: string, h: Hourly): ('green' | 'yellow' | 'red')[] {
   return Array.from({ length: N }, (_, i) => {
-    const ws  = h.windspeed_10m[i]   ?? 0   // vent sol km/h
-    const w3  = h.windspeed_700hPa[i] ?? 0  // ~3 000m
-    const w4  = h.windspeed_600hPa[i] ?? 0  // ~4 000m
-    const pr  = h.precipitation[i]   ?? 0
-    const wc  = h.weathercode[i]     ?? 0
-    const cl  = h.cloudcover_low[i]  ?? 0
-    const tmp = h.temperature_2m[i]  ?? 15
+    const ws    = h.windspeed_10m[i]          ?? 0
+    const gust  = h.windgusts_10m[i]          ?? 0
+    const w4    = h.windspeed_600hPa[i]       ?? 0
+    const vis   = (h.visibility[i]            ?? 10_000) / 1_000   // m → km
+    const cld   = h.cloudcover_low[i]         ?? 0
+    const wc    = h.weathercode[i]            ?? 0
     const storm = wc >= 95
+    const cape  = h.cape[i]                   ?? 0
+    const tmp   = h.temperature_2m[i]         ?? 15
+    const blH   = h.boundary_layer_height[i]  ?? 1_000
+    const li    = h.lifted_index[i]           ?? 0
+    const solar = h.shortwave_radiation[i]    ?? 0
+    const pr    = h.precipitation[i]          ?? 0
 
     if (layerId === 'skydive') {
-      if (storm || ws > 35 || w4 > 80) return 'red'
-      if (ws > 25 || w4 > 60 || w3 > 60 || pr > 0.1 || cl > 75) return 'yellow'
-      return 'green'
+      // precipFraction = 0 par heure, identique à ce que fait la route API
+      return skydiveCondition(ws, w4, vis, 0, cld, storm, cape)
     }
     if (layerId === 'paragliding') {
-      if (storm || ws > 45) return 'red'
-      if (ws > 30 || ws < 8 || tmp < 0 || tmp > 38) return 'yellow'
-      return 'green'
+      return paraglideCondition(ws, gust, tmp, solar, storm, cape, blH, li)
     }
     if (layerId === 'basejump') {
-      if (storm || pr > 0.1 || ws > 20) return 'red'
-      if (ws > 15) return 'yellow'
-      return 'green'
+      // Plafond estimé depuis la nébulosité basse (pas de donnée directe Open-Meteo)
+      const ceilingM = cld > 80 ? 300 : cld > 50 ? 700 : 2_000
+      return basejumpCondition(ws, gust, vis, pr > 0, ceilingM)
     }
-    // surf / autres : basé sur le vent uniquement
+    // Autres couches : vent seul
     if (ws > 50 || storm) return 'red'
     if (ws > 30) return 'yellow'
     return 'green'
@@ -176,18 +186,31 @@ export default function MeteogramOverlay({
   const lat = (point.data.latitude  as number | undefined) ?? point.latitude
   const lon = (point.data.longitude as number | undefined) ?? point.longitude
 
+  // Validation des coordonnées avant la requête
+  const validCoords =
+    isFinite(lat) && isFinite(lon) &&
+    lat >= -90 && lat <= 90 &&
+    lon >= -180 && lon <= 180
+
   useEffect(() => {
+    if (!validCoords) {
+      setError('Coordonnées invalides')
+      setLoading(false)
+      return
+    }
     setLoading(true); setError(null); setFc(null)
     const p = new URLSearchParams({
       latitude:  lat.toString(),
       longitude: lon.toString(),
       hourly: [
-        'temperature_2m','precipitation','windspeed_10m',
+        'temperature_2m','precipitation',
+        'windspeed_10m','windgusts_10m',
         'windspeed_700hPa','windspeed_600hPa',
         'cloudcover_low','cloudcover_mid','cloudcover_high','weathercode',
+        'visibility','cape','boundary_layer_height','lifted_index','shortwave_radiation',
       ].join(','),
       daily:         'weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max',
-      forecast_days: '5',
+      forecast_days: '7',
       timezone:      'Europe/Paris',
       windspeed_unit:'kmh',
     })
@@ -195,7 +218,7 @@ export default function MeteogramOverlay({
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
       .then(data => { setFc(data as Forecast); setLoading(false) })
       .catch(() => { setError('Météo indisponible'); setLoading(false) })
-  }, [lat, lon])
+  }, [lat, lon]) // validCoords is derived from lat/lon — no need to list separately
 
   const h = fc?.hourly
   const d = fc?.daily
@@ -394,6 +417,21 @@ export default function MeteogramOverlay({
                 x2={X0 + n * 24 * PX} y2={XAX_Y}
                 stroke="#1a2840" strokeWidth={0.8} strokeDasharray="3,4" />
             ))}
+
+            {/* ── "Now" vertical line ── */}
+            {(() => {
+              const nowX = X0 + parisHour() * PX
+              return (
+                <g>
+                  <line x1={nowX} y1={CLD_Y0} x2={nowX} y2={XAX_Y - 10}
+                    stroke="#00D4FF" strokeWidth={1} strokeDasharray="4,3" opacity={0.6} />
+                  <text x={nowX} y={CLD_Y0 - 2} textAnchor="middle"
+                    fontSize={7} fill="#00D4FF" fontFamily="monospace" opacity={0.8}>
+                    NOW
+                  </text>
+                </g>
+              )
+            })()}
 
             {/* ── Section separators ── */}
             {[SEP1, SEP2, SEP3].map((y, i) => (

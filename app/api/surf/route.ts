@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { globalCache } from '@/lib/cache'
 import surfSpotsData from '@/data/surf-spots.json'
 import { surfScore } from '@/lib/weather'
+import { currentHourIndex } from '@/lib/time'
+import { rateLimit } from '@/lib/rate-limit'
 
 interface SurfSpot {
   id: string; name: string; longitude: number; latitude: number
@@ -21,8 +23,8 @@ async function fetchSurf(): Promise<SurfResult[]> {
       const url = [
         'https://marine-api.open-meteo.com/v1/marine',
         `?latitude=${spot.latitude}&longitude=${spot.longitude}`,
-        '&hourly=wave_height,wave_period,swell_wave_height,swell_wave_period,wind_speed_10m',
-        '&wind_speed_unit=kmh&timezone=auto&forecast_days=1',
+        '&hourly=time,wave_height,wave_period,swell_wave_height,swell_wave_period,wind_speed_10m',
+        '&wind_speed_unit=kmh&timezone=Europe/Paris&forecast_days=1',
       ].join('')
 
       const res = await fetch(url, { next: { revalidate: 0 } })
@@ -30,6 +32,7 @@ async function fetchSurf(): Promise<SurfResult[]> {
 
       const json: {
         hourly: {
+          time: string[]
           wave_height: number[]; wave_period: number[]
           swell_wave_height: number[]; swell_wave_period: number[]
           wind_speed_10m: number[]
@@ -37,7 +40,7 @@ async function fetchSurf(): Promise<SurfResult[]> {
       } = await res.json()
 
       const h = json.hourly
-      const idx = new Date().getHours()
+      const idx = currentHourIndex(h.time ?? [])
 
       const swellHeightM = h.swell_wave_height?.[idx] ?? h.wave_height?.[idx] ?? 1.0
       const swellPeriodS = h.swell_wave_period?.[idx] ?? h.wave_period?.[idx] ?? 8
@@ -62,12 +65,13 @@ async function fetchSurf(): Promise<SurfResult[]> {
   )
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   try {
     const { data, stale } = await globalCache.get('surf', fetchSurf, 1_800_000)
     return NextResponse.json({ data, stale })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: message }, { status: 503 })
+  } catch {
+    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
   }
 }

@@ -2,15 +2,8 @@ import { NextResponse } from 'next/server'
 import { globalCache } from '@/lib/cache'
 import dzData from '@/data/skydive-dz.json'
 import { skydiveCondition, type ConditionStatus } from '@/lib/weather'
-
-function currentHourIndex(times: string[]): number {
-  const now = new Date()
-  const pad = (n: number) => String(n).padStart(2, '0')
-  // Build "YYYY-MM-DDTHH" prefix to match against the times array
-  const prefix = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}`
-  const idx = times.findIndex(t => t.startsWith(prefix))
-  return idx >= 0 ? idx : now.getHours() // fallback to UTC hour if not found
-}
+import { currentHourIndex } from '@/lib/time'
+import { rateLimit } from '@/lib/rate-limit'
 
 interface DZ {
   id: string; name: string; longitude: number; latitude: number
@@ -43,7 +36,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
         daily:     'sunrise,sunset',
         windspeed_unit: 'kmh',
         forecast_days: '1',
-        timezone:  'auto',
+        timezone:  'Europe/Paris',
       })
       const res = await fetch(
         `https://api.open-meteo.com/v1/forecast?${params}`,
@@ -89,9 +82,10 @@ async function fetchSkydive(): Promise<DZResult[]> {
       const hasStorm  = h.weathercode?.slice(idx, windowEnd).some(c => c >= 95) ?? false
 
       // ── Precipitation fraction over daylight hours ──────────────────────
-      // Parse "2026-05-14T06:10" → hour as integer (local time, no Date parsing)
-      const sunriseHour = parseInt(json.daily.sunrise[0]?.split('T')[1] ?? '06:00', 10)
-      const sunsetHour  = parseInt(json.daily.sunset[0]?.split('T')[1]  ?? '21:00', 10)
+      // Parse "2026-05-14T06:10" → heure entière. On split sur ':' avant parseInt
+      // pour éviter d'accidentellement inclure les minutes dans la valeur.
+      const sunriseHour = parseInt(json.daily.sunrise[0]?.split('T')[1]?.split(':')[0] ?? '06', 10)
+      const sunsetHour  = parseInt(json.daily.sunset[0]?.split('T')[1]?.split(':')[0]  ?? '21', 10)
       const daylightPrecip = h.precipitation?.slice(sunriseHour, sunsetHour + 1) ?? []
       const wetHours    = daylightPrecip.filter(p => p > 0.1).length
       const precipFraction = daylightHours(sunriseHour, sunsetHour) > 0
@@ -146,12 +140,13 @@ function daylightHours(sunrise: number, sunset: number): number {
   return Math.max(0, sunset - sunrise + 1)
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   try {
     const { data, stale } = await globalCache.get('skydive', fetchSkydive, 600_000)
     return NextResponse.json({ data, stale })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: message }, { status: 503 })
+  } catch {
+    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
   }
 }

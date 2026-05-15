@@ -22,7 +22,13 @@ export function useLayerData(layers: LayerConfig[], enabledMap: Record<string, b
       const json = await res.json()
       const stale: boolean = json.stale ?? false
       const rawData = json.data ?? json
-      const points: GeoPoint[] = layer.transformResponse(rawData)
+      const allPoints: GeoPoint[] = layer.transformResponse(rawData)
+      // Filter out points with invalid coordinates (NaN, out of bounds) to prevent map crashes
+      const points = allPoints.filter(p =>
+        isFinite(p.longitude) && isFinite(p.latitude) &&
+        p.longitude >= -180 && p.longitude <= 180 &&
+        p.latitude  >= -90  && p.latitude  <= 90
+      )
       setStates(prev => ({
         ...prev,
         [layer.id]: { points, stale, lastUpdated: Date.now(), error: null },

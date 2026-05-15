@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { globalCache } from '@/lib/cache'
 import exitsData from '@/data/basejump-exits.json'
 import { basejumpCondition, type ConditionStatus } from '@/lib/weather'
+import { currentHourIndex } from '@/lib/time'
+import { rateLimit } from '@/lib/rate-limit'
 
 interface Exit {
   id: string; name: string; longitude: number; latitude: number
@@ -18,18 +20,19 @@ async function fetchBasejump(): Promise<ExitResult[]> {
   const list = exitsData as Exit[]
   const results = await Promise.allSettled(
     list.map(async (e) => {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${e.latitude}&longitude=${e.longitude}&hourly=windspeed_10m,windgusts_10m,visibility,precipitation,cloudcover_low,temperature_2m,dewpoint_2m&forecast_days=1&windspeed_unit=kmh&timezone=auto`
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${e.latitude}&longitude=${e.longitude}&hourly=time,windspeed_10m,windgusts_10m,visibility,precipitation,cloudcover_low,temperature_2m,dewpoint_2m&forecast_days=1&windspeed_unit=kmh&timezone=Europe/Paris`
       const res = await fetch(url, { next: { revalidate: 0 } })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json: {
         hourly: {
+          time: string[]
           windspeed_10m: number[]; windgusts_10m: number[]
           visibility: number[]; precipitation: number[]; cloudcover_low: number[]
           temperature_2m: number[]; dewpoint_2m: number[]
         }
       } = await res.json()
       const h = json.hourly
-      const idx = new Date().getHours()
+      const idx = currentHourIndex(h.time ?? [])
       const windKmh = h.windspeed_10m?.[idx] ?? 0
       const gustKmh = h.windgusts_10m?.[idx] ?? 0
       const visibilityKm = (h.visibility?.[idx] ?? 10000) / 1000
@@ -45,16 +48,17 @@ async function fetchBasejump(): Promise<ExitResult[]> {
   return results.map((r, i) =>
     r.status === 'fulfilled'
       ? r.value
-      : { ...list[i], windKmh: 0, gustKmh: 0, visibilityKm: 10, precipitation: false, ceilingM: 1000, condition: 'green' as ConditionStatus }
+      : { ...list[i], windKmh: 0, gustKmh: 0, visibilityKm: 10, precipitation: false, ceilingM: 1000, condition: 'red' as ConditionStatus }
   )
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   try {
     const { data, stale } = await globalCache.get('basejump', fetchBasejump, 600_000)
     return NextResponse.json({ data, stale })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: message }, { status: 503 })
+  } catch {
+    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
   }
 }

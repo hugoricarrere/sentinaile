@@ -24,6 +24,11 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
   animation: fade-in 0.15s ease-out;
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
 @keyframes slide-up {
   from { transform: translateY(100%); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }

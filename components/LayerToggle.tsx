@@ -40,10 +40,14 @@ export default function LayerToggle({
     <div style={{ borderBottom: '1px solid #1a2840' }}>
       <SectionHeader label="Couches de données" />
       {LAYERS.map(l => {
-        const count = layerStates[l.id]?.points.length ?? 0
+        const state = layerStates[l.id]
+        const count = state?.points.length ?? 0
         const enabled = enabledMap[l.id] ?? l.defaultEnabled
         const filterable = FILTERABLE.has(l.id)
         const filterOpen = activeFilterLayer === l.id
+        const isLoading = enabled && state?.lastUpdated === null && !state?.error
+        const hasError  = enabled && !!state?.error
+        const isEmpty   = enabled && state?.lastUpdated !== null && count === 0 && !state?.error
 
         return (
           <div key={l.id}>
@@ -97,6 +101,45 @@ export default function LayerToggle({
                 }}>
                   {l.label}
                 </span>
+
+                {/* Loading indicator */}
+                {isLoading && (
+                  <span title="Chargement…" style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 9,
+                    color: '#3a6a8a',
+                    flexShrink: 0,
+                    animation: 'pulse 1.2s ease-in-out infinite',
+                  }}>
+                    ···
+                  </span>
+                )}
+
+                {/* Error indicator */}
+                {hasError && (
+                  <span title={state?.error ?? 'Erreur'} style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    color: '#cc3a20',
+                    flexShrink: 0,
+                    cursor: 'help',
+                  }}>
+                    ⚠
+                  </span>
+                )}
+
+                {/* Empty indicator (layer loaded but 0 points — e.g. webcam without API key) */}
+                {isEmpty && (
+                  <span title="Aucune donnée (clé API manquante ?)" style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 9,
+                    color: '#2a4060',
+                    flexShrink: 0,
+                    cursor: 'help',
+                  }}>
+                    —
+                  </span>
+                )}
 
                 {/* Count badge */}
                 {count > 0 && enabled && (

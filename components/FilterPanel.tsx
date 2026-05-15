@@ -1,5 +1,6 @@
 'use client'
 import type { AllFilters } from '@/lib/filters'
+import { DEFAULT_FILTERS } from '@/lib/filters'
 
 interface Props {
   layerId: string
@@ -137,20 +138,50 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
         }}>
           Filtres
         </span>
-        <button
-          onClick={onClose}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: '#2a4a6a',
-            fontSize: 14,
-            lineHeight: 1,
-            padding: '0 2px',
-          }}
-        >
-          ✕
-        </button>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <button
+            onClick={() => onChange(DEFAULT_FILTERS)}
+            title="Réinitialiser tous les filtres"
+            style={{
+              background: 'none',
+              border: '1px solid #1e3050',
+              borderRadius: 3,
+              cursor: 'pointer',
+              color: '#2a4a6a',
+              fontFamily: 'var(--font-rajdhani)',
+              fontWeight: 600,
+              fontSize: 9,
+              letterSpacing: '0.12em',
+              padding: '2px 6px',
+              textTransform: 'uppercase' as const,
+              transition: 'border-color 0.12s, color 0.12s',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = color
+              ;(e.currentTarget as HTMLButtonElement).style.color = color
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = '#1e3050'
+              ;(e.currentTarget as HTMLButtonElement).style.color = '#2a4a6a'
+            }}
+          >
+            Reset
+          </button>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#2a4a6a',
+              fontSize: 14,
+              lineHeight: 1,
+              padding: '0 2px',
+            }}
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       {/* Global: France only */}

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { globalCache } from '@/lib/cache'
+import { rateLimit } from '@/lib/rate-limit'
 
 interface WebcamPoint {
   id: string; title: string; longitude: number; latitude: number
@@ -35,12 +36,13 @@ async function fetchWebcams(): Promise<WebcamPoint[]> {
   }))
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   try {
     const { data, stale } = await globalCache.get('webcams', fetchWebcams, 300_000)
     return NextResponse.json({ data, stale })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: message }, { status: 503 })
+  } catch {
+    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
   }
 }

@@ -27,11 +27,14 @@ const Row = ({ label, value, valueColor }: { label: string; value: string; value
 export default function FrancePanel() {
   const [trains, setTrains] = useState<TrainsData | null>(null)
   const [traffic, setTraffic] = useState<TrafficData | null>(null)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
     const load = () => {
-      fetch('/api/trains').then(r => r.json()).then(setTrains).catch(() => null)
-      fetch('/api/traffic').then(r => r.json()).then(j => setTraffic(j.data)).catch(() => null)
+      Promise.all([
+        fetch('/api/trains').then(r => r.json()).then(setTrains).catch(() => null),
+        fetch('/api/traffic').then(r => r.json()).then(j => setTraffic(j.data)).catch(() => null),
+      ]).then(() => setLastUpdated(new Date()))
     }
     load()
     const id = setInterval(load, 120_000)
@@ -75,6 +78,18 @@ export default function FrancePanel() {
             value={traffic.label}
             valueColor={TRAFFIC_COLOR[traffic.level] ?? '#00c87a'}
           />
+        )}
+        {lastUpdated && (
+          <div style={{
+            fontFamily: 'var(--font-mono)', fontSize: 9,
+            color: '#1e3a5a', marginTop: 6, textAlign: 'right',
+            letterSpacing: '0.04em',
+          }}>
+            MÀJ {lastUpdated.toLocaleTimeString('fr-FR', {
+              timeZone: 'Europe/Paris',
+              hour: '2-digit', minute: '2-digit',
+            })}
+          </div>
         )}
       </div>
     </div>

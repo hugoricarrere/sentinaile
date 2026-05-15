@@ -1,17 +1,5 @@
 import type { GeoPoint } from '@/lib/types'
-
-function Row({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', borderBottom: '1px solid #0d1826' }}>
-      <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 500, fontSize: 13, letterSpacing: '0.06em', color: '#4a6fa5' }}>
-        {label}
-      </span>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8aaccc', textAlign: 'right', maxWidth: '55%' }}>
-        {value}
-      </span>
-    </div>
-  )
-}
+import { Row } from '@/components/ui/Row'
 
 interface ShipData {
   name: string; callSign: string; shipType: string
