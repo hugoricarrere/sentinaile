@@ -23,9 +23,10 @@ const SEP2   = 198
 const TMP_Y0 = 203, TMP_Y1 = 253 // température   50 px
 const SEP3   = 256
 const PRC_Y0 = 261, PRC_Y1 = 281 // précipitations 20 px
-const COND_Y0= 284, COND_Y1= 298 // bande favorable/défavorable  14 px
-const XAX_Y  = 308               // x-axis labels
-const SVG_H  = 319
+const DIR_Y0 = 284, DIR_Y1 = 295 // direction vent 11 px  (flèches toutes les 3h)
+const COND_Y0= 298, COND_Y1= 312 // bande favorable/défavorable  14 px
+const XAX_Y  = 322               // x-axis labels
+const SVG_H  = 333
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 const hx = (i: number) => X0 + (i + 0.5) * PX  // centre of hour column
@@ -82,6 +83,7 @@ interface Hourly {
   precipitation:         number[]
   windspeed_10m:         number[]
   windgusts_10m:         number[]
+  winddirection_10m:     number[]   // degrés météo (FROM)
   windspeed_700hPa:      number[]   // ~3 000 m
   windspeed_600hPa:      number[]   // ~4 000 m
   cloudcover_low:        number[]   // < 2 000 m  (stratus)
@@ -383,6 +385,7 @@ export default function MeteogramOverlay({
             <rect x={X0} y={WND_Y0}  width={CHART_W} height={WND_Y1  - WND_Y0  + 1} fill="#060910" />
             <rect x={X0} y={TMP_Y0}  width={CHART_W} height={TMP_Y1  - TMP_Y0  + 1} fill="#060910" />
             <rect x={X0} y={PRC_Y0}  width={CHART_W} height={PRC_Y1  - PRC_Y0  + 1} fill="#060910" />
+            <rect x={X0} y={DIR_Y0}  width={CHART_W} height={DIR_Y1  - DIR_Y0  + 1} fill="#040810" />
             <rect x={X0} y={COND_Y0} width={CHART_W} height={COND_Y1 - COND_Y0 + 1} fill="#040810" />
 
             {/* ── Cloud bands (3 altitude layers per hour) ── */}
@@ -523,6 +526,25 @@ export default function MeteogramOverlay({
                   width={PX - 1} height={bh} fill="#5599ffaa" />
               )
             })}
+
+            {/* ── Direction du vent surface (flèches toutes les 3h) ── */}
+            <text x={X0 - 3} y={DIR_Y0 + 8} textAnchor="end"
+              fontSize={7} fill="#2a4a6a" fontFamily="monospace">DIR</text>
+            {Array.from({ length: Math.ceil(N / 3) }, (_, k) => {
+              const i   = k * 3                          // heure de référence (0, 3, 6 …)
+              const dir = h.winddirection_10m?.[i] ?? 0
+              const cx  = X0 + (i + 1.5) * PX           // centre des 3 colonnes
+              const cy  = (DIR_Y0 + DIR_Y1) / 2
+              const isNow = i <= nowHour && nowHour < i + 3
+              const fill  = isNow ? '#00D4FF' : '#243a56'
+              return (
+                <g key={k} transform={`translate(${cx.toFixed(1)},${cy.toFixed(1)}) rotate(${dir})`}>
+                  <polygon points="0,-4.5 2.5,3 0,1.5 -2.5,3" fill={fill} />
+                </g>
+              )
+            })}
+            <line x1={X0} y1={DIR_Y0} x2={X1} y2={DIR_Y0} stroke="#1a2840" strokeWidth={0.8} />
+            <line x1={X0} y1={DIR_Y1} x2={X1} y2={DIR_Y1} stroke="#1a2840" strokeWidth={0.8} />
 
             {/* ── Bande conditions horaires ── */}
             <rect x={X0} y={COND_Y0} width={CHART_W} height={COND_Y1 - COND_Y0} fill="#040810" />

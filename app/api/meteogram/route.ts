@@ -13,7 +13,7 @@ import { rateLimit }    from '@/lib/rate-limit'
 
 const HOURLY_VARS = [
   'temperature_2m', 'precipitation',
-  'windspeed_10m', 'windgusts_10m',
+  'windspeed_10m', 'windgusts_10m', 'winddirection_10m',
   'windspeed_700hPa', 'windspeed_600hPa',
   'cloudcover_low', 'cloudcover_mid', 'cloudcover_high',
   'weathercode', 'visibility', 'cape',
