@@ -1,11 +1,11 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { LAYERS } from '@/lib/layers'
 import { DEFAULT_FILTERS } from '@/lib/filters'
 import { usePersistedState } from '@/lib/use-persisted-state'
 import { decodeUrlState } from '@/lib/url-state'
-import { useMobile, useGeolocation, useUrlHash } from '@/lib/hooks'
+import { useMobile, useGeolocation, useUrlHash, useLandscape } from '@/lib/hooks'
 import TopBar from '@/components/TopBar'
 import StatusBar from '@/components/StatusBar'
 import LayerToggle from '@/components/LayerToggle'
@@ -53,6 +53,7 @@ export default function Home() {
   const [filters, setFilters] = usePersistedState('sentinaile-filters', DEFAULT_FILTERS)
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sentinaile-sidebar-open', true)
   const [surfLevelFilter, setSurfLevelFilter] = usePersistedState<string>('sentinaile-surf-level', 'all')
+  const [satellite, setSatellite] = usePersistedState('sentinaile-satellite', false)
 
   // ── Transient state ───────────────────────────────────────────────────────
   const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
@@ -65,11 +66,21 @@ export default function Home() {
   const [mobileLayersOpen, setMobileLayersOpen] = useState(false)
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  // Pull-to-refresh
+  const pullStartY = useRef(0)
+  const [isPulling, setIsPulling] = useState(false)
 
   // ── Custom hooks ──────────────────────────────────────────────────────────
   const isMobile = useMobile()
+  const isLandscape = useLandscape()
   const { geoError, handleGeolocate, clearGeoError } = useGeolocation(setFlyTo)
   useUrlHash({ viewState, enabledMap, franceOnly: filters.global.franceOnly })
+
+  // ── Derived map style ─────────────────────────────────────────────────────
+  const mapStyle = useMemo(
+    () => satellite ? 'mapbox://styles/mapbox/satellite-streets-v12' : 'mapbox://styles/mapbox/dark-v11',
+    [satellite],
+  )
 
   // Sync surfLevelFilter into filters.surf
   useEffect(() => {
@@ -197,7 +208,7 @@ export default function Home() {
 
         {/* ── Mobile header (compact) ────────────────────────────────────── */}
         <header style={{
-          height: 50, flexShrink: 0, display: 'flex', alignItems: 'center',
+          height: isLandscape ? 38 : 50, flexShrink: 0, display: 'flex', alignItems: 'center',
           padding: '0 16px', gap: 10,
           background: 'linear-gradient(to right, #040810, #060c18)',
           borderBottom: '1px solid #1a2840',
@@ -248,7 +259,12 @@ export default function Home() {
         </header>
 
         {/* ── Map area ──────────────────────────────────────────────────── */}
-        <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+        <div
+          style={{ flex: 1, position: 'relative', overflow: 'hidden' }}
+          onTouchStart={(e) => { pullStartY.current = e.touches[0].clientY; setIsPulling(false) }}
+          onTouchMove={(e) => { if (e.touches[0].clientY - pullStartY.current > 60) setIsPulling(true) }}
+          onTouchEnd={() => { if (isPulling) { LAYERS.forEach(l => handleRefreshLayer(l.id)); setIsPulling(false) } }}
+        >
           <MapCanvas
             enabledMap={enabledMap}
             onPointClick={handlePointClick}
@@ -258,7 +274,21 @@ export default function Home() {
             flyTo={flyTo}
             refreshKeys={refreshKeys}
             onMapLoad={() => setMapLoaded(true)}
+            mapStyle={mapStyle}
           />
+
+          {/* Pull-to-refresh indicator */}
+          {isPulling && (
+            <div style={{
+              position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
+              background: '#0B1120', border: '1px solid #1a2840', borderRadius: 12,
+              padding: '4px 12px', zIndex: 10,
+              fontFamily: 'var(--font-rajdhani)', fontSize: 11, color: '#00D4FF',
+              pointerEvents: 'none',
+            }}>
+              ↻ Actualisation…
+            </div>
+          )}
 
           {/* Meteogram overlay (bottom-positioned, already responsive) */}
           {showMeteogram && (
@@ -296,11 +326,27 @@ export default function Home() {
           >
             ◎
           </button>
+
+          {/* FAB — satellite toggle */}
+          <button
+            onClick={() => setSatellite(s => !s)}
+            aria-label={satellite ? 'Vue carte' : 'Vue satellite'}
+            style={{
+              position: 'absolute', bottom: 70, right: 16, zIndex: 5,
+              width: 44, height: 44, borderRadius: 22,
+              background: '#0B1120', border: '1px solid #1a2840',
+              color: '#4a7aa0', cursor: 'pointer', fontSize: 18,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+            }}
+          >
+            {satellite ? '🗺' : '🛰'}
+          </button>
         </div>
 
         {/* ── Mobile bottom bar ─────────────────────────────────────────── */}
         <div style={{
-          height: 48, flexShrink: 0, display: 'flex', alignItems: 'center',
+          height: isLandscape ? 34 : 48, flexShrink: 0, display: 'flex', alignItems: 'center',
           padding: '0 16px', gap: 12,
           background: '#040810', borderTop: '1px solid #1a2840',
           paddingBottom: 'env(safe-area-inset-bottom)',
@@ -498,6 +544,7 @@ export default function Home() {
             flyTo={flyTo}
             refreshKeys={refreshKeys}
             onMapLoad={() => setMapLoaded(true)}
+            mapStyle={mapStyle}
           />
 
           {showMeteogram && (
@@ -525,6 +572,18 @@ export default function Home() {
             onMouseLeave={e => onBtnHover(e, false)}
           >
             ◎
+          </button>
+
+          {/* Satellite toggle button */}
+          <button
+            onClick={() => setSatellite(s => !s)}
+            title={satellite ? 'Vue carte' : 'Vue satellite'}
+            aria-label={satellite ? 'Vue carte' : 'Vue satellite'}
+            style={{ ...mapBtnBase, top: 108, right: 12 }}
+            onMouseEnter={e => onBtnHover(e, true)}
+            onMouseLeave={e => onBtnHover(e, false)}
+          >
+            {satellite ? '🗺' : '🛰'}
           </button>
 
           {/* Sidebar toggle */}

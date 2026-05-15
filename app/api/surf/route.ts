@@ -11,6 +11,7 @@ interface SurfSpot {
 interface SurfResult extends SurfSpot {
   score: number; swellHeightM: number; swellPeriodS: number
   windKmh: number; windOffshore: boolean
+  trend: 'up' | 'same' | 'down'
 }
 
 async function fetchSurf(): Promise<SurfResult[]> {
@@ -44,6 +45,21 @@ async function fetchSurf(): Promise<SurfResult[]> {
       const swellPeriodS = h.swell_wave_period?.[idx] ?? h.wave_period?.[idx] ?? 8
       const windKmh = h.wind_speed_10m?.[idx] ?? 10
       const windOffshore = windKmh < 20
+      const score = surfScore(swellHeightM, swellPeriodS, windKmh, windOffshore)
+
+      // Trend: compare current score vs score 3h from now
+      let trend: 'up' | 'same' | 'down' = 'same'
+      const futureIdx = idx + 3
+      if (futureIdx < h.time.length) {
+        const futureSwellM = h.swell_wave_height?.[futureIdx] ?? h.wave_height?.[futureIdx] ?? 1.0
+        const futurePeriodS = h.swell_wave_period?.[futureIdx] ?? h.wave_period?.[futureIdx] ?? 8
+        const futureWindKmh = h.wind_speed_10m?.[futureIdx] ?? 10
+        const futureWindOffshore = futureWindKmh < 20
+        const futureScore = surfScore(futureSwellM, futurePeriodS, futureWindKmh, futureWindOffshore)
+        const diff = futureScore - score
+        if (diff > 0.5) trend = 'up'
+        else if (diff < -0.5) trend = 'down'
+      }
 
       return {
         ...spot,
@@ -51,7 +67,8 @@ async function fetchSurf(): Promise<SurfResult[]> {
         swellPeriodS,
         windKmh,
         windOffshore,
-        score: surfScore(swellHeightM, swellPeriodS, windKmh, windOffshore),
+        score,
+        trend,
       }
     })
   )
@@ -59,7 +76,7 @@ async function fetchSurf(): Promise<SurfResult[]> {
   return results.map((r, i) =>
     r.status === 'fulfilled'
       ? r.value
-      : { ...spots[i], score: 0, swellHeightM: 0, swellPeriodS: 0, windKmh: 0, windOffshore: false }
+      : { ...spots[i], score: 0, swellHeightM: 0, swellPeriodS: 0, windKmh: 0, windOffshore: false, trend: 'same' as const }
   )
 }
 

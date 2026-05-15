@@ -13,6 +13,7 @@ export default defineConfig({
       '**/.claude/worktrees/**',
       '**/.superpowers/worktrees/**',
       '**/worktrees/**',
+      '**/e2e/**',
     ],
   },
   resolve: {

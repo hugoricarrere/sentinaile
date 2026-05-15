@@ -113,3 +113,13 @@ html, body { margin: 0; padding: 0; height: 100%; background: #050a14; }
   .font-display { font-family: var(--font-rajdhani, 'Rajdhani'), system-ui, sans-serif; }
   .font-code    { font-family: var(--font-mono, 'JetBrains Mono'), monospace; }
 }
+
+/* ── Mobile landscape tweaks ─────────────────────────────────────────────── */
+/* Heights are controlled via useLandscape() in page.tsx (inline styles).    */
+/* This media query handles any remaining structural elements.                */
+@media (orientation: landscape) and (max-height: 500px) {
+  body {
+    --mobile-header-h: 38px;
+    --mobile-bar-h: 34px;
+  }
+}

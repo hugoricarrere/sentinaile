@@ -25,6 +25,7 @@ interface Props {
   flyTo?: FlyToTarget | null
   refreshKeys?: Record<string, number>
   onMapLoad?: () => void
+  mapStyle?: string
 }
 
 const INITIAL_VIEW_STATE = {
@@ -44,6 +45,7 @@ export default function MapCanvas({
   flyTo,
   refreshKeys = {},
   onMapLoad,
+  mapStyle = 'mapbox://styles/mapbox/dark-v11',
 }: Props) {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
   const deckRef = useRef<HTMLDivElement>(null)
@@ -147,7 +149,7 @@ export default function MapCanvas({
       >
         <Map
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-          mapStyle="mapbox://styles/mapbox/dark-v11"
+          mapStyle={mapStyle}
           onLoad={({ target }) => {
             target.setProjection({ name: 'mercator' })
             onMapLoad?.()
