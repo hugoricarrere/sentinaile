@@ -1,5 +1,6 @@
 import type { GeoPoint } from '@/lib/types'
 import { Row } from '@/components/ui/Row'
+import { SpotWeather } from '@/components/SpotWeather'
 
 const getScoreColor = (s: number) => s >= 7 ? '#00FF88' : s >= 4 ? '#FFB347' : '#FF6B35'
 const LEVEL_LABEL: Record<string, string> = {
@@ -35,6 +36,9 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
       <Row label="HOULE" value={`${d.swellHeightM.toFixed(1)} m · ${Math.round(d.swellPeriodS)}s`} />
       <Row label="VENT" value={`${Math.round(d.windKmh)} km/h ${d.windOffshore ? '(offshore ✓)' : '(onshore)'}`} />
       <Row label="NIVEAU" value={LEVEL_LABEL[d.level] ?? d.level} />
+      <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
+        <SpotWeather lat={point.latitude} lng={point.longitude} color="#00CED1" />
+      </div>
     </div>
   )
 }

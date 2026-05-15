@@ -15,12 +15,12 @@ const rajdhani = Rajdhani({
 
 export const metadata: Metadata = {
   title: 'SentinAile — Intelligence géospatiale en temps réel',
-  description: 'Carte interactive temps réel : vols, navires, parachutisme, parapente, BASE jump, surf, météo et qualité de l\'air.',
-  keywords: ['carte', 'temps réel', 'vols', 'navires', 'parachutisme', 'parapente', 'météo', 'géospatial'],
+  description: 'Carte interactive outdoor en temps réel : parachutisme, parapente, BASE jump, surf, webcams.',
+  keywords: ['carte', 'temps réel', 'parachutisme', 'parapente', 'surf', 'BASE jump', 'outdoor', 'webcams', 'météo', 'géospatial'],
   authors: [{ name: 'SentinAile' }],
   openGraph: {
     title: 'SentinAile — Intelligence géospatiale en temps réel',
-    description: 'Suivez en direct vols, navires, sports de plein air et données météo sur une carte interactive.',
+    description: 'Carte interactive outdoor en temps réel : parachutisme, parapente, BASE jump, surf, webcams.',
     type: 'website',
     locale: 'fr_FR',
     siteName: 'SentinAile',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'SentinAile',
-    description: 'Carte interactive temps réel : vols, navires, sports outdoor et météo.',
+    description: 'Carte interactive outdoor en temps réel : parachutisme, parapente, BASE jump, surf, webcams.',
   },
   icons: {
     icon: [
@@ -45,6 +45,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Viewport: enables safe-area-inset for iOS notch + disables zoom for map */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#040810" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SentinAile" />
       </head>
       <body className={`${mono.variable} ${rajdhani.variable}`}>
         <a href="#main-content" className="skip-link">

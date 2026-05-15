@@ -1,0 +1,14 @@
+{
+  "name": "SentinAile",
+  "short_name": "SentinAile",
+  "description": "Carte interactive outdoor : surf, parapente, parachutisme, BASE jump",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#040810",
+  "theme_color": "#040810",
+  "orientation": "any",
+  "categories": ["sports", "navigation", "weather"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

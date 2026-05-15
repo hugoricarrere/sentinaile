@@ -1,6 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
 import { DEFAULT_FILTERS } from '@/lib/filters'
 import { usePersistedState } from '@/lib/use-persisted-state'
@@ -14,6 +14,7 @@ import FrancePanel from '@/components/FrancePanel'
 import MeteogramOverlay from '@/components/MeteogramOverlay'
 import ConditionToast from '@/components/ConditionToast'
 import MobileSearch from '@/components/MobileSearch'
+import { SplashScreen } from '@/components/SplashScreen'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from '@/components/MapCanvas'
@@ -38,6 +39,10 @@ function onBtnHover(e: React.MouseEvent<HTMLButtonElement>, enter: boolean) {
 }
 
 export default function Home() {
+  // ── Swipe refs (bottom sheets) ────────────────────────────────────────────
+  const swipeLayers = useRef<{ startY: number; dy: number }>({ startY: 0, dy: 0 })
+  const swipeDetail = useRef<{ startY: number; dy: number }>({ startY: 0, dy: 0 })
+
   // ── Persisted state ───────────────────────────────────────────────────────
   const [enabledMap, setEnabledMap] = usePersistedState<Record<string, boolean>>(
     'sentinaile-enabled-layers', DEFAULT_ENABLED,
@@ -47,6 +52,7 @@ export default function Home() {
   )
   const [filters, setFilters] = usePersistedState('sentinaile-filters', DEFAULT_FILTERS)
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sentinaile-sidebar-open', true)
+  const [surfLevelFilter, setSurfLevelFilter] = usePersistedState<string>('sentinaile-surf-level', 'all')
 
   // ── Transient state ───────────────────────────────────────────────────────
   const [selectedPoint, setSelectedPoint] = useState<GeoPoint | null>(null)
@@ -64,6 +70,11 @@ export default function Home() {
   const isMobile = useMobile()
   const { geoError, handleGeolocate, clearGeoError } = useGeolocation(setFlyTo)
   useUrlHash({ viewState, enabledMap, franceOnly: filters.global.franceOnly })
+
+  // Sync surfLevelFilter into filters.surf
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, surf: { level: surfLevelFilter } }))
+  }, [surfLevelFilter]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync detail sheet open state with selectedPoint
   useEffect(() => {
@@ -131,6 +142,35 @@ export default function Home() {
         onRefreshLayer={handleRefreshLayer}
         onResetLayers={handleResetLayers}
       />
+      {enabledMap['surf'] && (
+        <div style={{ padding: '0 16px 16px' }}>
+          <div style={{ fontFamily: 'var(--font-rajdhani)', fontSize: 10, fontWeight: 600, letterSpacing: '0.2em', color: '#2a4a6a', textTransform: 'uppercase', marginBottom: 8 }}>
+            NIVEAU SURF
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {(['all', 'beginner', 'intermediate', 'advanced', 'expert'] as const).map(lvl => {
+              const labels: Record<string, string> = { all: 'Tous', beginner: 'Débutant', intermediate: 'Inter.', advanced: 'Avancé', expert: 'Expert' }
+              const active = surfLevelFilter === lvl
+              return (
+                <button
+                  key={lvl}
+                  onClick={() => setSurfLevelFilter(lvl)}
+                  style={{
+                    fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11,
+                    letterSpacing: '0.08em', padding: '4px 10px', borderRadius: 12,
+                    background: active ? '#00CED120' : 'transparent',
+                    border: `1px solid ${active ? '#00CED1' : '#1a2840'}`,
+                    color: active ? '#00CED1' : '#3a5a80',
+                    cursor: 'pointer', transition: 'all 0.15s',
+                  }}
+                >
+                  {labels[lvl]}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
       {selectedPoint && <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />}
       {isFranceView && <FrancePanel />}
     </>
@@ -287,6 +327,9 @@ export default function Home() {
           role="dialog"
           aria-label="Couches de données"
           aria-modal={mobileLayersOpen}
+          onTouchStart={(e) => { swipeLayers.current = { startY: e.touches[0].clientY, dy: 0 } }}
+          onTouchMove={(e) => { swipeLayers.current.dy = e.touches[0].clientY - swipeLayers.current.startY }}
+          onTouchEnd={() => { if (swipeLayers.current.dy > 60) setMobileLayersOpen(false) }}
           style={{
             position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 50,
             background: '#0B1120',
@@ -332,6 +375,35 @@ export default function Home() {
               onRefreshLayer={handleRefreshLayer}
               onResetLayers={handleResetLayers}
             />
+            {enabledMap['surf'] && (
+              <div style={{ padding: '0 16px 16px' }}>
+                <div style={{ fontFamily: 'var(--font-rajdhani)', fontSize: 10, fontWeight: 600, letterSpacing: '0.2em', color: '#2a4a6a', textTransform: 'uppercase', marginBottom: 8 }}>
+                  NIVEAU SURF
+                </div>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {(['all', 'beginner', 'intermediate', 'advanced', 'expert'] as const).map(lvl => {
+                    const labels: Record<string, string> = { all: 'Tous', beginner: 'Débutant', intermediate: 'Inter.', advanced: 'Avancé', expert: 'Expert' }
+                    const active = surfLevelFilter === lvl
+                    return (
+                      <button
+                        key={lvl}
+                        onClick={() => setSurfLevelFilter(lvl)}
+                        style={{
+                          fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 11,
+                          letterSpacing: '0.08em', padding: '4px 10px', borderRadius: 12,
+                          background: active ? '#00CED120' : 'transparent',
+                          border: `1px solid ${active ? '#00CED1' : '#1a2840'}`,
+                          color: active ? '#00CED1' : '#3a5a80',
+                          cursor: 'pointer', transition: 'all 0.15s',
+                        }}
+                      >
+                        {labels[lvl]}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
             {isFranceView && <FrancePanel />}
           </div>
         </div>
@@ -349,6 +421,9 @@ export default function Home() {
               role="dialog"
               aria-label="Détail du point"
               aria-modal={mobileDetailOpen}
+              onTouchStart={(e) => { swipeDetail.current = { startY: e.touches[0].clientY, dy: 0 } }}
+              onTouchMove={(e) => { swipeDetail.current.dy = e.touches[0].clientY - swipeDetail.current.startY }}
+              onTouchEnd={() => { if (swipeDetail.current.dy > 60) handleCloseDetail() }}
               style={{
                 position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 70,
                 background: '#0B1120',
@@ -385,6 +460,7 @@ export default function Home() {
         />
 
         <ConditionToast layerStates={layerStates} />
+        <SplashScreen />
       </div>
     )
   }
@@ -475,6 +551,7 @@ export default function Home() {
 
       <StatusBar layerStates={layerStates} viewState={viewState} />
       <ConditionToast layerStates={layerStates} />
+      <SplashScreen />
     </div>
   )
 }

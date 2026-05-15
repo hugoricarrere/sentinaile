@@ -5,6 +5,7 @@ import { fuzzySearch } from '@/lib/fuzzy'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
+import { useFavorites } from '@/lib/hooks/use-favorites'
 
 interface NominatimResult {
   place_id: number
@@ -29,6 +30,7 @@ function getPointLabel(point: GeoPoint): string {
 }
 
 export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSelectPoint }: Props) {
+  const { favorites, isFavorite, toggle } = useFavorites()
   const [query, setQuery] = useState('')
   const [nominatimResults, setNominatimResults] = useState<NominatimResult[]>([])
   const [nomSearching, setNomSearching] = useState(false)
@@ -44,6 +46,12 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
     }
     return pts
   }, [layerStates])
+
+  // Favorite points (shown when query is empty)
+  const favoritePoints = useMemo(() => {
+    if (query.trim() !== '') return []
+    return allPoints.filter(p => isFavorite(p.id))
+  }, [allPoints, query, isFavorite, favorites])
 
   // Local fuzzy search on layer points
   const pointResults = useMemo(() => {
@@ -194,6 +202,62 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
                 Essayez un autre terme ou activez plus de couches
               </p>
             </div>
+          )}
+
+          {/* ── Favorites section (visible when query is empty) ── */}
+          {query.trim() === '' && favoritePoints.length > 0 && (
+            <section>
+              <div style={{ padding: '10px 16px 4px', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 9, letterSpacing: '0.25em', color: '#2a4a6a', textTransform: 'uppercase' }}>
+                Favoris
+              </div>
+              {favoritePoints.map(point => {
+                const l = layer(point)
+                const name = (point.data.name as string | undefined) ?? (point.data.title as string | undefined) ?? point.id
+                const sub = (point.data.icao as string | undefined) ?? (point.data.commune as string | undefined) ?? (point.data.country as string | undefined) ?? ''
+                return (
+                  <button
+                    key={point.id}
+                    onClick={() => handleSelectPoint(point)}
+                    style={{
+                      width: '100%', background: 'none', border: 'none',
+                      borderBottom: '1px solid #0d1826', cursor: 'pointer',
+                      padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12,
+                      textAlign: 'left',
+                    }}
+                    onTouchStart={e => { (e.currentTarget).style.background = '#111c2e' }}
+                    onTouchEnd={e => { (e.currentTarget).style.background = 'none' }}
+                  >
+                    <span style={{
+                      width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                      background: l ? `${l.color}20` : '#1a2840',
+                      border: `1px solid ${l ? l.color + '40' : '#1a2840'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 16,
+                    }}>
+                      {l?.icon ?? '📍'}
+                    </span>
+                    <span style={{ flex: 1, overflow: 'hidden' }}>
+                      <span style={{ display: 'block', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 14, color: '#8aaccc', letterSpacing: '0.04em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {name}
+                      </span>
+                      {sub && (
+                        <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.04em', marginTop: 1 }}>
+                          {l?.label ?? ''}{sub ? ` · ${sub}` : ''}
+                        </span>
+                      )}
+                    </span>
+                    <span style={{ color: '#FF6B6B', fontSize: 14, flexShrink: 0 }}>❤️</span>
+                  </button>
+                )
+              })}
+            </section>
+          )}
+
+          {/* Hint when no favorites and query is empty */}
+          {query.trim() === '' && favoritePoints.length === 0 && (
+            <p style={{ fontFamily: 'var(--font-rajdhani)', fontSize: 12, color: '#2a4a6a', textAlign: 'center', padding: '24px 16px', margin: 0 }}>
+              Appuyez sur ❤️ dans une fiche pour sauvegarder un spot
+            </p>
           )}
 
           {/* ── Layer points results ── */}

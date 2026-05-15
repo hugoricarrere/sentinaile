@@ -1,8 +1,9 @@
 'use client'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
 import type { GeoPoint } from '@/lib/types'
 import { ErrorBoundary } from './ErrorBoundary'
+import { useFavorites } from '@/lib/hooks/use-favorites'
 
 interface Props {
   point: GeoPoint
@@ -11,6 +12,17 @@ interface Props {
 
 export default function ContextPanel({ point, onClose }: Props) {
   const layer = LAYERS.find(l => l.id === point.layerId)
+  const { isFavorite, toggle } = useFavorites()
+  const [copied, setCopied] = useState(false)
+
+  const handleShare = useCallback(() => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }, [])
+
+  const favorite = isFavorite(point.id)
 
   // Close on Escape key
   useEffect(() => {
@@ -40,8 +52,55 @@ export default function ContextPanel({ point, onClose }: Props) {
         }}>
           {layer?.icon}&nbsp; Détail
         </span>
-        <button
-          onClick={onClose}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {/* Share button */}
+          <button
+            onClick={handleShare}
+            title="Copier le lien"
+            style={{
+              background: 'none',
+              border: '1px solid #1a2840',
+              color: copied ? '#00D4FF' : '#2a4a6a',
+              width: 22,
+              height: 22,
+              borderRadius: 3,
+              cursor: 'pointer',
+              fontSize: 12,
+              lineHeight: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            aria-label="Partager"
+          >
+            {copied ? '✓' : '🔗'}
+          </button>
+          {/* Favorite button */}
+          <button
+            onClick={() => toggle(point.id)}
+            title={favorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            style={{
+              background: 'none',
+              border: '1px solid #1a2840',
+              color: favorite ? '#FF6B6B' : '#2a4a6a',
+              width: 22,
+              height: 22,
+              borderRadius: 3,
+              cursor: 'pointer',
+              fontSize: 12,
+              lineHeight: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            aria-label={favorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+          >
+            {favorite ? '❤️' : '🤍'}
+          </button>
+          <button
+            onClick={onClose}
           style={{
             background: 'none',
             border: '1px solid #1a2840',
@@ -70,6 +129,7 @@ export default function ContextPanel({ point, onClose }: Props) {
         >
           ×
         </button>
+        </div>
       </div>
 
       {/* Panel content */}

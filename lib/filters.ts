@@ -30,11 +30,17 @@ export interface BasejumpFilters {
   types: string[]
 }
 
+export interface SurfFilters {
+  /** Pilot level to show: 'all' | 'beginner' | 'intermediate' | 'advanced' | 'expert' */
+  level: string
+}
+
 export interface AllFilters {
   global: GlobalFilters
   skydive: SkydiveFilters
   paragliding: ParaglidingFilters
   basejump: BasejumpFilters
+  surf: SurfFilters
 }
 
 // ─── Defaults ────────────────────────────────────────────────────────────────
@@ -55,6 +61,9 @@ export const DEFAULT_FILTERS: AllFilters = {
     difficulties: ['intermediate', 'advanced', 'expert'],
     legalStatus: ['authorized', 'tolerated'],
     types: ['cliff', 'bridge', 'antenna', 'earth'],
+  },
+  surf: {
+    level: 'all',
   },
 }
 
@@ -118,6 +127,16 @@ export function applyFilters(
       })
       break
     }
+    case 'surf': {
+      const f = filters.surf
+      if (f.level !== 'all') {
+        result = result.filter((p) => {
+          const d = p.data as Record<string, unknown>
+          return d.level === f.level
+        })
+      }
+      break
+    }
   }
 
   return result
@@ -155,6 +174,9 @@ export function hasActiveFilters(layerId: string, filters: AllFilters): boolean 
         [...f.legalStatus].sort().join() !== [...d.legalStatus].sort().join() ||
         [...f.types].sort().join() !== [...d.types].sort().join()
       )
+    }
+    case 'surf': {
+      return filters.surf.level !== def.surf.level
     }
     default:
       return false

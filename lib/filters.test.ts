@@ -26,6 +26,7 @@ function cloneFilters(overrides: Partial<AllFilters> = {}): AllFilters {
       legalStatus:  [...DEFAULT_FILTERS.basejump.legalStatus],
       types:        [...DEFAULT_FILTERS.basejump.types],
     },
+    surf: { ...DEFAULT_FILTERS.surf },
     ...overrides,
   }
 }
