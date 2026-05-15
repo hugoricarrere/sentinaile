@@ -6,13 +6,11 @@
  */
 export type { LayerConfig } from './_types'
 
-import { weatherLayer }    from './weather'
 import { webcamsLayer }    from './webcams'
 import { surfLayer }       from './surf'
 import { skydiveLayer }    from './skydive'
 import { paraglidingLayer } from './paragliding'
 import { basejumpLayer }   from './basejump'
-import { airLayer }        from './air'
 
 export const LAYERS = [
   // ── Sports aériens ───────────────────────────────────────────────────────
@@ -21,8 +19,6 @@ export const LAYERS = [
   basejumpLayer,
   // ── Sports nautiques ─────────────────────────────────────────────────────
   surfLayer,
-  // ── Environnement ────────────────────────────────────────────────────────
-  weatherLayer,
-  airLayer,
+  // ── Webcams ──────────────────────────────────────────────────────────────
   webcamsLayer,
 ]
