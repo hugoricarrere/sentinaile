@@ -22,7 +22,7 @@ const MapCanvas = dynamic(() => import('@/components/MapCanvas'), { ssr: false }
 // enabledMap default — computed once outside render
 const DEFAULT_ENABLED = Object.fromEntries(LAYERS.map(l => [l.id, l.defaultEnabled]))
 
-// ── Shared map button style ────────────────────────────────────────────────
+// ── Shared desktop map button style ───────────────────────────────────────
 const mapBtnBase: React.CSSProperties = {
   position: 'absolute', zIndex: 5, width: 40, height: 40,
   background: '#0B1120', border: '1px solid #1a2840', borderRadius: 4,
@@ -54,11 +54,19 @@ export default function Home() {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({})
   const [activeFilterLayer, setActiveFilterLayer] = useState<string | null>(null)
+  // Mobile: separate sheet states
+  const [mobileLayersOpen, setMobileLayersOpen] = useState(false)
+  const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
 
   // ── Custom hooks ──────────────────────────────────────────────────────────
   const isMobile = useMobile()
   const { geoError, handleGeolocate, clearGeoError } = useGeolocation(setFlyTo)
   useUrlHash({ viewState, enabledMap, franceOnly: filters.global.franceOnly })
+
+  // Sync detail sheet open state with selectedPoint
+  useEffect(() => {
+    if (selectedPoint) setMobileDetailOpen(true)
+  }, [selectedPoint])
 
   // On mount: if URL has a valid hash, apply it (overrides persisted state)
   useEffect(() => {
@@ -91,12 +99,23 @@ export default function Home() {
     setEnabledMap(DEFAULT_ENABLED)
   }, [setEnabledMap])
 
+  const handleCloseDetail = useCallback(() => {
+    setMobileDetailOpen(false)
+    // Delay clearing point so the close animation can play
+    setTimeout(() => setSelectedPoint(null), 250)
+  }, [])
+
   // ── Derived state ─────────────────────────────────────────────────────────
   const isFranceView =
     viewState.zoom >= 5 &&
     viewState.longitude > -4.8 && viewState.longitude < 8.2 &&
     viewState.latitude  > 42.3 && viewState.latitude  < 51.2
 
+  const showMeteogram = !!selectedPoint && ['skydive', 'paragliding', 'basejump'].includes(selectedPoint.layerId)
+  const connectedCount = LAYERS.filter(l => layerStates[l.id]?.lastUpdated !== null).length
+  const errorCount = LAYERS.filter(l => !!layerStates[l.id]?.error).length
+
+  // ── Desktop sidebar content ───────────────────────────────────────────────
   const sidebarContent = (
     <>
       <LayerToggle
@@ -115,6 +134,235 @@ export default function Home() {
     </>
   )
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // MOBILE LAYOUT
+  // ─────────────────────────────────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', width: '100vw', background: '#070B14', overflow: 'hidden' }}>
+
+        {/* Loading overlay */}
+        {!mapLoaded && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#040810', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <svg width="48" height="38" viewBox="0 0 34 26" fill="none" style={{ opacity: 0.9, animation: 'pulse 1.8s ease-in-out infinite' }}>
+              <path d="M2 22 C7 17 16 10 32 3 C28 9 22 15 15 19 C10 21 6 22 2 22Z" fill="#00D4FF" fillOpacity="0.9" />
+            </svg>
+            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 12, letterSpacing: '0.3em', color: '#2a4a6a', textTransform: 'uppercase' }}>
+              Chargement…
+            </span>
+          </div>
+        )}
+
+        {/* ── Mobile header (compact) ────────────────────────────────────── */}
+        <header style={{
+          height: 50, flexShrink: 0, display: 'flex', alignItems: 'center',
+          padding: '0 16px', gap: 10,
+          background: 'linear-gradient(to right, #040810, #060c18)',
+          borderBottom: '1px solid #1a2840',
+        }}>
+          {/* Logo */}
+          <svg width="24" height="18" viewBox="0 0 34 26" fill="none" style={{ flexShrink: 0 }}>
+            <path d="M2 22 C7 17 16 10 32 3 C28 9 22 15 15 19 C10 21 6 22 2 22Z" fill="white" fillOpacity="0.9" />
+          </svg>
+          <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: 18, color: '#00C4EE', flex: 1 }}>
+            Sentin<span style={{ fontSize: 28, color: '#fff', letterSpacing: '0.04em', lineHeight: 1 }}>A</span>ile
+          </span>
+
+          {/* Sources indicator */}
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '0.06em', color: errorCount > 0 ? '#cc3a20' : '#00c87a', fontWeight: 600 }}>
+            ● {connectedCount}/{LAYERS.length}
+          </span>
+
+          {/* Layers toggle button */}
+          <button
+            onClick={() => setMobileLayersOpen(o => !o)}
+            aria-label="Couches de données"
+            style={{
+              background: mobileLayersOpen ? '#00D4FF18' : '#0B1120',
+              border: `1px solid ${mobileLayersOpen ? '#00D4FF60' : '#1a2840'}`,
+              borderRadius: 6, color: mobileLayersOpen ? '#00D4FF' : '#4a7aa0',
+              width: 38, height: 34, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16, transition: 'all 0.15s', flexShrink: 0,
+            }}
+          >
+            ≡
+          </button>
+        </header>
+
+        {/* ── Map area ──────────────────────────────────────────────────── */}
+        <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+          <MapCanvas
+            enabledMap={enabledMap}
+            onPointClick={handlePointClick}
+            onViewStateChange={setViewState}
+            onLayerStatesChange={setLayerStates}
+            filters={filters}
+            flyTo={flyTo}
+            refreshKeys={refreshKeys}
+            onMapLoad={() => setMapLoaded(true)}
+          />
+
+          {/* Meteogram overlay (bottom-positioned, already responsive) */}
+          {showMeteogram && (
+            <MeteogramOverlay point={selectedPoint!} onClose={handleCloseDetail} />
+          )}
+
+          {/* Geoloc error toast */}
+          {geoError && (
+            <div
+              onClick={clearGeoError}
+              role="alert"
+              style={{
+                position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)',
+                background: '#070B14', border: '1px solid #cc3a2060', borderRadius: 6,
+                padding: '8px 16px', fontFamily: 'var(--font-rajdhani)', fontWeight: 600,
+                fontSize: 12, color: '#FFB347', zIndex: 10, cursor: 'pointer', whiteSpace: 'nowrap',
+              }}
+            >
+              {geoError}
+            </div>
+          )}
+
+          {/* FAB — geolocation */}
+          <button
+            onClick={handleGeolocate}
+            aria-label="Centrer sur ma position"
+            style={{
+              position: 'absolute', bottom: 16, right: 16, zIndex: 5,
+              width: 44, height: 44, borderRadius: 22,
+              background: '#0B1120', border: '1px solid #1a2840',
+              color: '#4a7aa0', cursor: 'pointer', fontSize: 18,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+            }}
+          >
+            ◎
+          </button>
+        </div>
+
+        {/* ── Mobile bottom bar ─────────────────────────────────────────── */}
+        <div style={{
+          height: 48, flexShrink: 0, display: 'flex', alignItems: 'center',
+          padding: '0 16px', gap: 12,
+          background: '#040810', borderTop: '1px solid #1a2840',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}>
+          {/* Coords */}
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.06em', flex: 1 }}>
+            {viewState.latitude.toFixed(3)}°N {Math.abs(viewState.longitude).toFixed(3)}°{viewState.longitude >= 0 ? 'E' : 'O'} z{viewState.zoom.toFixed(1)}
+          </span>
+
+          {/* Active layer pills (icons only) */}
+          {LAYERS.filter(l => (layerStates[l.id]?.points.length ?? 0) > 0).slice(0, 5).map(l => (
+            <span key={l.id} style={{ fontSize: 14 }} title={l.label}>{l.icon}</span>
+          ))}
+        </div>
+
+        {/* ── Mobile: Layers bottom sheet ───────────────────────────────── */}
+        {mobileLayersOpen && (
+          <div
+            onClick={() => setMobileLayersOpen(false)}
+            style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(0,0,0,0.6)' }}
+          />
+        )}
+        <div
+          role="dialog"
+          aria-label="Couches de données"
+          aria-modal={mobileLayersOpen}
+          style={{
+            position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 50,
+            background: '#0B1120',
+            borderTop: '1px solid #1a2840',
+            borderRadius: '16px 16px 0 0',
+            maxHeight: '80dvh',
+            display: 'flex', flexDirection: 'column',
+            transform: mobileLayersOpen ? 'translateY(0)' : 'translateY(100%)',
+            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+          }}
+        >
+          {/* Drag handle */}
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#1a2840' }} />
+          </div>
+          {/* Header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '4px 16px 10px',
+          }}>
+            <span style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 11, letterSpacing: '0.25em', color: '#2a4a6a', textTransform: 'uppercase' }}>
+              Couches de données
+            </span>
+            <button
+              onClick={() => setMobileLayersOpen(false)}
+              aria-label="Fermer"
+              style={{ background: 'none', border: '1px solid #1a2840', borderRadius: 3, color: '#2a4a6a', width: 24, height: 24, cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              ×
+            </button>
+          </div>
+          {/* Scrollable content */}
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            <LayerToggle
+              enabledMap={enabledMap}
+              onToggle={(id, enabled) => setEnabledMap(prev => ({ ...prev, [id]: enabled }))}
+              layerStates={layerStates}
+              filters={filters}
+              onFiltersChange={setFilters}
+              activeFilterLayer={activeFilterLayer}
+              onFilterLayer={setActiveFilterLayer}
+              onRefreshLayer={handleRefreshLayer}
+              onResetLayers={handleResetLayers}
+            />
+            {isFranceView && <FrancePanel />}
+          </div>
+        </div>
+
+        {/* ── Mobile: Point detail bottom sheet ────────────────────────── */}
+        {selectedPoint && !showMeteogram && (
+          <>
+            {mobileDetailOpen && (
+              <div
+                onClick={handleCloseDetail}
+                style={{ position: 'fixed', inset: 0, zIndex: 60, background: 'rgba(0,0,0,0.5)' }}
+              />
+            )}
+            <div
+              role="dialog"
+              aria-label="Détail du point"
+              aria-modal={mobileDetailOpen}
+              style={{
+                position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 70,
+                background: '#0B1120',
+                borderTop: '1px solid #1a2840',
+                borderRadius: '16px 16px 0 0',
+                maxHeight: '75dvh',
+                display: 'flex', flexDirection: 'column',
+                transform: mobileDetailOpen ? 'translateY(0)' : 'translateY(100%)',
+                transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                paddingBottom: 'env(safe-area-inset-bottom)',
+              }}
+            >
+              {/* Drag handle */}
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 2px' }}>
+                <div style={{ width: 36, height: 4, borderRadius: 2, background: '#1a2840' }} />
+              </div>
+              <div style={{ overflowY: 'auto', flex: 1 }}>
+                <ContextPanel point={selectedPoint} onClose={handleCloseDetail} />
+              </div>
+            </div>
+          </>
+        )}
+
+        <ConditionToast layerStates={layerStates} />
+      </div>
+    )
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // DESKTOP LAYOUT (unchanged)
+  // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col h-screen w-screen bg-page overflow-hidden">
 
@@ -147,8 +395,8 @@ export default function Home() {
             onMapLoad={() => setMapLoaded(true)}
           />
 
-          {selectedPoint && ['skydive', 'paragliding', 'basejump'].includes(selectedPoint.layerId) && (
-            <MeteogramOverlay point={selectedPoint} onClose={() => setSelectedPoint(null)} />
+          {showMeteogram && (
+            <MeteogramOverlay point={selectedPoint!} onClose={() => setSelectedPoint(null)} />
           )}
 
           {/* Geolocation error toast */}
@@ -189,29 +437,10 @@ export default function Home() {
         </div>
 
         {/* Desktop sidebar */}
-        {!isMobile && sidebarOpen && (
+        {sidebarOpen && (
           <aside className="w-[272px] shrink-0 border-l border-border bg-sidebar flex flex-col overflow-y-auto">
             {sidebarContent}
           </aside>
-        )}
-
-        {/* Mobile sidebar (slide-in overlay) */}
-        {isMobile && (
-          <>
-            {sidebarOpen && (
-              <div
-                onClick={() => setSidebarOpen(false)}
-                className="absolute inset-0 z-[15] bg-black/60"
-              />
-            )}
-            <aside
-              aria-hidden={!sidebarOpen}
-              className="absolute top-0 right-0 bottom-0 z-[20] w-[85vw] max-w-[320px] bg-sidebar border-l border-border flex flex-col overflow-y-auto transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{ transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)' }}
-            >
-              {sidebarContent}
-            </aside>
-          </>
         )}
       </div>
 

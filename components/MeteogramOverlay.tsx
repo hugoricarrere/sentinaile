@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import type { GeoPoint } from '@/lib/types'
 import { LAYERS } from '@/lib/layers'
 import { skydiveCondition, paraglideCondition, basejumpCondition } from '@/lib/weather'
@@ -257,15 +257,27 @@ export default function MeteogramOverlay({
     precTickVals = ticks(0, maxP, pStep).filter(v => v > 0)
   }
 
+  // Detect mobile for adjusted layout
+  const isMobile = useMemo(() => typeof window !== 'undefined' && window.innerWidth < 768, [])
+
   return (
     <div className="meteogram-slide-up" style={{
       position: 'absolute', bottom: 0, left: 0, right: 0,
       background: 'rgba(5, 9, 20, 0.97)',
       backdropFilter: 'blur(10px)',
       borderTop: `1px solid ${meta.color}50`,
+      borderRadius: isMobile ? '16px 16px 0 0' : 0,
       zIndex: 10, display: 'flex', flexDirection: 'column',
+      maxHeight: isMobile ? '80dvh' : undefined,
       userSelect: 'none',
     }}>
+
+      {/* ── Mobile drag handle ───────────────────────────────────────────── */}
+      {isMobile && (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 2px' }}>
+          <div style={{ width: 36, height: 4, borderRadius: 2, background: '#1a2840' }} />
+        </div>
+      )}
 
       {/* ── Header ───────────────────────────────────────────────────────── */}
       <div style={{ display:'flex', alignItems:'center', gap:10,
