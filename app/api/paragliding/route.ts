@@ -16,6 +16,7 @@ interface PGResult extends PGSpot {
   condition: ConditionStatus
   forecast: { hour: number; wind: number; gust: number }[]
   hourlyConditions: ConditionStatus[]
+  hourlyWindDirs: number[]
   blHeight: number
   liftedIndex: number
 }
@@ -72,7 +73,9 @@ async function fetchParagliding(): Promise<PGResult[]> {
         return paraglideCondition(w, g, t, r, storm, c, bl, li)
       }) as ConditionStatus[]
 
-      return { ...s, windKmh, gustKmh, windDeg, tempC, radiation, condition, forecast, hourlyConditions, blHeight, liftedIndex }
+      const hourlyWindDirs = Array.from({ length: 24 }, (_, i) => h.winddirection_10m?.[i] ?? 0)
+
+      return { ...s, windKmh, gustKmh, windDeg, tempC, radiation, condition, forecast, hourlyConditions, hourlyWindDirs, blHeight, liftedIndex }
     })
   )
   return results.map((r, i) =>
@@ -84,6 +87,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
           condition: 'yellow' as ConditionStatus,
           forecast: [],
           hourlyConditions: Array(24).fill('yellow') as ConditionStatus[],
+          hourlyWindDirs: Array(24).fill(0) as number[],
           blHeight: 1000, liftedIndex: 0,
         }
   )

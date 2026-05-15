@@ -21,6 +21,7 @@ interface DZResult extends DZ {
   hasStorm: boolean
   condition: ConditionStatus
   hourlyConditions: ConditionStatus[]
+  hourlyWindDirs: number[]
   tempC: number
   densityAltM: number
 }
@@ -32,7 +33,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
       const params = new URLSearchParams({
         latitude:  dz.latitude.toString(),
         longitude: dz.longitude.toString(),
-        hourly:    'windspeed_10m,windspeed_700hPa,windspeed_600hPa,visibility,precipitation,cloudcover_low,weathercode,cape,temperature_2m,surface_pressure',
+        hourly:    'windspeed_10m,winddirection_10m,windspeed_700hPa,windspeed_600hPa,visibility,precipitation,cloudcover_low,weathercode,cape,temperature_2m,surface_pressure',
         daily:     'sunrise,sunset',
         windspeed_unit: 'kmh',
         forecast_days: '1',
@@ -46,17 +47,18 @@ async function fetchSkydive(): Promise<DZResult[]> {
 
       const json: {
         hourly: {
-          time:             string[]
-          windspeed_10m:    number[]
-          windspeed_700hPa: number[]
-          windspeed_600hPa: number[]
-          visibility:       number[]
-          precipitation:    number[]
-          cloudcover_low:   number[]
-          weathercode:      number[]
-          cape:             number[]
-          temperature_2m:   number[]
-          surface_pressure: number[]
+          time:               string[]
+          windspeed_10m:      number[]
+          winddirection_10m:  number[]
+          windspeed_700hPa:   number[]
+          windspeed_600hPa:   number[]
+          visibility:         number[]
+          precipitation:      number[]
+          cloudcover_low:     number[]
+          weathercode:        number[]
+          cape:               number[]
+          temperature_2m:     number[]
+          surface_pressure:   number[]
         }
         daily: {
           sunrise: string[]
@@ -117,11 +119,13 @@ async function fetchSkydive(): Promise<DZResult[]> {
         return skydiveCondition(ws, w4, vis, 0, cld, storm, c)
       }) as ConditionStatus[]
 
+      const hourlyWindDirs = Array.from({ length: 24 }, (_, i) => h.winddirection_10m?.[i] ?? 0)
+
       return {
         ...dz,
         windSurface, wind3000, wind4000,
         visibility, precipFraction, cloudcoverLow, hasStorm,
-        condition, hourlyConditions, tempC, densityAltM,
+        condition, hourlyConditions, hourlyWindDirs, tempC, densityAltM,
       }
     })
   )
@@ -135,6 +139,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
           visibility: 10, precipFraction: 0, cloudcoverLow: 0, hasStorm: false,
           condition: 'red' as ConditionStatus,
           hourlyConditions: Array(24).fill('red') as ConditionStatus[],
+          hourlyWindDirs: Array(24).fill(0) as number[],
           tempC: 15, densityAltM: 0,
           cape: 0,
         }

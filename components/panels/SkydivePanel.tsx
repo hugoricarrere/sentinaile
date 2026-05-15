@@ -15,8 +15,24 @@ interface SkydiveData {
   precipFraction: number; cloudcoverLow: number; hasStorm: boolean
   condition: 'green' | 'yellow' | 'red'
   hourlyConditions?: string[]
+  hourlyWindDirs?: number[]
   densityAltM?: number
   tempC?: number
+}
+
+/** Tiny SVG arrow pointing where wind blows TO (rotated by windDir degrees) */
+function WindArrow({ deg, active }: { deg: number; active: boolean }) {
+  return (
+    <svg
+      width={8} height={9} viewBox="0 0 8 9"
+      style={{ display: 'block', transform: `rotate(${deg}deg)`, transformOrigin: '50% 50%' }}
+    >
+      <path
+        d="M4 0.5 L6.5 7.5 L4 6 L1.5 7.5 Z"
+        fill={active ? '#00D4FF' : '#2a4a6a'}
+      />
+    </svg>
+  )
 }
 
 export default function SkydivePanel({ point }: { point: GeoPoint }) {
@@ -54,10 +70,14 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
               const color = condH === 'green' ? '#00FF88' : condH === 'yellow' ? '#FFB347' : '#FF6B35'
               const isNow = h === parisHour()
               const showLabel = h % 3 === 0
+              const windDir = d.hourlyWindDirs?.[h]
               return (
                 <div key={h} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                   {isNow && (
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 7, color: '#00D4FF', letterSpacing: 0 }}>▼</span>
+                  )}
+                  {windDir !== undefined && (
+                    <WindArrow deg={windDir} active={isNow} />
                   )}
                   <div style={{
                     width: isNow ? 10 : 8,
