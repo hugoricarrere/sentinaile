@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { WindCompass } from '@/components/WindCompass'
 
 interface WeatherData {
   windKmh: number
@@ -105,45 +106,15 @@ export function SpotWeather({ lat, lng, color }: Props) {
         CONDITIONS ACTUELLES
       </div>
 
-      {/* Wind line */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 6,
-          marginBottom: 4,
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-block',
-            transform: `rotate(${data.windDir}deg)`,
-            fontSize: 14,
-            color: color ?? '#00D4FF',
-            lineHeight: 1,
-          }}
-        >
-          ↑
-        </span>
-        <span
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 13,
-            color: '#e8f4ff',
-          }}
-        >
-          {Math.round(data.windKmh)} km/h
-        </span>
-        <span style={{ color: '#3a5a80', fontSize: 11 }}>rafales</span>
-        <span
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 13,
-            color: '#e8f4ff',
-          }}
-        >
-          {Math.round(data.windGustsKmh)} km/h
-        </span>
+      {/* Wind compass */}
+      <div style={{ marginBottom: 8 }}>
+        <WindCompass
+          dirDeg={data.windDir}
+          speedKmh={data.windKmh}
+          gustKmh={data.windGustsKmh}
+          color={color ?? '#00D4FF'}
+          size={76}
+        />
       </div>
 
       {/* Temp + weather line */}

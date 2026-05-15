@@ -388,7 +388,7 @@ export default function Home() {
         }}>
           {/* Coords */}
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.06em', flex: 1 }}>
-            {viewState.latitude.toFixed(3)}°N {Math.abs(viewState.longitude).toFixed(3)}°{viewState.longitude >= 0 ? 'E' : 'O'} z{viewState.zoom.toFixed(1)}
+            {viewState.latitude.toFixed(2)}°N  {Math.abs(viewState.longitude).toFixed(2)}°{viewState.longitude >= 0 ? 'E' : 'O'}
           </span>
 
           {/* Active layer pills (icons only) */}

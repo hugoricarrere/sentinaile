@@ -115,7 +115,7 @@ export function NearbySpots({ layerStates, onSelectPoint, onFlyTo }: Props) {
         title="Spots autour de moi"
         style={{
           position: 'fixed',
-          bottom: 24,
+          bottom: `calc(48px + env(safe-area-inset-bottom) + 16px)`,
           left: 24,
           zIndex: 20,
           display: 'flex',
@@ -155,7 +155,7 @@ export function NearbySpots({ layerStates, onSelectPoint, onFlyTo }: Props) {
           role="alert"
           style={{
             position: 'fixed',
-            bottom: 70,
+            bottom: `calc(48px + env(safe-area-inset-bottom) + 72px)`,
             left: 24,
             zIndex: 20,
             background: '#070B14',
@@ -178,11 +178,11 @@ export function NearbySpots({ layerStates, onSelectPoint, onFlyTo }: Props) {
         <div
           style={{
             position: 'fixed',
-            bottom: 70,
-            left: 24,
+            bottom: `calc(48px + env(safe-area-inset-bottom) + 72px)`,
+            left: 16,
             zIndex: 19,
             width: 280,
-            maxHeight: 420,
+            maxHeight: '55vh',
             background: '#040810',
             border: '1px solid #1a2840',
             borderRadius: 8,

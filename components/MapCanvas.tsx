@@ -201,7 +201,7 @@ export default function MapCanvas({
         aria-label={terrain3d ? 'Désactiver le relief 3D' : 'Activer le relief 3D'}
         style={{
           position: 'absolute',
-          bottom: 80,
+          bottom: 124,
           right: 12,
           background: terrain3d ? '#0d2137' : '#060c18',
           border: `1px solid ${terrain3d ? '#00D4FF' : '#1a2840'}`,

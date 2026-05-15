@@ -106,13 +106,13 @@ export function SpotComparator({ spots, onRemove }: ComparatorProps) {
     <div
       style={{
         position: 'fixed',
-        bottom: 0,
+        bottom: `calc(48px + env(safe-area-inset-bottom))`,
         left: 0,
         right: 0,
         zIndex: 30,
         background: '#040810',
         borderTop: '1px solid #1a2840',
-        minHeight: 200,
+        maxHeight: '45vh',
         display: 'flex',
         flexDirection: 'column',
         boxShadow: '0 -8px 32px rgba(0,0,0,0.7)',
@@ -149,6 +149,7 @@ export function SpotComparator({ spots, onRemove }: ComparatorProps) {
           display: 'flex',
           flex: 1,
           overflow: 'auto',
+          overflowY: 'auto',
           padding: '10px 16px 16px',
           gap: 12,
         }}
