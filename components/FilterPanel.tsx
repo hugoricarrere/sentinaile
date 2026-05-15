@@ -8,6 +8,8 @@ interface Props {
   onChange: (f: AllFilters) => void
   onClose: () => void
   color: string
+  totalCount?: number
+  visibleCount?: number
 }
 
 // ── Chip toggle ────────────────────────────────────────────────────────────
@@ -25,6 +27,9 @@ function Chip({
   return (
     <button
       onClick={onClick}
+      role="switch"
+      aria-checked={active}
+      aria-label={label}
       style={{
         fontFamily: 'var(--font-rajdhani)',
         fontWeight: 600,
@@ -68,11 +73,13 @@ function AltitudeSlider({
   value,
   max,
   color,
+  label,
   onChange,
 }: {
   value: number
   max: number
   color: string
+  label?: string
   onChange: (v: number) => void
 }) {
   return (
@@ -84,6 +91,11 @@ function AltitudeSlider({
         step={100}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={label ?? `Altitude minimum (${value} m)`}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-valuetext={value > 0 ? `${value} mètres minimum` : 'aucun filtre'}
         style={{ flex: 1, accentColor: color, height: 3, cursor: 'pointer' }}
       />
       <span style={{
@@ -106,7 +118,7 @@ function toggle(arr: string[], val: string): string[] {
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
-export default function FilterPanel({ layerId, filters, onChange, onClose, color }: Props) {
+export default function FilterPanel({ layerId, filters, onChange, onClose, color, totalCount, visibleCount }: Props) {
   const setGlobal = (g: Partial<AllFilters['global']>) =>
     onChange({ ...filters, global: { ...filters.global, ...g } })
   const setSkydive = (s: Partial<AllFilters['skydive']>) =>
@@ -128,20 +140,34 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
     }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{
-          fontFamily: 'var(--font-rajdhani)',
-          fontWeight: 700,
-          fontSize: 11,
-          letterSpacing: '0.2em',
-          color: color,
-          textTransform: 'uppercase',
-        }}>
-          Filtres
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{
+            fontFamily: 'var(--font-rajdhani)',
+            fontWeight: 700,
+            fontSize: 11,
+            letterSpacing: '0.2em',
+            color: color,
+            textTransform: 'uppercase',
+          }}>
+            Filtres
+          </span>
+          {totalCount != null && visibleCount != null && (
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 9,
+              color: visibleCount < totalCount ? color : '#2a4a6a',
+              letterSpacing: '0.04em',
+            }}>
+              {visibleCount}/{totalCount}
+              {visibleCount < totalCount && ` (−${totalCount - visibleCount})`}
+            </span>
+          )}
         </span>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <button
             onClick={() => onChange(DEFAULT_FILTERS)}
             title="Réinitialiser tous les filtres"
+            aria-label="Réinitialiser tous les filtres"
             style={{
               background: 'none',
               border: '1px solid #1e3050',
@@ -169,6 +195,7 @@ export default function FilterPanel({ layerId, filters, onChange, onClose, color
           </button>
           <button
             onClick={onClose}
+            aria-label="Fermer les filtres"
             style={{
               background: 'none',
               border: 'none',

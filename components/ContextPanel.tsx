@@ -1,6 +1,7 @@
 'use client'
 import { LAYERS } from '@/lib/layers-registry'
 import type { GeoPoint } from '@/lib/types'
+import { ErrorBoundary } from './ErrorBoundary'
 
 interface Props {
   point: GeoPoint
@@ -65,13 +66,15 @@ export default function ContextPanel({ point, onClose }: Props) {
 
       {/* Panel content */}
       <div style={{ padding: '14px 16px', fontSize: 12 }}>
-        {layer ? (
-          layer.renderContextPanel(point)
-        ) : (
-          <span style={{ fontFamily: 'var(--font-rajdhani)', color: '#2a4a6a' }}>
-            Données non disponibles
-          </span>
-        )}
+        <ErrorBoundary>
+          {layer ? (
+            layer.renderContextPanel(point)
+          ) : (
+            <span style={{ fontFamily: 'var(--font-rajdhani)', color: '#2a4a6a' }}>
+              Données non disponibles
+            </span>
+          )}
+        </ErrorBoundary>
       </div>
     </div>
   )

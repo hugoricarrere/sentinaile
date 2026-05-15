@@ -22,7 +22,7 @@ export default function FlightPanel({ point }: { point: GeoPoint }) {
       <Row label="VITESSE" value={`${Math.round(d.velocityMs * 3.6)} km/h`} />
       <Row label="CAP" value={`${Math.round(d.headingDeg)}°`} />
       <a
-        href={`https://www.flightaware.com/live/flight/${d.callsign}`}
+        href={`https://www.flightaware.com/live/flight/${encodeURIComponent(d.callsign)}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{

@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server'
-import { globalCache } from '@/lib/cache'
+import { createSportRoute } from '@/lib/create-sport-route'
 import exitsData from '@/data/basejump-exits.json'
 import { basejumpCondition, type ConditionStatus } from '@/lib/weather'
 import { currentHourIndex } from '@/lib/time'
-import { rateLimit } from '@/lib/rate-limit'
 
 interface Exit {
   id: string; name: string; longitude: number; latitude: number
@@ -52,13 +50,4 @@ async function fetchBasejump(): Promise<ExitResult[]> {
   )
 }
 
-export async function GET(request: Request) {
-  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  try {
-    const { data, stale } = await globalCache.get('basejump', fetchBasejump, 600_000)
-    return NextResponse.json({ data, stale })
-  } catch {
-    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
-  }
-}
+export const GET = createSportRoute('basejump', fetchBasejump, 600_000)

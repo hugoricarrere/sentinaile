@@ -1,7 +1,9 @@
 /** Retourne l'heure courante (0-23) dans le fuseau Europe/Paris */
 export function parisHour(): number {
+  // Use 'en-US' with hour12:false — 'fr-FR' can produce "0h00" or locale-specific strings
+  // that parseInt may misparse (e.g. narrow-no-break-space, "h" suffix).
   return parseInt(
-    new Intl.DateTimeFormat('fr-FR', {
+    new Intl.DateTimeFormat('en-US', {
       timeZone: 'Europe/Paris',
       hour: 'numeric',
       hour12: false,

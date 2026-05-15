@@ -5,6 +5,9 @@ import type { GeoPoint } from './types'
  * same airfield), spread them in a small circle so they are all visible
  * and independently clickable. The original lat/lon are preserved in
  * point.data; only the top-level coordinates used for rendering are shifted.
+ *
+ * Ordering within each group is sorted by point.id so that the offsets are
+ * stable across renders (no trembling when data is re-fetched).
  */
 export function jitterCoincident(points: GeoPoint[], radiusDeg = 0.005): GeoPoint[] {
   // Group point indices by rounded coordinate key
@@ -15,6 +18,9 @@ export function jitterCoincident(points: GeoPoint[], radiusDeg = 0.005): GeoPoin
     g.push(i)
     groups.set(key, g)
   })
+
+  // Sort each group by stable id so angle assignment never changes between renders
+  groups.forEach(g => g.sort((a, b) => points[a].id.localeCompare(points[b].id)))
 
   return points.map((p, i) => {
     const key = `${p.longitude.toFixed(3)},${p.latitude.toFixed(3)}`

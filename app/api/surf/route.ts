@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server'
-import { globalCache } from '@/lib/cache'
+import { createSportRoute } from '@/lib/create-sport-route'
 import surfSpotsData from '@/data/surf-spots.json'
 import { surfScore } from '@/lib/weather'
 import { currentHourIndex } from '@/lib/time'
-import { rateLimit } from '@/lib/rate-limit'
 
 interface SurfSpot {
   id: string; name: string; longitude: number; latitude: number
@@ -65,13 +63,4 @@ async function fetchSurf(): Promise<SurfResult[]> {
   )
 }
 
-export async function GET(request: Request) {
-  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  try {
-    const { data, stale } = await globalCache.get('surf', fetchSurf, 1_800_000)
-    return NextResponse.json({ data, stale })
-  } catch {
-    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
-  }
-}
+export const GET = createSportRoute('surf', fetchSurf, 1_800_000)

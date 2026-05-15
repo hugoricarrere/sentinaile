@@ -53,15 +53,15 @@ export function useLayerData(layers: LayerConfig[], enabledMap: Record<string, b
 
     for (const layer of layers) {
       if (!enabledMap[layer.id]) continue
-      // Only fetch layers that just became enabled (weren't enabled before)
-      const justEnabled = !prevEnabled[layer.id]
-      if (justEnabled) {
-        const controller = new AbortController()
-        controllers.push(controller)
-        fetchLayer(layer, controller.signal)
-      }
+      // One AbortController shared between the immediate fetch and the interval
       const controller = new AbortController()
       controllers.push(controller)
+
+      // Fire immediately when the layer just became enabled
+      const justEnabled = !prevEnabled[layer.id]
+      if (justEnabled) fetchLayer(layer, controller.signal)
+
+      // Then refresh on the layer's poll interval
       const id = setInterval(() => fetchLayer(layer, controller.signal), layer.pollIntervalMs)
       intervals.push(id)
     }

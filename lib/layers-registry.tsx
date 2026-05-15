@@ -11,6 +11,7 @@ import SkydivePanel from '@/components/panels/SkydivePanel'
 import ParaglidingPanel from '@/components/panels/ParaglidingPanel'
 import BasejumpPanel from '@/components/panels/BasejumpPanel'
 import { jitterCoincident } from './jitter'
+import { CLUSTER_RADIUS_PX, CLUSTER_MAX_ZOOM, POLL_WEATHER_MS, POLL_SURF_MS, POLL_MEDIUM_MS, POLL_SHIPS_MS, POLL_FLIGHTS_MS } from './constants'
 
 export interface LayerConfig {
   id: string
@@ -51,7 +52,7 @@ const _scCache = new WeakMap<GeoPoint[], Supercluster<{ originalPoint: GeoPoint 
 
 function getClusterIndex(points: GeoPoint[]) {
   if (_scCache.has(points)) return _scCache.get(points)!
-  const sc = new Supercluster<{ originalPoint: GeoPoint }>({ radius: 55, maxZoom: 15 })
+  const sc = new Supercluster<{ originalPoint: GeoPoint }>({ radius: CLUSTER_RADIUS_PX, maxZoom: CLUSTER_MAX_ZOOM })
   sc.load(points.map(p => ({
     type: 'Feature' as const,
     geometry: { type: 'Point' as const, coordinates: [p.longitude, p.latitude] },
@@ -69,7 +70,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#FF6B35',
     colorRgb: hexToRgb('#FF6B35'),
     apiRoute: '/api/air',
-    pollIntervalMs: 600_000,
+    pollIntervalMs: POLL_WEATHER_MS,
     defaultEnabled: false,
     transformResponse: (raw) => {
       const items = raw as AirPoint[]
@@ -112,7 +113,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#B388FF',
     colorRgb: hexToRgb('#B388FF'),
     apiRoute: '/api/weather',
-    pollIntervalMs: 600_000,
+    pollIntervalMs: POLL_WEATHER_MS,
     defaultEnabled: false,
     transformResponse: (raw) => {
       const items = raw as WeatherPoint[]
@@ -171,7 +172,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#FFD700',
     colorRgb: hexToRgb('#FFD700'),
     apiRoute: '/api/webcams',
-    pollIntervalMs: 300_000,
+    pollIntervalMs: POLL_MEDIUM_MS,
     defaultEnabled: false,
     transformResponse: (raw) => {
       const items = raw as WebcamPoint[]
@@ -203,7 +204,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#00CED1',
     colorRgb: hexToRgb('#00CED1'),
     apiRoute: '/api/surf',
-    pollIntervalMs: 1_800_000,
+    pollIntervalMs: POLL_SURF_MS,
     defaultEnabled: true,
     transformResponse: (raw) => {
       const items = raw as SurfResult[]
@@ -240,7 +241,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#FF4500',
     colorRgb: hexToRgb('#FF4500'),
     apiRoute: '/api/skydive',
-    pollIntervalMs: 600_000,
+    pollIntervalMs: POLL_WEATHER_MS,
     defaultEnabled: true,
     transformResponse: (raw) => {
       const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
@@ -327,7 +328,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#9B59B6',
     colorRgb: hexToRgb('#9B59B6'),
     apiRoute: '/api/paragliding',
-    pollIntervalMs: 600_000,
+    pollIntervalMs: POLL_WEATHER_MS,
     defaultEnabled: true,
     transformResponse: (raw) => {
       const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
@@ -416,7 +417,7 @@ export const LAYERS: LayerConfig[] = [
     color: '#FF0080',
     colorRgb: hexToRgb('#FF0080'),
     apiRoute: '/api/basejump',
-    pollIntervalMs: 600_000,
+    pollIntervalMs: POLL_WEATHER_MS,
     defaultEnabled: true,
     transformResponse: (raw) => {
       const items = raw as { id: string; longitude: number; latitude: number; [key: string]: unknown }[]
@@ -426,24 +427,74 @@ export const LAYERS: LayerConfig[] = [
         data: d as Record<string, unknown>,
       }))
     },
-    getDeckLayer: (points, onClick) => [
-      new ScatterplotLayer<GeoPoint>({
-        id: 'basejump-layer',
-        data: jitterCoincident(points),
-        getPosition: (d) => [d.longitude, d.latitude],
-        getColor: (d) => {
-          const c = (d.data as { condition: string }).condition
-          if (c === 'green') return [255, 0, 128, 255]
-          if (c === 'yellow') return [255, 179, 71, 255]
-          return [100, 0, 50, 255]
-        },
-        getRadius: 22_000,
-        radiusMinPixels: 6,
-        radiusMaxPixels: 14,
-        pickable: true,
-        onClick: ({ object }) => { if (object) onClick(object) },
-      }),
-    ],
+    getDeckLayer: (points, onClick, zoom = 5) => {
+      const CLUSTER_THRESHOLD = 8
+      const sc = getClusterIndex(points)
+      const tileZoom = Math.max(0, Math.min(Math.round(zoom), 20))
+      const features = sc.getClusters([-10, 40, 12, 52], tileZoom)
+
+      const displayPoints: GeoPoint[] = features.map(f => {
+        const [lng, lat] = f.geometry.coordinates
+        const props = f.properties as (Supercluster.ClusterProperties & Supercluster.AnyProps) | { originalPoint: GeoPoint }
+        const isCluster = 'cluster' in props && !!props.cluster
+        const count: number = isCluster ? (props as Supercluster.ClusterProperties).point_count : 1
+        if (isCluster) {
+          return {
+            id: `bj-cluster-${f.id ?? lng + lat}`,
+            longitude: lng, latitude: lat,
+            layerId: 'basejump',
+            data: { isCluster: true, count, condition: '' } as Record<string, unknown>,
+          }
+        }
+        return (f.properties as { originalPoint: GeoPoint }).originalPoint
+      })
+
+      const jittered = jitterCoincident(displayPoints)
+      const showIndividual = zoom >= CLUSTER_THRESHOLD
+
+      return [
+        new ScatterplotLayer<GeoPoint>({
+          id: 'basejump-layer',
+          data: jittered,
+          getPosition: (d) => [d.longitude, d.latitude],
+          getColor: (d) => {
+            const { isCluster, condition } = d.data as { isCluster?: boolean; condition: string }
+            if (isCluster) return [255, 0, 128, 180]
+            if (condition === 'green') return [255, 0, 128, 255]
+            if (condition === 'yellow') return [255, 179, 71, 255]
+            return [100, 0, 50, 255]
+          },
+          getRadius: (d) => {
+            const { isCluster, count } = d.data as { isCluster?: boolean; count?: number }
+            if (!isCluster) return 22_000
+            const n = count ?? 1
+            if (n < 5) return 25_000
+            if (n < 20) return 40_000
+            return 60_000
+          },
+          radiusMinPixels: showIndividual ? 6 : 8,
+          radiusMaxPixels: showIndividual ? 14 : 40,
+          pickable: true,
+          onClick: ({ object }) => {
+            if (!object) return
+            if ((object.data as { isCluster?: boolean }).isCluster) return
+            onClick(object)
+          },
+        }),
+        new TextLayer<GeoPoint>({
+          id: 'basejump-cluster-labels',
+          data: jittered.filter(d => !!(d.data as { isCluster?: boolean }).isCluster),
+          getPosition: (d) => [d.longitude, d.latitude],
+          getText: (d) => String((d.data as { count: number }).count),
+          getSize: 13,
+          getColor: [255, 255, 255, 230],
+          fontWeight: 700,
+          fontFamily: 'monospace',
+          getTextAnchor: 'middle',
+          getAlignmentBaseline: 'center',
+        }),
+      ]
+    },
     renderContextPanel: (point) => <BasejumpPanel point={point} />,
   },
 ]

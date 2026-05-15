@@ -178,6 +178,12 @@ export default function MeteogramOverlay({
   const [fc,      setFc]      = useState<Forecast | null>(null)
   const [loading, setLoading] = useState(true)
   const [error,   setError]   = useState<string | null>(null)
+  // Live "current hour" — refreshed every minute so the NOW line stays accurate
+  const [nowHour, setNowHour] = useState(() => parisHour())
+  useEffect(() => {
+    const id = setInterval(() => setNowHour(parisHour()), 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   const meta      = getLayerMeta(point.layerId)
   const name      = (point.data.name  as string) ?? ''
@@ -363,9 +369,9 @@ export default function MeteogramOverlay({
 
       {/* ── SVG Chart ────────────────────────────────────────────────────── */}
       {h && d && (
-        <div style={{ flexShrink: 0, height: SVG_H, overflow:'hidden' }}>
-          <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} preserveAspectRatio="none"
-            style={{ width:'100%', height: SVG_H, display:'block' }}>
+        <div style={{ flexShrink: 0, height: SVG_H, overflowX: 'auto', overflowY: 'hidden' }}>
+          <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} preserveAspectRatio="xMinYMid meet"
+            style={{ minWidth: SVG_W, height: SVG_H, display:'block' }}>
 
             {/* ── Section backgrounds ── */}
             <rect x={X0} y={CLD_Y0}  width={CHART_W} height={CLD_Y1  - CLD_Y0  + 1} fill="#07101c" />
@@ -420,7 +426,7 @@ export default function MeteogramOverlay({
 
             {/* ── "Now" vertical line ── */}
             {(() => {
-              const nowX = X0 + parisHour() * PX
+              const nowX = X0 + nowHour * PX
               return (
                 <g>
                   <line x1={nowX} y1={CLD_Y0} x2={nowX} y2={XAX_Y - 10}

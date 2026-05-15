@@ -1,4 +1,5 @@
 'use client'
+import { useEffect, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import type { LayerStates } from '@/lib/use-layer-data'
 
@@ -8,6 +9,14 @@ interface Props {
 }
 
 export default function StatusBar({ layerStates, viewState }: Props) {
+  // Debounce coordinate display so it doesn't thrash during panning
+  const [displayVs, setDisplayVs] = useState(viewState)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => setDisplayVs(viewState), 300)
+    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
+  }, [viewState])
   const connected  = LAYERS.filter(l => layerStates[l.id]?.lastUpdated !== null).length
   const staleCount = LAYERS.filter(l => layerStates[l.id]?.stale && !layerStates[l.id]?.error).length
   const errorCount = LAYERS.filter(l => !!layerStates[l.id]?.error).length
@@ -102,9 +111,9 @@ export default function StatusBar({ layerStates, viewState }: Props) {
         letterSpacing: '0.06em',
         flexShrink: 0,
       }}>
-        {viewState.latitude.toFixed(4)}°N &nbsp;
-        {Math.abs(viewState.longitude).toFixed(4)}°{viewState.longitude >= 0 ? 'E' : 'O'} &nbsp;
-        z{viewState.zoom.toFixed(1)}
+        {displayVs.latitude.toFixed(4)}°N &nbsp;
+        {Math.abs(displayVs.longitude).toFixed(4)}°{displayVs.longitude >= 0 ? 'E' : 'O'} &nbsp;
+        z{displayVs.zoom.toFixed(1)}
       </span>
     </footer>
   )

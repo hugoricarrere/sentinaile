@@ -30,15 +30,26 @@ export default function FrancePanel() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
   useEffect(() => {
-    const load = () => {
-      Promise.all([
-        fetch('/api/trains').then(r => r.json()).then(setTrains).catch(() => null),
-        fetch('/api/traffic').then(r => r.json()).then(j => setTraffic(j.data)).catch(() => null),
-      ]).then(() => setLastUpdated(new Date()))
+    let cancelled = false
+    let timerId: ReturnType<typeof setTimeout>
+
+    const load = async () => {
+      await Promise.all([
+        fetch('/api/trains').then(r => r.json()).then(d => { if (!cancelled) setTrains(d) }).catch(() => null),
+        fetch('/api/traffic').then(r => r.json()).then(j => { if (!cancelled) setTraffic(j.data) }).catch(() => null),
+      ])
+      if (!cancelled) {
+        setLastUpdated(new Date())
+        // Schedule next fetch only after current one completes (prevents concurrent requests)
+        timerId = setTimeout(load, 120_000)
+      }
     }
-    load()
-    const id = setInterval(load, 120_000)
-    return () => clearInterval(id)
+
+    void load()
+    return () => {
+      cancelled = true
+      clearTimeout(timerId)
+    }
   }, [])
 
   const avgPonct = trains?.data?.results?.length

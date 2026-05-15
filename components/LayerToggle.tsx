@@ -2,6 +2,7 @@
 import { LAYERS } from '@/lib/layers-registry'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { AllFilters } from '@/lib/filters'
+import { applyFilters } from '@/lib/filters'
 import FilterPanel from '@/components/FilterPanel'
 
 const FILTERABLE = new Set(['skydive', 'paragliding', 'basejump'])
@@ -191,6 +192,8 @@ export default function LayerToggle({
                 onChange={onFiltersChange}
                 onClose={() => onFilterLayer(null)}
                 color={l.color}
+                totalCount={count}
+                visibleCount={applyFilters(state?.points ?? [], l.id, filters).length}
               />
             )}
           </div>

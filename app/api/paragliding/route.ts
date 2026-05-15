@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server'
-import { globalCache } from '@/lib/cache'
+import { createSportRoute } from '@/lib/create-sport-route'
 import pgData from '@/data/paragliding-spots.json'
 import { paraglideCondition, type ConditionStatus } from '@/lib/weather'
 import { currentHourIndex } from '@/lib/time'
-import { rateLimit } from '@/lib/rate-limit'
 
 interface PGSpot {
   id: string; name: string; longitude: number; latitude: number
@@ -12,6 +10,7 @@ interface PGSpot {
 
 interface PGResult extends PGSpot {
   windKmh: number; gustKmh: number; tempC: number; radiation: number
+  windDeg: number
   condition: ConditionStatus
   forecast: { hour: number; wind: number; gust: number }[]
   hourlyConditions: ConditionStatus[]
@@ -23,13 +22,14 @@ async function fetchParagliding(): Promise<PGResult[]> {
   const list = pgData as PGSpot[]
   const results = await Promise.allSettled(
     list.map(async (s) => {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${s.latitude}&longitude=${s.longitude}&hourly=windspeed_10m,windgusts_10m,temperature_2m,shortwave_radiation,weathercode,cape,boundary_layer_height,lifted_index&forecast_days=2&windspeed_unit=kmh&timezone=Europe/Paris`
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${s.latitude}&longitude=${s.longitude}&hourly=windspeed_10m,windgusts_10m,winddirection_10m,temperature_2m,shortwave_radiation,weathercode,cape,boundary_layer_height,lifted_index&forecast_days=2&windspeed_unit=kmh&timezone=Europe/Paris`
       const res = await fetch(url, { next: { revalidate: 0 } })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json: {
         hourly: {
           time: string[]
           windspeed_10m: number[]; windgusts_10m: number[]
+          winddirection_10m: number[]
           temperature_2m: number[]; shortwave_radiation: number[]
           weathercode: number[]
           cape: number[]
@@ -41,6 +41,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
       const idx = currentHourIndex(h.time ?? [])
       const windKmh = h.windspeed_10m?.[idx] ?? 0
       const gustKmh = h.windgusts_10m?.[idx] ?? 0
+      const windDeg = h.winddirection_10m?.[idx] ?? 0
       const tempC = h.temperature_2m?.[idx] ?? 15
       const radiation = h.shortwave_radiation?.[idx] ?? 200
       const cape = h.cape?.[idx] ?? 0
@@ -69,7 +70,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
         return paraglideCondition(w, g, t, r, storm, c, bl, li)
       }) as ConditionStatus[]
 
-      return { ...s, windKmh, gustKmh, tempC, radiation, condition, forecast, hourlyConditions, blHeight, liftedIndex }
+      return { ...s, windKmh, gustKmh, windDeg, tempC, radiation, condition, forecast, hourlyConditions, blHeight, liftedIndex }
     })
   )
   return results.map((r, i) =>
@@ -77,7 +78,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
       ? r.value
       : {
           ...list[i],
-          windKmh: 0, gustKmh: 0, tempC: 15, radiation: 0,
+          windKmh: 0, gustKmh: 0, windDeg: 0, tempC: 15, radiation: 0,
           condition: 'yellow' as ConditionStatus,
           forecast: [],
           hourlyConditions: Array(24).fill('yellow') as ConditionStatus[],
@@ -86,13 +87,4 @@ async function fetchParagliding(): Promise<PGResult[]> {
   )
 }
 
-export async function GET(request: Request) {
-  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  try {
-    const { data, stale } = await globalCache.get('paragliding', fetchParagliding, 600_000)
-    return NextResponse.json({ data, stale })
-  } catch {
-    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
-  }
-}
+export const GET = createSportRoute('paragliding', fetchParagliding, 600_000)

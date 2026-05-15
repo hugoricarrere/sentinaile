@@ -1,10 +1,20 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers-registry'
 import type { LayerStates } from '@/lib/use-layer-data'
+import type { FlyToTarget } from './MapCanvas'
+
+interface NominatimResult {
+  place_id: number
+  display_name: string
+  lat: string
+  lon: string
+  type: string
+}
 
 interface Props {
   layerStates: LayerStates
+  onFlyTo?: (target: FlyToTarget) => void
 }
 
 const S = {
@@ -91,8 +101,14 @@ const S = {
   },
 } as const
 
-export default function TopBar({ layerStates }: Props) {
+export default function TopBar({ layerStates, onFlyTo }: Props) {
   const [utc, setUtc] = useState('')
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<NominatimResult[]>([])
+  const [searching, setSearching] = useState(false)
+  const [showResults, setShowResults] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const tick = () => {
@@ -108,6 +124,44 @@ export default function TopBar({ layerStates }: Props) {
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [])
+
+  // Debounced Nominatim geocoding
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (query.trim().length < 2) { setResults([]); return }
+    debounceRef.current = setTimeout(async () => {
+      setSearching(true)
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=fr`
+        const res = await fetch(url, { headers: { 'User-Agent': 'Sentinai-le/1.0' } })
+        const data: NominatimResult[] = await res.json()
+        setResults(data)
+        setShowResults(true)
+      } catch {
+        setResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, 350)
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+  }, [query])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowResults(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const handleSelect = (r: NominatimResult) => {
+    onFlyTo?.({ longitude: parseFloat(r.lon), latitude: parseFloat(r.lat), zoom: 12 })
+    setQuery(r.display_name.split(',')[0])
+    setShowResults(false)
+  }
 
   const activeLayers = LAYERS.filter(
     l => (layerStates[l.id]?.points.length ?? 0) > 0
@@ -179,6 +233,83 @@ export default function TopBar({ layerStates }: Props) {
           </div>
         </>
       )}
+
+      {/* Search box */}
+      <div ref={searchRef} style={{ marginLeft: 'auto', position: 'relative', flexShrink: 0 }}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <span style={{
+            position: 'absolute', left: 10, color: '#2a4a6a',
+            fontSize: 13, pointerEvents: 'none', lineHeight: 1,
+          }}>⌕</span>
+          <input
+            type="search"
+            placeholder="Rechercher un lieu…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onFocus={() => { if (results.length > 0) setShowResults(true) }}
+            style={{
+              width: 200,
+              height: 30,
+              background: '#0B1120',
+              border: '1px solid #1a2840',
+              borderRadius: 4,
+              color: '#8aaccc',
+              fontFamily: 'var(--font-rajdhani)',
+              fontSize: 13,
+              paddingLeft: 28,
+              paddingRight: 8,
+              outline: 'none',
+            }}
+            aria-label="Recherche géographique"
+          />
+          {searching && (
+            <span style={{ position: 'absolute', right: 8, color: '#2a4a6a', fontSize: 10 }}>…</span>
+          )}
+        </div>
+        {showResults && results.length > 0 && (
+          <ul style={{
+            position: 'absolute',
+            top: '100%',
+            right: 0,
+            width: 320,
+            marginTop: 4,
+            background: '#0B1120',
+            border: '1px solid #1a2840',
+            borderRadius: 4,
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+            zIndex: 100,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+          }}>
+            {results.map(r => (
+              <li key={r.place_id}>
+                <button
+                  onClick={() => handleSelect(r)}
+                  style={{
+                    width: '100%',
+                    background: 'none',
+                    border: 'none',
+                    borderBottom: '1px solid #0d1826',
+                    color: '#8aaccc',
+                    fontFamily: 'var(--font-rajdhani)',
+                    fontSize: 12,
+                    padding: '8px 12px',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    lineHeight: 1.4,
+                  }}
+                  onMouseEnter={e => { (e.currentTarget).style.background = '#111c2e' }}
+                  onMouseLeave={e => { (e.currentTarget).style.background = 'none' }}
+                >
+                  <span style={{ color: '#00D4FF', marginRight: 6, fontSize: 11 }}>📍</span>
+                  {r.display_name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <span style={S.time}>{utc}</span>
     </header>

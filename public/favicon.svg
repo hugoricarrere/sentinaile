@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#040810"/>
+  <!-- Wing silhouette in cyan/white -->
+  <path d="M3 25 C8 19 18 11 29 4 C25 11 18 17 11 21 C7 23 5 24 3 25Z" fill="#00D4FF" opacity="0.9"/>
+  <path d="M3 25 C7 22 12 20 17 18" stroke="#ffffff" stroke-width="0.8" stroke-opacity="0.5" fill="none"/>
+</svg>

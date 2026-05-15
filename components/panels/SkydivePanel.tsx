@@ -22,7 +22,13 @@ interface SkydiveData {
 export default function SkydivePanel({ point }: { point: GeoPoint }) {
   const d = point.data as unknown as SkydiveData
   const cond = COND[d.condition]
-  const safeUrl = d.website?.match(/^https?:\/\//) ? d.website : null
+  const safeUrl = (() => {
+    if (!d.website) return null
+    try {
+      const u = new URL(d.website)
+      return u.protocol === 'https:' || u.protocol === 'http:' ? d.website : null
+    } catch { return null }
+  })()
   const densityWarning = d.densityAltM !== undefined && d.altitudeM !== undefined
     ? d.densityAltM > d.altitudeM + 1000
     : false

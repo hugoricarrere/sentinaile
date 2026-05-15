@@ -1,9 +1,7 @@
-import { NextResponse } from 'next/server'
-import { globalCache } from '@/lib/cache'
+import { createSportRoute } from '@/lib/create-sport-route'
 import dzData from '@/data/skydive-dz.json'
 import { skydiveCondition, type ConditionStatus } from '@/lib/weather'
 import { currentHourIndex } from '@/lib/time'
-import { rateLimit } from '@/lib/rate-limit'
 
 interface DZ {
   id: string; name: string; longitude: number; latitude: number
@@ -82,10 +80,15 @@ async function fetchSkydive(): Promise<DZResult[]> {
       const hasStorm  = h.weathercode?.slice(idx, windowEnd).some(c => c >= 95) ?? false
 
       // ── Precipitation fraction over daylight hours ──────────────────────
-      // Parse "2026-05-14T06:10" → heure entière. On split sur ':' avant parseInt
-      // pour éviter d'accidentellement inclure les minutes dans la valeur.
-      const sunriseHour = parseInt(json.daily.sunrise[0]?.split('T')[1]?.split(':')[0] ?? '06', 10)
-      const sunsetHour  = parseInt(json.daily.sunset[0]?.split('T')[1]?.split(':')[0]  ?? '21', 10)
+      // Parse "2026-05-14T06:10" → heure entière. Défensive si daily manquant.
+      const sunriseTimes = json.daily?.sunrise ?? []
+      const sunsetTimes  = json.daily?.sunset  ?? []
+      const sunriseHour = sunriseTimes.length > 0
+        ? parseInt(sunriseTimes[0].split('T')[1]?.split(':')[0] ?? '6', 10)
+        : 6
+      const sunsetHour = sunsetTimes.length > 0
+        ? parseInt(sunsetTimes[0].split('T')[1]?.split(':')[0] ?? '21', 10)
+        : 21
       const daylightPrecip = h.precipitation?.slice(sunriseHour, sunsetHour + 1) ?? []
       const wetHours    = daylightPrecip.filter(p => p > 0.1).length
       const precipFraction = daylightHours(sunriseHour, sunsetHour) > 0
@@ -140,13 +143,4 @@ function daylightHours(sunrise: number, sunset: number): number {
   return Math.max(0, sunset - sunrise + 1)
 }
 
-export async function GET(request: Request) {
-  if (!rateLimit(request, { windowMs: 60_000, max: 60 }))
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-  try {
-    const { data, stale } = await globalCache.get('skydive', fetchSkydive, 600_000)
-    return NextResponse.json({ data, stale })
-  } catch {
-    return NextResponse.json({ error: 'Service temporarily unavailable' }, { status: 503 })
-  }
-}
+export const GET = createSportRoute('skydive', fetchSkydive, 600_000)

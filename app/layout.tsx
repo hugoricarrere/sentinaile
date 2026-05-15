@@ -14,8 +14,28 @@ const rajdhani = Rajdhani({
 })
 
 export const metadata: Metadata = {
-  title: 'SentinAile',
-  description: 'Plateforme d\'intelligence géospatiale',
+  title: 'SentinAile — Intelligence géospatiale en temps réel',
+  description: 'Carte interactive temps réel : vols, navires, parachutisme, parapente, BASE jump, surf, météo et qualité de l\'air.',
+  keywords: ['carte', 'temps réel', 'vols', 'navires', 'parachutisme', 'parapente', 'météo', 'géospatial'],
+  authors: [{ name: 'SentinAile' }],
+  openGraph: {
+    title: 'SentinAile — Intelligence géospatiale en temps réel',
+    description: 'Suivez en direct vols, navires, sports de plein air et données météo sur une carte interactive.',
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'SentinAile',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'SentinAile',
+    description: 'Carte interactive temps réel : vols, navires, sports outdoor et météo.',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

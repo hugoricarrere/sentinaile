@@ -47,8 +47,9 @@ export function paraglideCondition(
   if (cape > 800)               return 'yellow' // instabilité modérée
   if (liftedIndex < -3)         return 'yellow' // instabilité modérée, thermiques actifs mais risque
   if (blHeight < 400)           return 'yellow' // vol très limité en altitude
-  if (windKmh > 30) return 'yellow'
-  if (windKmh < 10) return 'yellow'
+  if (windKmh < 5)  return 'red'    // vent nul : pas de portance, décollage impossible
+  if (windKmh > 30) return 'yellow' // vent fort : turbulences
+  if (windKmh < 10) return 'yellow' // vent faible : portance incertaine selon relief
   return 'green'
 }
 

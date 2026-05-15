@@ -8,10 +8,16 @@ const COND = {
   red: { label: '🔴 Vol déconseillé', color: '#FF6B35' },
 }
 
+/** Convert bearing degrees to 8-point compass rose */
+function bearingToCompass(deg: number): string {
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO']
+  return dirs[Math.round(((deg % 360) + 360) % 360 / 45) % 8]
+}
+
 interface PGData {
   name: string; country: string; type: string; level: string
   altitudeM: number; windDirections: string[]
-  windKmh: number; gustKmh: number; tempC: number
+  windKmh: number; gustKmh: number; windDeg?: number; tempC: number
   condition: 'green' | 'yellow' | 'red'
   hourlyConditions?: string[]
   blHeight?: number
@@ -77,7 +83,12 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       <Row label="NIVEAU" value={d.level} />
       <Row label="ALTITUDE DÉCO" value={`${d.altitudeM} m`} />
       <Row label="VENT FAVORABLE" value={d.windDirections.join(', ')} />
-      <Row label="VENT ACTUEL" value={`${Math.round(d.windKmh)} km/h`} />
+      <Row
+        label="VENT ACTUEL"
+        value={d.windDeg != null
+          ? `${Math.round(d.windKmh)} km/h ${bearingToCompass(d.windDeg)} (${Math.round(d.windDeg)}°)`
+          : `${Math.round(d.windKmh)} km/h`}
+      />
       <Row label="RAFALES" value={`${Math.round(d.gustKmh)} km/h`} />
       <Row label="TEMP" value={`${Math.round(d.tempC)}°C`} />
       <Row label="COUCHE LIMITE" value={`${Math.round(d.blHeight ?? 0)} m`} />
