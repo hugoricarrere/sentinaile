@@ -540,7 +540,7 @@ export default function Home() {
           }}
         />
 
-        <NearbySpots layerStates={layerStates} onSelectPoint={handlePointClick} onFlyTo={setFlyTo} />
+        <NearbySpots layerStates={layerStates} onSelectPoint={handlePointClick} onFlyTo={setFlyTo} hidden={!!(selectedPoint && mobileDetailOpen)} />
         <SpotComparator spots={comparatorSpots} onRemove={removeFromComparator} />
         <ConditionToast layerStates={layerStates} />
         <SplashScreen />

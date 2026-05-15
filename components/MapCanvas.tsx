@@ -161,6 +161,7 @@ export default function MapCanvas({
         viewState={viewState}
         controller={true}
         layers={deckLayers}
+        pickingRadius={12}
         onViewStateChange={({ viewState: vs }) => {
           const next = vs as typeof INITIAL_VIEW_STATE
           setViewState(next)

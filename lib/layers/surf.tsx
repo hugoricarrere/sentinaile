@@ -42,8 +42,8 @@ export const surfLayer: LayerConfig = {
         return [255, 107, 53, 255]
       },
       getRadius: 15_000,
-      radiusMinPixels: 4,
-      radiusMaxPixels: 12,
+      radiusMinPixels: 7,
+      radiusMaxPixels: 16,
       pickable: true,
       onClick: ({ object }) => { if (object) onClick(object) },
     }),

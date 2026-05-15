@@ -51,8 +51,8 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
         {d.trend === 'down' && <span style={{ color: '#FF6B35', fontSize: 16 }}>↓</span>}
         {d.trend === 'same' && <span style={{ color: '#3a5a80', fontSize: 14 }}>→</span>}
       </div>
-      <Row label="HOULE" value={`${d.swellHeightM.toFixed(1)} m · ${Math.round(d.swellPeriodS)}s`} />
-      <Row label="VENT" value={`${Math.round(d.windKmh)} km/h ${d.windOffshore ? '(offshore ✓)' : '(onshore)'}`} />
+      <Row label="HOULE" value={`${(d.swellHeightM ?? 0).toFixed(1)} m · ${Math.round(d.swellPeriodS ?? 0)}s`} />
+      <Row label="VENT" value={`${Math.round(d.windKmh ?? 0)} km/h ${d.windOffshore ? '(offshore ✓)' : '(onshore)'}`} />
       <Row label="OFFSHORE" value={
         d.windDirDeg !== undefined
           ? `${Math.round(d.windDirDeg)}° ${(d.facingDeg !== undefined && isWindOffshore(d.windDirDeg, d.facingDeg)) ? '✓ offshore' : 'onshore'}`

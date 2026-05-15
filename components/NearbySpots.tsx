@@ -10,6 +10,7 @@ interface Props {
   layerStates: LayerStates
   onSelectPoint: (point: GeoPoint) => void
   onFlyTo: (target: FlyToTarget) => void
+  hidden?: boolean
 }
 
 type ConditionColor = 'green' | 'yellow' | 'red' | 'unknown'
@@ -51,7 +52,7 @@ function getPointName(p: GeoPoint): string {
   )
 }
 
-export function NearbySpots({ layerStates, onSelectPoint, onFlyTo }: Props) {
+export function NearbySpots({ layerStates, onSelectPoint, onFlyTo, hidden }: Props) {
   const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null)
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -105,6 +106,8 @@ export function NearbySpots({ layerStates, onSelectPoint, onFlyTo }: Props) {
       setOpen(o => !o)
     }
   }
+
+  if (hidden) return null
 
   return (
     <>
