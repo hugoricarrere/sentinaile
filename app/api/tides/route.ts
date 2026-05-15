@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   try {
     const { data } = await globalCache.get(cacheKey, async () => {
       const url = `https://services.data.shom.fr/oceano/meree/SPM?harborCode=${harborCode}&duration=48&step=60&lang=fr`
-      const res = await fetch(url, { signal: AbortSignal.timeout(10_000) })
+      const res = await fetch(url, { next: { revalidate: 1800 }, signal: AbortSignal.timeout(10_000) })
       if (!res.ok) throw new Error(`SHOM ${res.status}`)
       const json = await res.json()
       // Parse into array of { time: string, heightM: number }
@@ -28,7 +28,10 @@ export async function GET(request: NextRequest) {
       return tides
     }, 1_800_000) // 30min cache
 
-    return NextResponse.json({ tides: data })
+    return NextResponse.json(
+      { tides: data },
+      { headers: { 'Cache-Control': 's-maxage=1800, stale-while-revalidate=3600' } },
+    )
   } catch {
     return NextResponse.json({ error: 'SHOM unavailable' }, { status: 502 })
   }

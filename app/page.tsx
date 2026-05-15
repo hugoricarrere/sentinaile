@@ -15,6 +15,8 @@ import MeteogramOverlay from '@/components/MeteogramOverlay'
 import ConditionToast from '@/components/ConditionToast'
 import MobileSearch from '@/components/MobileSearch'
 import { SplashScreen } from '@/components/SplashScreen'
+import { NearbySpots } from '@/components/NearbySpots'
+import { SpotComparator, useComparator } from '@/components/SpotComparator'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from '@/components/MapCanvas'
@@ -70,6 +72,9 @@ export default function Home() {
   // Pull-to-refresh
   const pullStartY = useRef(0)
   const [isPulling, setIsPulling] = useState(false)
+
+  // ── Comparator ────────────────────────────────────────────────────────────
+  const { spots: comparatorSpots, add: addToComparator, remove: removeFromComparator } = useComparator()
 
   // ── Custom hooks ──────────────────────────────────────────────────────────
   const isMobile = useMobile()
@@ -212,7 +217,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      {selectedPoint && <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} />}
+      {selectedPoint && <ContextPanel point={selectedPoint} onClose={() => setSelectedPoint(null)} onAddToComparator={addToComparator} />}
       {isFranceView && <FrancePanel />}
     </>
   )
@@ -517,7 +522,7 @@ export default function Home() {
                 <div style={{ width: 36, height: 4, borderRadius: 2, background: '#1a2840' }} />
               </div>
               <div style={{ overflowY: 'auto', flex: 1 }}>
-                <ContextPanel point={selectedPoint} onClose={handleCloseDetail} />
+                <ContextPanel point={selectedPoint} onClose={handleCloseDetail} onAddToComparator={addToComparator} />
               </div>
             </div>
           </>
@@ -535,6 +540,8 @@ export default function Home() {
           }}
         />
 
+        <NearbySpots layerStates={layerStates} onSelectPoint={handlePointClick} onFlyTo={setFlyTo} />
+        <SpotComparator spots={comparatorSpots} onRemove={removeFromComparator} />
         <ConditionToast layerStates={layerStates} />
         <SplashScreen />
       </div>
@@ -638,6 +645,8 @@ export default function Home() {
         )}
       </div>
 
+      <NearbySpots layerStates={layerStates} onSelectPoint={handlePointClick} onFlyTo={setFlyTo} />
+      <SpotComparator spots={comparatorSpots} onRemove={removeFromComparator} />
       <StatusBar layerStates={layerStates} viewState={viewState} />
       <ConditionToast layerStates={layerStates} />
       <SplashScreen />

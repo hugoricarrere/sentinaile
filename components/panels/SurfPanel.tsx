@@ -3,6 +3,8 @@ import { Row } from '@/components/ui/Row'
 import { SpotWeather } from '@/components/SpotWeather'
 import { SurfForecast } from '@/components/SurfForecast'
 import { TideForecast } from '@/components/TideForecast'
+import { SpotPhoto } from '@/components/SpotPhoto'
+import { PushAlertButton } from '@/components/PushAlertButton'
 
 const getScoreColor = (s: number) => s >= 7 ? '#00FF88' : s >= 4 ? '#FFB347' : '#FF6B35'
 const LEVEL_LABEL: Record<string, string> = {
@@ -17,6 +19,8 @@ interface SurfData {
   windDirDeg?: number; facingDeg?: number
   trend?: 'up' | 'same' | 'down'
   shomHarbor?: string
+  photoUrl?: string
+  id?: string
 }
 
 function isWindOffshore(windDirDeg: number, facingDeg: number): boolean {
@@ -30,6 +34,7 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
   const scoreColor = getScoreColor(d.score)
   return (
     <div>
+      {d.photoUrl && <SpotPhoto url={d.photoUrl} alt={d.name} />}
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#00CED1', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
@@ -66,6 +71,7 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
           <TideForecast harborCode={d.shomHarbor} color="#00D4FF" />
         </div>
       )}
+      <PushAlertButton spotId={d.id ?? d.name} minScore={7} color="#00D4FF" />
     </div>
   )
 }

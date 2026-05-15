@@ -1,3 +1,5 @@
+export const revalidate = 1800 // 30 min ISR
+
 import { createSportRoute } from '@/lib/create-sport-route'
 import exitsData from '@/data/basejump-exits.json'
 import { basejumpCondition, type ConditionStatus } from '@/lib/weather'
@@ -19,7 +21,7 @@ async function fetchBasejump(): Promise<ExitResult[]> {
   const results = await Promise.allSettled(
     list.map(async (e) => {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${e.latitude}&longitude=${e.longitude}&hourly=time,windspeed_10m,windgusts_10m,visibility,precipitation,cloudcover_low,temperature_2m,dewpoint_2m&forecast_days=1&windspeed_unit=kmh&timezone=Europe/Paris`
-      const res = await fetch(url, { next: { revalidate: 0 } })
+      const res = await fetch(url, { next: { revalidate: 1800 } })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json: {
         hourly: {

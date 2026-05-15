@@ -1,3 +1,5 @@
+export const revalidate = 600 // 10 min ISR
+
 import { createSportRoute } from '@/lib/create-sport-route'
 import dzData from '@/data/skydive-dz.json'
 import { skydiveCondition, type ConditionStatus } from '@/lib/weather'
@@ -38,7 +40,7 @@ async function fetchSkydive(): Promise<DZResult[]> {
       })
       const res = await fetch(
         `https://api.open-meteo.com/v1/forecast?${params}`,
-        { next: { revalidate: 0 } },
+        { next: { revalidate: 1800 } },
       )
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
 

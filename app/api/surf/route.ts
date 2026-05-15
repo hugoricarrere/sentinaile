@@ -1,3 +1,5 @@
+export const revalidate = 1800 // 30 min ISR
+
 import { createSportRoute } from '@/lib/create-sport-route'
 import surfSpotsData from '@/data/surf-spots.json'
 import { surfScore } from '@/lib/weather'
@@ -43,7 +45,7 @@ async function fetchSurf(): Promise<SurfResult[]> {
 
   try {
     const res = await fetch(url, {
-      next: { revalidate: 0 },
+      next: { revalidate: 1800 },
       signal: AbortSignal.timeout(15_000),
     })
     if (!res.ok) throw new Error(`Open-Meteo Marine ${res.status}`)

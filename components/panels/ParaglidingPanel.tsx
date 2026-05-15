@@ -1,6 +1,8 @@
 import type { GeoPoint } from '@/lib/types'
 import { parisHour } from '@/lib/time'
 import { Row } from '@/components/ui/Row'
+import { FlyForecast } from '@/components/FlyForecast'
+import { PushAlertButton } from '@/components/PushAlertButton'
 
 const COND = {
   green:  { label: '🟢 ● Vol possible',         color: '#00FF88' },
@@ -93,6 +95,10 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       <Row label="TEMP" value={`${Math.round(d.tempC)}°C`} />
       <Row label="COUCHE LIMITE" value={`${Math.round(d.blHeight ?? 0)} m`} />
       <Row label="LIFTED INDEX" value={`${d.liftedIndex?.toFixed(1) ?? '?'}`} />
+      <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
+        <FlyForecast lat={point.latitude} lng={point.longitude} />
+      </div>
+      <PushAlertButton spotId={d.name} minScore={-1} color="#9B59B6" />
     </div>
   )
 }

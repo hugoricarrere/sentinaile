@@ -1,3 +1,5 @@
+export const revalidate = 600 // 10 min ISR
+
 import { createSportRoute } from '@/lib/create-sport-route'
 import pgData from '@/data/paragliding-spots.json'
 import { paraglideCondition, type ConditionStatus } from '@/lib/weather'
@@ -23,7 +25,7 @@ async function fetchParagliding(): Promise<PGResult[]> {
   const results = await Promise.allSettled(
     list.map(async (s) => {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${s.latitude}&longitude=${s.longitude}&hourly=windspeed_10m,windgusts_10m,winddirection_10m,temperature_2m,shortwave_radiation,weathercode,cape,boundary_layer_height,lifted_index&forecast_days=2&windspeed_unit=kmh&timezone=Europe/Paris`
-      const res = await fetch(url, { next: { revalidate: 0 } })
+      const res = await fetch(url, { next: { revalidate: 1800 } })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json: {
         hourly: {

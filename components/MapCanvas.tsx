@@ -119,6 +119,12 @@ export default function MapCanvas({
     setTerrain3d(v => !v)
   }, [terrain3d])
 
+  const prefetchWeather = useCallback((lat: number, lng: number) => {
+    // Fire-and-forget fetch — browser will cache the response
+    void fetch(`/api/spot-weather?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`)
+      .catch(() => { /* silent */ })
+  }, [])
+
   const deckLayers = useMemo(
     () =>
       LAYERS.filter(l => enabledMap[l.id]).flatMap(l => {
@@ -163,6 +169,14 @@ export default function MapCanvas({
             latitude: next.latitude,
             zoom: next.zoom,
           })
+        }}
+        onHover={(info) => {
+          if (info.picked && info.object) {
+            const obj = info.object as GeoPoint
+            if (obj.latitude && obj.longitude) {
+              prefetchWeather(obj.latitude, obj.longitude)
+            }
+          }
         }}
         onClick={({ object }) => {
           if (!object) onPointClick(null)

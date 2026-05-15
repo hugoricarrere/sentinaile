@@ -77,7 +77,7 @@ export async function GET(request: Request): Promise<NextResponse> {
 
       const res = await fetch(url, {
         signal: AbortSignal.timeout(12_000),
-        next: { revalidate: 0 },
+        next: { revalidate: 1800 },
       })
       if (!res.ok) throw new Error(`Marine API error ${res.status}`)
 
@@ -151,5 +151,8 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
   }
 
-  return NextResponse.json({ days: forecasts, bestDayIdx })
+  return NextResponse.json(
+    { days: forecasts, bestDayIdx },
+    { headers: { 'Cache-Control': 's-maxage=1800, stale-while-revalidate=3600' } },
+  )
 }

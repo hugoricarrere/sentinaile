@@ -8,9 +8,10 @@ import { useFavorites } from '@/lib/hooks/use-favorites'
 interface Props {
   point: GeoPoint
   onClose: () => void
+  onAddToComparator?: (point: GeoPoint) => void
 }
 
-export default function ContextPanel({ point, onClose }: Props) {
+export default function ContextPanel({ point, onClose, onAddToComparator }: Props) {
   const layer = LAYERS.find(l => l.id === point.layerId)
   const { isFavorite, toggle } = useFavorites()
   const [copied, setCopied] = useState(false)
@@ -76,6 +77,43 @@ export default function ContextPanel({ point, onClose }: Props) {
           >
             {copied ? '✓' : '🔗'}
           </button>
+          {/* Comparer button */}
+          {onAddToComparator && (
+            <button
+              onClick={() => onAddToComparator(point)}
+              title="Ajouter au comparateur"
+              style={{
+                background: 'none',
+                border: '1px solid #1a2840',
+                color: '#2a4a6a',
+                height: 22,
+                padding: '0 6px',
+                borderRadius: 3,
+                cursor: 'pointer',
+                fontSize: 10,
+                fontFamily: 'var(--font-rajdhani)',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'border-color 0.15s, color 0.15s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = '#00D4FF'
+                ;(e.currentTarget as HTMLButtonElement).style.color = '#00D4FF'
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = '#1a2840'
+                ;(e.currentTarget as HTMLButtonElement).style.color = '#2a4a6a'
+              }}
+              aria-label="Ajouter au comparateur"
+            >
+              + Comparer
+            </button>
+          )}
           {/* Favorite button */}
           <button
             onClick={() => toggle(point.id)}

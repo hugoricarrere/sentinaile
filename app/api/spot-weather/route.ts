@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
   let current: Record<string, number>
   try {
     const { data } = await globalCache.get(cacheKey, async () => {
-      const res = await fetch(url, { next: { revalidate: 0 }, signal: AbortSignal.timeout(10_000) })
+      const res = await fetch(url, { next: { revalidate: 600 }, signal: AbortSignal.timeout(10_000) })
       if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
       const json = await res.json() as { current: Record<string, number> }
       return json.current
@@ -88,12 +88,15 @@ export async function GET(request: NextRequest) {
   const tempC = current.temperature_2m
   const weatherCode = current.weather_code
 
-  return NextResponse.json({
-    windKmh,
-    windGustsKmh,
-    windDir,
-    tempC,
-    weatherCode,
-    description: getDescription(weatherCode),
-  })
+  return NextResponse.json(
+    {
+      windKmh,
+      windGustsKmh,
+      windDir,
+      tempC,
+      weatherCode,
+      description: getDescription(weatherCode),
+    },
+    { headers: { 'Cache-Control': 's-maxage=600, stale-while-revalidate=1200' } },
+  )
 }
