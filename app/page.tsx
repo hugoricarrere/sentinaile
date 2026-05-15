@@ -13,6 +13,7 @@ import ContextPanel from '@/components/ContextPanel'
 import FrancePanel from '@/components/FrancePanel'
 import MeteogramOverlay from '@/components/MeteogramOverlay'
 import ConditionToast from '@/components/ConditionToast'
+import MobileSearch from '@/components/MobileSearch'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from '@/components/MapCanvas'
@@ -57,6 +58,7 @@ export default function Home() {
   // Mobile: separate sheet states
   const [mobileLayersOpen, setMobileLayersOpen] = useState(false)
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
 
   // ── Custom hooks ──────────────────────────────────────────────────────────
   const isMobile = useMobile()
@@ -172,6 +174,21 @@ export default function Home() {
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: '0.06em', color: errorCount > 0 ? '#cc3a20' : '#00c87a', fontWeight: 600 }}>
             ● {connectedCount}/{LAYERS.length}
           </span>
+
+          {/* Search button */}
+          <button
+            onClick={() => setMobileSearchOpen(true)}
+            aria-label="Rechercher un club, spot ou lieu"
+            style={{
+              background: '#0B1120', border: '1px solid #1a2840',
+              borderRadius: 6, color: '#4a7aa0',
+              width: 38, height: 34, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 17, transition: 'all 0.15s', flexShrink: 0,
+            }}
+          >
+            ⌕
+          </button>
 
           {/* Layers toggle button */}
           <button
@@ -355,6 +372,18 @@ export default function Home() {
           </>
         )}
 
+        {/* ── Mobile: Search bottom sheet ──────────────────────────────── */}
+        <MobileSearch
+          open={mobileSearchOpen}
+          onClose={() => setMobileSearchOpen(false)}
+          layerStates={layerStates}
+          onFlyTo={setFlyTo}
+          onSelectPoint={(pt) => {
+            handlePointClick(pt)
+            setMobileSearchOpen(false)
+          }}
+        />
+
         <ConditionToast layerStates={layerStates} />
       </div>
     )
@@ -378,7 +407,7 @@ export default function Home() {
         </div>
       )}
 
-      <TopBar layerStates={layerStates} onFlyTo={setFlyTo} />
+      <TopBar layerStates={layerStates} onFlyTo={setFlyTo} onSelectPoint={handlePointClick} />
 
       <div className="flex flex-1 overflow-hidden relative">
 

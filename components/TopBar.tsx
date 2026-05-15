@@ -1,6 +1,8 @@
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
+import { fuzzySearch } from '@/lib/fuzzy'
+import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
 
@@ -12,9 +14,17 @@ interface NominatimResult {
   type: string
 }
 
+// Extract searchable text from a GeoPoint
+function getPointLabel(point: GeoPoint): string {
+  const d = point.data
+  const fields = ['name', 'title', 'icao', 'callsign', 'commune', 'city', 'station_name', 'country']
+  return fields.map(f => (typeof d[f] === 'string' ? (d[f] as string) : '')).filter(Boolean).join(' ')
+}
+
 interface Props {
   layerStates: LayerStates
   onFlyTo?: (target: FlyToTarget) => void
+  onSelectPoint?: (point: GeoPoint) => void
 }
 
 const S = {
@@ -101,7 +111,7 @@ const S = {
   },
 } as const
 
-export default function TopBar({ layerStates, onFlyTo }: Props) {
+export default function TopBar({ layerStates, onFlyTo, onSelectPoint }: Props) {
   const [utc, setUtc] = useState('')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<NominatimResult[]>([])
@@ -109,6 +119,28 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
   const [showResults, setShowResults] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // All loaded points (for local fuzzy search)
+  const allPoints = useMemo(() => {
+    const pts: GeoPoint[] = []
+    for (const layer of LAYERS) {
+      pts.push(...(layerStates[layer.id]?.points ?? []))
+    }
+    return pts
+  }, [layerStates])
+
+  // Local fuzzy search on layer points
+  const pointResults = useMemo(() => {
+    if (query.trim().length < 2) return []
+    return fuzzySearch(allPoints, getPointLabel, query, 5)
+  }, [allPoints, query])
+
+  const handleSelectPoint = useCallback((point: GeoPoint) => {
+    onFlyTo?.({ longitude: point.longitude, latitude: point.latitude, zoom: 12 })
+    onSelectPoint?.(point)
+    setQuery((point.data.name as string | undefined) ?? '')
+    setShowResults(false)
+  }, [onFlyTo, onSelectPoint])
 
   useEffect(() => {
     const tick = () => {
@@ -243,12 +275,12 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
           }}>⌕</span>
           <input
             type="search"
-            placeholder="Rechercher un lieu…"
+            placeholder="Club, spot, lieu…"
             value={query}
-            onChange={e => setQuery(e.target.value)}
-            onFocus={() => { if (results.length > 0) setShowResults(true) }}
+            onChange={e => { setQuery(e.target.value); setShowResults(true) }}
+            onFocus={() => setShowResults(true)}
             style={{
-              width: 200,
+              width: 220,
               height: 30,
               background: '#0B1120',
               border: '1px solid #1a2840',
@@ -260,56 +292,95 @@ export default function TopBar({ layerStates, onFlyTo }: Props) {
               paddingRight: 8,
               outline: 'none',
             }}
-            aria-label="Recherche géographique"
+            aria-label="Rechercher un club, spot ou lieu"
           />
           {searching && (
             <span style={{ position: 'absolute', right: 8, color: '#2a4a6a', fontSize: 10 }}>…</span>
           )}
         </div>
-        {showResults && results.length > 0 && (
-          <ul style={{
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            width: 320,
-            marginTop: 4,
-            background: '#0B1120',
-            border: '1px solid #1a2840',
-            borderRadius: 4,
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            zIndex: 100,
+
+        {/* Dropdown results */}
+        {showResults && (pointResults.length > 0 || results.length > 0) && (
+          <div style={{
+            position: 'absolute', top: '100%', right: 0,
+            width: 340, marginTop: 4,
+            background: '#0B1120', border: '1px solid #1a2840',
+            borderRadius: 4, zIndex: 100,
             boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-            maxHeight: '50vh',
-            overflowY: 'auto' as const,
+            maxHeight: '60vh', overflowY: 'auto',
           }}>
-            {results.map(r => (
-              <li key={r.place_id}>
-                <button
-                  onClick={() => handleSelect(r)}
-                  style={{
-                    width: '100%',
-                    background: 'none',
-                    border: 'none',
-                    borderBottom: '1px solid #0d1826',
-                    color: '#8aaccc',
-                    fontFamily: 'var(--font-rajdhani)',
-                    fontSize: 12,
-                    padding: '8px 12px',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    lineHeight: 1.4,
-                  }}
-                  onMouseEnter={e => { (e.currentTarget).style.background = '#111c2e' }}
-                  onMouseLeave={e => { (e.currentTarget).style.background = 'none' }}
-                >
-                  <span style={{ color: '#00D4FF', marginRight: 6, fontSize: 11 }}>📍</span>
-                  {r.display_name}
-                </button>
-              </li>
-            ))}
-          </ul>
+
+            {/* ── Layer points section ── */}
+            {pointResults.length > 0 && (
+              <>
+                <div style={{ padding: '6px 12px 2px', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 9, letterSpacing: '0.22em', color: '#2a4a6a', textTransform: 'uppercase', borderBottom: '1px solid #0d1826' }}>
+                  Clubs &amp; Spots
+                </div>
+                {pointResults.map(({ item: point, score }) => {
+                  const l = LAYERS.find(lyr => lyr.id === point.layerId)
+                  const name = (point.data.name as string | undefined) ?? (point.data.title as string | undefined) ?? point.id
+                  const sub = (point.data.icao as string | undefined) ?? (point.data.commune as string | undefined) ?? (point.data.country as string | undefined)
+                  return (
+                    <button
+                      key={point.id}
+                      onClick={() => handleSelectPoint(point)}
+                      style={{
+                        width: '100%', background: 'none', border: 'none',
+                        borderBottom: '1px solid #0d1826', cursor: 'pointer',
+                        padding: '7px 12px', textAlign: 'left',
+                        display: 'flex', alignItems: 'center', gap: 8,
+                      }}
+                      onMouseEnter={e => { (e.currentTarget).style.background = '#111c2e' }}
+                      onMouseLeave={e => { (e.currentTarget).style.background = 'none' }}
+                    >
+                      <span style={{ fontSize: 14, flexShrink: 0 }}>{l?.icon ?? '📍'}</span>
+                      <span style={{ flex: 1, overflow: 'hidden' }}>
+                        <span style={{ display: 'block', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 12, color: '#8aaccc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {name}
+                        </span>
+                        {sub && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em' }}>
+                            {l?.label}{sub ? ` · ${sub}` : ''}
+                          </span>
+                        )}
+                      </span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: score >= 80 ? '#00FF88' : '#FFB347', flexShrink: 0 }}>
+                        {score >= 80 ? '●' : '◐'}
+                      </span>
+                    </button>
+                  )
+                })}
+              </>
+            )}
+
+            {/* ── Geographic places section ── */}
+            {results.length > 0 && (
+              <>
+                <div style={{ padding: '6px 12px 2px', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 9, letterSpacing: '0.22em', color: '#2a4a6a', textTransform: 'uppercase', borderBottom: '1px solid #0d1826', borderTop: pointResults.length > 0 ? '1px solid #1a2840' : undefined }}>
+                  Lieux
+                </div>
+                {results.map(r => (
+                  <button
+                    key={r.place_id}
+                    onClick={() => handleSelect(r)}
+                    style={{
+                      width: '100%', background: 'none', border: 'none',
+                      borderBottom: '1px solid #0d1826', cursor: 'pointer',
+                      padding: '7px 12px', textAlign: 'left',
+                      display: 'flex', alignItems: 'center', gap: 8,
+                    }}
+                    onMouseEnter={e => { (e.currentTarget).style.background = '#111c2e' }}
+                    onMouseLeave={e => { (e.currentTarget).style.background = 'none' }}
+                  >
+                    <span style={{ fontSize: 13, flexShrink: 0 }}>📍</span>
+                    <span style={{ fontFamily: 'var(--font-rajdhani)', fontSize: 12, color: '#8aaccc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                      {r.display_name}
+                    </span>
+                  </button>
+                ))}
+              </>
+            )}
+          </div>
         )}
       </div>
 
