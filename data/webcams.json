@@ -1,0 +1,254 @@
+[
+  {
+    "id": "wc-gap-tallard",
+    "title": "Gap-Tallard – DZ & Alpilles",
+    "longitude": 6.0367,
+    "latitude": 44.4611,
+    "city": "Gap",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1512442068/day"
+  },
+  {
+    "id": "wc-annecy-lac",
+    "title": "Annecy – Lac & Aravis",
+    "longitude": 6.1296,
+    "latitude": 45.8992,
+    "city": "Annecy",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1536659860/day"
+  },
+  {
+    "id": "wc-chamonix-aiguille",
+    "title": "Chamonix – Aiguille du Midi",
+    "longitude": 6.8874,
+    "latitude": 45.8789,
+    "city": "Chamonix",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1496566802/day"
+  },
+  {
+    "id": "wc-chamonix-vallee",
+    "title": "Chamonix – Vallée",
+    "longitude": 6.869,
+    "latitude": 45.9237,
+    "city": "Chamonix",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1547464052/day"
+  },
+  {
+    "id": "wc-megeve",
+    "title": "Megève – Mont-Blanc",
+    "longitude": 6.6177,
+    "latitude": 45.8566,
+    "city": "Megève",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1450445095/day"
+  },
+  {
+    "id": "wc-grenoble",
+    "title": "Grenoble – Belledonne",
+    "longitude": 5.7245,
+    "latitude": 45.1885,
+    "city": "Grenoble",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1519648975/day"
+  },
+  {
+    "id": "wc-hossegor",
+    "title": "Hossegor – La Gravière",
+    "longitude": -1.7956,
+    "latitude": 43.6536,
+    "city": "Hossegor",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1607937842/day"
+  },
+  {
+    "id": "wc-biarritz",
+    "title": "Biarritz – Grande Plage",
+    "longitude": -1.5567,
+    "latitude": 43.4865,
+    "city": "Biarritz",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1553882462/day"
+  },
+  {
+    "id": "wc-lacanau",
+    "title": "Lacanau Océan – Plage",
+    "longitude": -1.2003,
+    "latitude": 44.9833,
+    "city": "Lacanau",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1609937721/day"
+  },
+  {
+    "id": "wc-capbreton",
+    "title": "Capbreton – Port",
+    "longitude": -1.7731,
+    "latitude": 43.6503,
+    "city": "Capbreton",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1519643502/day"
+  },
+  {
+    "id": "wc-la-torche",
+    "title": "La Torche – Vague",
+    "longitude": -4.3069,
+    "latitude": 47.8454,
+    "city": "La Torche",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1578475248/day"
+  },
+  {
+    "id": "wc-marseille-calanques",
+    "title": "Marseille – Calanques",
+    "longitude": 5.3518,
+    "latitude": 43.2965,
+    "city": "Marseille",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1571748481/day"
+  },
+  {
+    "id": "wc-palavas",
+    "title": "Palavas-les-Flots – Plage",
+    "longitude": 3.9308,
+    "latitude": 43.5278,
+    "city": "Palavas",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1533645975/day"
+  },
+  {
+    "id": "wc-alpe-dhuez",
+    "title": "Alpe d'Huez – Panorama",
+    "longitude": 6.07,
+    "latitude": 45.09,
+    "city": "Alpe d'Huez",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1528360049/day"
+  },
+  {
+    "id": "wc-les-arcs",
+    "title": "Les Arcs – Bourg-Saint-Maurice",
+    "longitude": 6.7731,
+    "latitude": 45.5561,
+    "city": "Les Arcs",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1500905067/day"
+  },
+  {
+    "id": "wc-val-thorens",
+    "title": "Val Thorens – Les 3 Vallées",
+    "longitude": 6.58,
+    "latitude": 45.2978,
+    "city": "Val Thorens",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1507748497/day"
+  },
+  {
+    "id": "wc-tignes",
+    "title": "Tignes – Grande Motte",
+    "longitude": 6.9025,
+    "latitude": 45.4673,
+    "city": "Tignes",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1501108840/day"
+  },
+  {
+    "id": "wc-les-deux-alpes",
+    "title": "Les Deux Alpes – Glacier",
+    "longitude": 6.127,
+    "latitude": 45.0135,
+    "city": "Les Deux Alpes",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1607591481/day"
+  },
+  {
+    "id": "wc-serre-chevalier",
+    "title": "Serre Chevalier – Briançon",
+    "longitude": 6.567,
+    "latitude": 44.9259,
+    "city": "Briançon",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1498680017/day"
+  },
+  {
+    "id": "wc-saint-hilaire",
+    "title": "Saint-Hilaire-du-Touvet – Parapente",
+    "longitude": 5.9058,
+    "latitude": 45.3302,
+    "city": "Saint-Hilaire",
+    "country": "France",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1569228012/day"
+  },
+  {
+    "id": "wc-mundaka",
+    "title": "Mundaka – Surf",
+    "longitude": -2.6986,
+    "latitude": 43.4057,
+    "city": "Mundaka",
+    "country": "Spain",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1497453540/day"
+  },
+  {
+    "id": "wc-zarautz",
+    "title": "Zarautz – Plage",
+    "longitude": -2.1705,
+    "latitude": 43.2835,
+    "city": "Zarautz",
+    "country": "Spain",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1551434671/day"
+  },
+  {
+    "id": "wc-sierra-nevada",
+    "title": "Sierra Nevada",
+    "longitude": -3.3968,
+    "latitude": 37.0939,
+    "city": "Sierra Nevada",
+    "country": "Spain",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1549218706/day"
+  },
+  {
+    "id": "wc-nazare",
+    "title": "Nazaré – Praia do Norte",
+    "longitude": -8.8997,
+    "latitude": 39.6073,
+    "city": "Nazaré",
+    "country": "Portugal",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1550754685/day"
+  },
+  {
+    "id": "wc-peniche",
+    "title": "Peniche – Supertubos",
+    "longitude": -9.3631,
+    "latitude": 39.3614,
+    "city": "Peniche",
+    "country": "Portugal",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1563628404/day"
+  },
+  {
+    "id": "wc-interlaken",
+    "title": "Interlaken – Alpes bernoises",
+    "longitude": 7.8687,
+    "latitude": 46.6863,
+    "city": "Interlaken",
+    "country": "Switzerland",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1531213019/day"
+  },
+  {
+    "id": "wc-lauterbrunnen",
+    "title": "Lauterbrunnen – BASE jump valley",
+    "longitude": 7.9095,
+    "latitude": 46.5945,
+    "city": "Lauterbrunnen",
+    "country": "Switzerland",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1504960093/day"
+  },
+  {
+    "id": "wc-zermatt",
+    "title": "Zermatt – Cervin",
+    "longitude": 7.7491,
+    "latitude": 46.0207,
+    "city": "Zermatt",
+    "country": "Switzerland",
+    "streamUrl": "https://webcams.windy.com/webcams/public/embed/player/1495717895/day"
+  }
+]

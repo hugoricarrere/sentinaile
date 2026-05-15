@@ -1,9 +1,425 @@
 [
-  { "id": "hossegor", "name": "Hossegor", "longitude": -1.79, "latitude": 43.66, "country": "France", "level": "advanced", "breakType": "beach" },
-  { "id": "lacanau", "name": "Lacanau Ocean", "longitude": -1.20, "latitude": 44.99, "country": "France", "level": "all", "breakType": "beach" },
-  { "id": "biarritz", "name": "Biarritz Grande Plage", "longitude": -1.56, "latitude": 43.49, "country": "France", "level": "beginner", "breakType": "beach" },
-  { "id": "mundaka", "name": "Mundaka", "longitude": -2.69, "latitude": 43.40, "country": "Spain", "level": "expert", "breakType": "river mouth" },
-  { "id": "nazare", "name": "Nazaré", "longitude": -8.92, "latitude": 39.60, "country": "Portugal", "level": "expert", "breakType": "beach" },
-  { "id": "pipeline", "name": "Pipeline", "longitude": -158.05, "latitude": 21.66, "country": "USA", "level": "expert", "breakType": "reef" },
-  { "id": "uluwatu", "name": "Uluwatu", "longitude": 115.09, "latitude": -8.82, "country": "Indonesia", "level": "advanced", "breakType": "reef" }
+  {
+    "id": "surf-hossegor-graviere",
+    "name": "Hossegor – La Gravière",
+    "longitude": -1.796,
+    "latitude": 43.654,
+    "country": "France",
+    "level": "expert",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-hossegor-estagnots",
+    "name": "Hossegor – Les Estagnots",
+    "longitude": -1.809,
+    "latitude": 43.671,
+    "country": "France",
+    "level": "advanced",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-hossegor-centrales",
+    "name": "Hossegor – Les Centrales",
+    "longitude": -1.802,
+    "latitude": 43.66,
+    "country": "France",
+    "level": "advanced",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-seignosse",
+    "name": "Seignosse – Les Bourdaines",
+    "longitude": -1.775,
+    "latitude": 43.695,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-capbreton",
+    "name": "Capbreton – La Piste",
+    "longitude": -1.773,
+    "latitude": 43.65,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-soorts",
+    "name": "Soorts-Hossegor – Culs Nuls",
+    "longitude": -1.79,
+    "latitude": 43.677,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-messanges",
+    "name": "Messanges – Plage Sud",
+    "longitude": -1.792,
+    "latitude": 43.81,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-mimizan",
+    "name": "Mimizan Plage",
+    "longitude": -1.3,
+    "latitude": 44.21,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-contis",
+    "name": "Contis-les-Bains",
+    "longitude": -1.337,
+    "latitude": 44.094,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-lacanau",
+    "name": "Lacanau – Plage Centrale",
+    "longitude": -1.2,
+    "latitude": 44.983,
+    "country": "France",
+    "level": "all",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-montalivet",
+    "name": "Montalivet",
+    "longitude": -1.143,
+    "latitude": 45.373,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-soulac",
+    "name": "Soulac-sur-Mer",
+    "longitude": -1.127,
+    "latitude": 45.502,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-biarritz-grande",
+    "name": "Biarritz – Grande Plage",
+    "longitude": -1.557,
+    "latitude": 43.487,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-biarritz-cote",
+    "name": "Biarritz – Côte des Basques",
+    "longitude": -1.564,
+    "latitude": 43.482,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-biarritz-milady",
+    "name": "Biarritz – Milady",
+    "longitude": -1.561,
+    "latitude": 43.468,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-anglet",
+    "name": "Anglet – VVF",
+    "longitude": -1.53,
+    "latitude": 43.507,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-guethary",
+    "name": "Guéthary – Parlementia",
+    "longitude": -1.6,
+    "latitude": 43.432,
+    "country": "France",
+    "level": "expert",
+    "breakType": "reef"
+  },
+  {
+    "id": "surf-hendaye",
+    "name": "Hendaye Plage",
+    "longitude": -1.774,
+    "latitude": 43.373,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-la-torche",
+    "name": "La Torche – Pendreff",
+    "longitude": -4.307,
+    "latitude": 47.845,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-audierne",
+    "name": "Audierne – Tronoen",
+    "longitude": -4.432,
+    "latitude": 47.951,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-quiberon",
+    "name": "Quiberon – Côte Sauvage",
+    "longitude": -3.127,
+    "latitude": 47.494,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-crozon",
+    "name": "Crozon – Lostmarc'h",
+    "longitude": -4.481,
+    "latitude": 48.245,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-plouescat",
+    "name": "Plouescat – Mescouez",
+    "longitude": -4.22,
+    "latitude": 48.648,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-brignogan",
+    "name": "Brignogan-Plages",
+    "longitude": -4.334,
+    "latitude": 48.672,
+    "country": "France",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-jullouville",
+    "name": "Jullouville",
+    "longitude": -1.571,
+    "latitude": 48.8,
+    "country": "France",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-mundaka",
+    "name": "Mundaka",
+    "longitude": -2.699,
+    "latitude": 43.406,
+    "country": "Spain",
+    "level": "expert",
+    "breakType": "river mouth"
+  },
+  {
+    "id": "surf-zarautz",
+    "name": "Zarautz",
+    "longitude": -2.171,
+    "latitude": 43.284,
+    "country": "Spain",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-bakio",
+    "name": "Bakio",
+    "longitude": -2.819,
+    "latitude": 43.435,
+    "country": "Spain",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-sopelana",
+    "name": "Sopelana – Meñakoz",
+    "longitude": -2.979,
+    "latitude": 43.394,
+    "country": "Spain",
+    "level": "advanced",
+    "breakType": "reef"
+  },
+  {
+    "id": "surf-rodiles",
+    "name": "Rodiles – Asturias",
+    "longitude": -5.357,
+    "latitude": 43.565,
+    "country": "Spain",
+    "level": "advanced",
+    "breakType": "estuary"
+  },
+  {
+    "id": "surf-somo",
+    "name": "Somo – Cantabria",
+    "longitude": -3.607,
+    "latitude": 43.465,
+    "country": "Spain",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-pantin",
+    "name": "Pantin – Galicia",
+    "longitude": -7.987,
+    "latitude": 43.683,
+    "country": "Spain",
+    "level": "advanced",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-nazare",
+    "name": "Nazaré – Praia do Norte",
+    "longitude": -8.9,
+    "latitude": 39.607,
+    "country": "Portugal",
+    "level": "expert",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-peniche",
+    "name": "Peniche – Supertubos",
+    "longitude": -9.363,
+    "latitude": 39.361,
+    "country": "Portugal",
+    "level": "advanced",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-ericeira",
+    "name": "Ericeira – Ribeira d'Ilhas",
+    "longitude": -9.422,
+    "latitude": 38.967,
+    "country": "Portugal",
+    "level": "advanced",
+    "breakType": "reef"
+  },
+  {
+    "id": "surf-sagres",
+    "name": "Sagres – Tonel",
+    "longitude": -8.941,
+    "latitude": 37.006,
+    "country": "Portugal",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-figueira",
+    "name": "Figueira da Foz – Buarcos",
+    "longitude": -8.872,
+    "latitude": 40.155,
+    "country": "Portugal",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-porto-covo",
+    "name": "Porto Covo",
+    "longitude": -8.786,
+    "latitude": 37.849,
+    "country": "Portugal",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-fistral",
+    "name": "Fistral Beach – Newquay",
+    "longitude": -5.087,
+    "latitude": 50.417,
+    "country": "UK",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-croyde",
+    "name": "Croyde Bay",
+    "longitude": -4.236,
+    "latitude": 51.12,
+    "country": "UK",
+    "level": "intermediate",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-sennen",
+    "name": "Sennen Cove",
+    "longitude": -5.698,
+    "latitude": 50.072,
+    "country": "UK",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-perranporth",
+    "name": "Perranporth",
+    "longitude": -5.151,
+    "latitude": 50.344,
+    "country": "UK",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-bundoran",
+    "name": "Bundoran – The Peak",
+    "longitude": -8.279,
+    "latitude": 54.478,
+    "country": "Ireland",
+    "level": "advanced",
+    "breakType": "reef"
+  },
+  {
+    "id": "surf-lahinch",
+    "name": "Lahinch",
+    "longitude": -9.344,
+    "latitude": 52.933,
+    "country": "Ireland",
+    "level": "beginner",
+    "breakType": "beach"
+  },
+  {
+    "id": "surf-taghazout",
+    "name": "Taghazout – Anchor Point",
+    "longitude": -9.708,
+    "latitude": 30.543,
+    "country": "Morocco",
+    "level": "advanced",
+    "breakType": "point break"
+  },
+  {
+    "id": "surf-pipeline",
+    "name": "Pipeline – Oahu",
+    "longitude": -158.054,
+    "latitude": 21.665,
+    "country": "USA",
+    "level": "expert",
+    "breakType": "reef"
+  },
+  {
+    "id": "surf-uluwatu",
+    "name": "Uluwatu – Bali",
+    "longitude": 115.085,
+    "latitude": -8.829,
+    "country": "Indonesia",
+    "level": "advanced",
+    "breakType": "reef"
+  }
 ]
