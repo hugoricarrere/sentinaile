@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { globalCache } from '@/lib/cache'
 
 const WMO_DESCRIPTIONS: Record<number, string> = {
   0: 'Ciel dégagé',
@@ -61,26 +62,25 @@ export async function GET(request: NextRequest) {
     `https://api.open-meteo.com/v1/forecast` +
     `?latitude=${lat}&longitude=${lng}` +
     `&current=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code` +
-    `&wind_speed_unit=kmh&timezone=auto`
+    `&wind_speed_unit=kmh&timezone=Europe%2FParis`
 
-  let data: unknown
+  const cacheKey = `spot-weather-${lat.toFixed(2)}-${lng.toFixed(2)}`
+
+  let current: Record<string, number>
   try {
-    const res = await fetch(url, { next: { revalidate: 0 } })
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: 'Erreur de l\'API Open-Meteo' },
-        { status: 502 }
-      )
-    }
-    data = await res.json()
+    const { data } = await globalCache.get(cacheKey, async () => {
+      const res = await fetch(url, { next: { revalidate: 0 }, signal: AbortSignal.timeout(10_000) })
+      if (!res.ok) throw new Error(`Open-Meteo ${res.status}`)
+      const json = await res.json() as { current: Record<string, number> }
+      return json.current
+    }, 600_000) // 10 min
+    current = data
   } catch {
     return NextResponse.json(
       { error: 'Impossible de contacter Open-Meteo' },
       { status: 502 }
     )
   }
-
-  const current = (data as { current: Record<string, number> }).current
 
   const windKmh = current.wind_speed_10m
   const windGustsKmh = current.wind_gusts_10m

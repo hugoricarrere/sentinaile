@@ -65,12 +65,25 @@ export function basejumpCondition(
   return 'green'
 }
 
+function angleDiff(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
+
 export function surfScore(
   swellHeightM: number,
   swellPeriodS: number,
   windKmh: number,
   windOffshore: boolean,
+  windDirDeg?: number,
+  facingDeg?: number,
 ): number {
+  let effectiveOffshore = windOffshore
+  if (windDirDeg !== undefined && facingDeg !== undefined) {
+    const offshoreDir = (facingDeg + 180) % 360
+    effectiveOffshore = angleDiff(windDirDeg, offshoreDir) < 70
+  }
+
   let score = 5
   if (swellHeightM >= 1.5 && swellHeightM <= 2.5) score += 2
   else if (swellHeightM >= 0.8 && swellHeightM < 1.5) score += 0.5
@@ -78,7 +91,7 @@ export function surfScore(
   if (swellPeriodS >= 12) score += 2
   else if (swellPeriodS >= 8) score += 0.5
   else score -= 1
-  if (windOffshore && windKmh < 15) score += 1
-  else if (!windOffshore || windKmh > 25) score -= 2
+  if (effectiveOffshore && windKmh < 15) score += 1
+  else if (!effectiveOffshore || windKmh > 25) score -= 2
   return Math.max(1, Math.min(10, Math.round(score)))
 }

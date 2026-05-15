@@ -6,6 +6,7 @@ import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
 import { useFavorites } from '@/lib/hooks/use-favorites'
+import { haversineKm, formatKm } from '@/lib/utils/haversine'
 
 interface NominatimResult {
   place_id: number
@@ -34,18 +35,25 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
   const [query, setQuery] = useState('')
   const [nominatimResults, setNominatimResults] = useState<NominatimResult[]>([])
   const [nomSearching, setNomSearching] = useState(false)
+  const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // All loaded points across all layers
+  // All loaded points across all layers (sorted by distance when userPos available and query empty)
   const allPoints = useMemo(() => {
     const pts: GeoPoint[] = []
     for (const layer of LAYERS) {
       const pts2 = layerStates[layer.id]?.points ?? []
       pts.push(...pts2)
     }
+    if (userPos && query.trim() === '') {
+      pts.sort((a, b) =>
+        haversineKm(userPos.lat, userPos.lng, a.latitude, a.longitude) -
+        haversineKm(userPos.lat, userPos.lng, b.latitude, b.longitude)
+      )
+    }
     return pts
-  }, [layerStates])
+  }, [layerStates, userPos, query])
 
   // Favorite points (shown when query is empty)
   const favoritePoints = useMemo(() => {
@@ -78,10 +86,19 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [query])
 
-  // Focus input when sheet opens
+  // Focus input when sheet opens + fetch geolocation on first open
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 80)
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          ({ coords }) => {
+            setUserPos({ lat: coords.latitude, lng: coords.longitude })
+          },
+          () => { /* silencieux */ },
+          { timeout: 5000 },
+        )
+      }
     } else {
       setQuery('')
       setNominatimResults([])
@@ -214,6 +231,7 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
                 const l = layer(point)
                 const name = (point.data.name as string | undefined) ?? (point.data.title as string | undefined) ?? point.id
                 const sub = (point.data.icao as string | undefined) ?? (point.data.commune as string | undefined) ?? (point.data.country as string | undefined) ?? ''
+                const distKm = userPos ? haversineKm(userPos.lat, userPos.lng, point.latitude, point.longitude) : null
                 return (
                   <button
                     key={point.id}
@@ -240,11 +258,18 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
                       <span style={{ display: 'block', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 14, color: '#8aaccc', letterSpacing: '0.04em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {name}
                       </span>
-                      {sub && (
-                        <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.04em', marginTop: 1 }}>
-                          {l?.label ?? ''}{sub ? ` · ${sub}` : ''}
-                        </span>
-                      )}
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 1 }}>
+                        {sub && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.04em' }}>
+                            {l?.label ?? ''}{sub ? ` · ${sub}` : ''}
+                          </span>
+                        )}
+                        {distKm !== null && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em', flexShrink: 0, marginLeft: 4 }}>
+                            {formatKm(distKm)}
+                          </span>
+                        )}
+                      </span>
                     </span>
                     <span style={{ color: '#FF6B6B', fontSize: 14, flexShrink: 0 }}>❤️</span>
                   </button>
@@ -270,6 +295,7 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
                 const l = layer(point)
                 const name = (point.data.name as string | undefined) ?? (point.data.title as string | undefined) ?? point.id
                 const sub = (point.data.icao as string | undefined) ?? (point.data.commune as string | undefined) ?? (point.data.country as string | undefined) ?? ''
+                const distKm = userPos ? haversineKm(userPos.lat, userPos.lng, point.latitude, point.longitude) : null
                 return (
                   <button
                     key={point.id}
@@ -298,11 +324,18 @@ export default function MobileSearch({ open, onClose, layerStates, onFlyTo, onSe
                       <span style={{ display: 'block', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 14, color: '#8aaccc', letterSpacing: '0.04em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {name}
                       </span>
-                      {sub && (
-                        <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.04em', marginTop: 1 }}>
-                          {l?.label ?? ''}{sub ? ` · ${sub}` : ''}
-                        </span>
-                      )}
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 1 }}>
+                        {sub && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#2a4a6a', letterSpacing: '0.04em' }}>
+                            {l?.label ?? ''}{sub ? ` · ${sub}` : ''}
+                          </span>
+                        )}
+                        {distKm !== null && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em', flexShrink: 0, marginLeft: 4 }}>
+                            {formatKm(distKm)}
+                          </span>
+                        )}
+                      </span>
                     </span>
                     {/* Score indicator */}
                     <span style={{

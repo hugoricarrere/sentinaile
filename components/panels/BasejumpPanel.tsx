@@ -5,9 +5,9 @@ const LEGAL: Record<string, string> = {
   authorized: '✅ Autorisé', tolerated: '⚠️ Toléré', forbidden: '❌ Interdit',
 }
 const COND = {
-  green: { label: '🟢 Conditions OK', color: '#00FF88' },
-  yellow: { label: '🟡 Limites', color: '#FFB347' },
-  red: { label: '🔴 Ne pas sauter', color: '#FF6B35' },
+  green:  { label: '🟢 ● Conditions OK',  shape: '●', color: '#00FF88' },
+  yellow: { label: '🟡 ▲ Limites',        shape: '▲', color: '#FFB347' },
+  red:    { label: '🔴 ■ Ne pas sauter',  shape: '■', color: '#FF6B35' },
 }
 
 interface BJData {
@@ -25,7 +25,7 @@ export default function BasejumpPanel({ point }: { point: GeoPoint }) {
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF0080', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 400, fontSize: 13, color: '#3a5a80', marginBottom: 10 }}>

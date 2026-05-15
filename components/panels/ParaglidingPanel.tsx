@@ -3,9 +3,9 @@ import { parisHour } from '@/lib/time'
 import { Row } from '@/components/ui/Row'
 
 const COND = {
-  green: { label: '🟢 Vol possible', color: '#00FF88' },
-  yellow: { label: '🟡 Conditions limites', color: '#FFB347' },
-  red: { label: '🔴 Vol déconseillé', color: '#FF6B35' },
+  green:  { label: '🟢 ● Vol possible',         color: '#00FF88' },
+  yellow: { label: '🟡 ▲ Conditions limites',   color: '#FFB347' },
+  red:    { label: '🔴 ■ Vol déconseillé',      color: '#FF6B35' },
 }
 
 /** Convert bearing degrees to 8-point compass rose */
@@ -32,7 +32,7 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#9B59B6', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
 

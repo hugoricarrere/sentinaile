@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LAYERS } from '@/lib/layers'
 import { fuzzySearch } from '@/lib/fuzzy'
+import { haversineKm, formatKm } from '@/lib/utils/haversine'
 import type { GeoPoint } from '@/lib/types'
 import type { LayerStates } from '@/lib/use-layer-data'
 import type { FlyToTarget } from './MapCanvas'
@@ -117,8 +118,19 @@ export default function TopBar({ layerStates, onFlyTo, onSelectPoint }: Props) {
   const [results, setResults] = useState<NominatimResult[]>([])
   const [searching, setSearching] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null)
   const searchRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Fetch geolocation once on mount (silent failure)
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => setUserPos({ lat: coords.latitude, lng: coords.longitude }),
+      () => { /* silencieux */ },
+      { timeout: 5000 },
+    )
+  }, [])
 
   // All loaded points (for local fuzzy search)
   const allPoints = useMemo(() => {
@@ -320,6 +332,7 @@ export default function TopBar({ layerStates, onFlyTo, onSelectPoint }: Props) {
                   const l = LAYERS.find(lyr => lyr.id === point.layerId)
                   const name = (point.data.name as string | undefined) ?? (point.data.title as string | undefined) ?? point.id
                   const sub = (point.data.icao as string | undefined) ?? (point.data.commune as string | undefined) ?? (point.data.country as string | undefined)
+                  const distKm = userPos ? haversineKm(userPos.lat, userPos.lng, point.latitude, point.longitude) : null
                   return (
                     <button
                       key={point.id}
@@ -338,11 +351,18 @@ export default function TopBar({ layerStates, onFlyTo, onSelectPoint }: Props) {
                         <span style={{ display: 'block', fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 12, color: '#8aaccc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {name}
                         </span>
-                        {sub && (
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em' }}>
-                            {l?.label}{sub ? ` · ${sub}` : ''}
-                          </span>
-                        )}
+                        <span style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                          {sub && (
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em' }}>
+                              {l?.label}{sub ? ` · ${sub}` : ''}
+                            </span>
+                          )}
+                          {distKm !== null && (
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#2a4a6a', letterSpacing: '0.04em' }}>
+                              {formatKm(distKm)}
+                            </span>
+                          )}
+                        </span>
                       </span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: score >= 80 ? '#00FF88' : '#FFB347', flexShrink: 0 }}>
                         {score >= 80 ? '●' : '◐'}

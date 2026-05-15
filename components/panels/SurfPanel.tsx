@@ -13,7 +13,14 @@ interface SurfData {
   name: string; country: string; level: string; breakType: string
   score: number; swellHeightM: number; swellPeriodS: number
   windKmh: number; windOffshore: boolean
+  windDirDeg?: number; facingDeg?: number
   trend?: 'up' | 'same' | 'down'
+}
+
+function isWindOffshore(windDirDeg: number, facingDeg: number): boolean {
+  // Wind is offshore if it blows away from the beach (opposite of facing direction)
+  const diff = Math.abs(((windDirDeg - facingDeg + 180 + 360) % 360) - 180)
+  return diff <= 90
 }
 
 export default function SurfPanel({ point }: { point: GeoPoint }) {
@@ -40,6 +47,11 @@ export default function SurfPanel({ point }: { point: GeoPoint }) {
       </div>
       <Row label="HOULE" value={`${d.swellHeightM.toFixed(1)} m · ${Math.round(d.swellPeriodS)}s`} />
       <Row label="VENT" value={`${Math.round(d.windKmh)} km/h ${d.windOffshore ? '(offshore ✓)' : '(onshore)'}`} />
+      <Row label="OFFSHORE" value={
+        d.windDirDeg !== undefined
+          ? `${Math.round(d.windDirDeg)}° ${(d.facingDeg !== undefined && isWindOffshore(d.windDirDeg, d.facingDeg)) ? '✓ offshore' : 'onshore'}`
+          : d.windOffshore ? '✓ offshore' : 'onshore'
+      } />
       <Row label="NIVEAU" value={LEVEL_LABEL[d.level] ?? d.level} />
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
         <SpotWeather lat={point.latitude} lng={point.longitude} color="#00CED1" />

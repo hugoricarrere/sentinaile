@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { surfScore } from '@/lib/weather'
 import { rateLimit } from '@/lib/rate-limit'
+import { globalCache } from '@/lib/cache'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,80 +61,95 @@ export async function GET(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'Invalid lng: must be between -180 and 180' }, { status: 400 })
   }
 
-  const url = [
-    'https://marine-api.open-meteo.com/v1/marine',
-    `?latitude=${lat}&longitude=${lng}`,
-    '&hourly=time,swell_wave_height,swell_wave_period,wind_speed_10m',
-    '&wind_speed_unit=kmh&timezone=Europe%2FParis&forecast_days=7',
-  ].join('')
+  const cacheKey = `surf-forecast-${lat.toFixed(2)}-${lng.toFixed(2)}`
 
-  let marineJson: {
-    hourly: {
-      time: string[]
-      swell_wave_height: number[]
-      swell_wave_period: number[]
-      wind_speed_10m: number[]
-    }
-  }
+  let forecasts: DayForecast[]
+  let bestDayIdx: number
 
   try {
-    const res = await fetch(url, {
-      signal: AbortSignal.timeout(12_000),
-      next: { revalidate: 0 },
-    })
-    if (!res.ok) {
-      return NextResponse.json({ error: `Marine API error ${res.status}` }, { status: 502 })
-    }
-    marineJson = await res.json()
+    const { data } = await globalCache.get(cacheKey, async () => {
+      const url = [
+        'https://marine-api.open-meteo.com/v1/marine',
+        `?latitude=${lat}&longitude=${lng}`,
+        '&hourly=time,swell_wave_height,swell_wave_period,wind_speed_10m',
+        '&wind_speed_unit=kmh&timezone=Europe%2FParis&forecast_days=7',
+      ].join('')
+
+      const res = await fetch(url, {
+        signal: AbortSignal.timeout(12_000),
+        next: { revalidate: 0 },
+      })
+      if (!res.ok) throw new Error(`Marine API error ${res.status}`)
+
+      const marineJson: {
+        hourly: {
+          time: string[]
+          swell_wave_height: number[]
+          swell_wave_period: number[]
+          wind_speed_10m: number[]
+        }
+      } = await res.json()
+
+      const { time, swell_wave_height, swell_wave_period, wind_speed_10m } = marineJson.hourly
+
+      const today = new Date()
+      const days: DayForecast[] = []
+
+      for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+        const targetDate = addDays(today, dayOffset)
+        const dateStr = formatDate(targetDate)
+
+        const daySwells: number[] = []
+        const dayPeriods: number[] = []
+        const dayWinds: number[] = []
+
+        for (let i = 0; i < time.length; i++) {
+          const t = time[i]
+          if (!t.startsWith(dateStr)) continue
+          // Extract hour from "YYYY-MM-DDTHH:MM"
+          const hourStr = t.slice(11, 13)
+          const hour = parseInt(hourStr, 10)
+          if (hour < 7 || hour > 20) continue
+
+          const swell = swell_wave_height[i] ?? 0
+          const period = swell_wave_period[i] ?? 0
+          const wind = wind_speed_10m[i] ?? 0
+
+          daySwells.push(swell)
+          dayPeriods.push(period)
+          dayWinds.push(wind)
+        }
+
+        const avgSwellM = parseFloat(avg(daySwells).toFixed(2))
+        const maxSwellM = parseFloat(max(daySwells).toFixed(2))
+        const avgPeriodS = parseFloat(avg(dayPeriods).toFixed(1))
+        const avgWindKmh = parseFloat(avg(dayWinds).toFixed(1))
+        const windOffshore = avgWindKmh < 20
+
+        days.push({
+          date: dateStr,
+          avgSwellM,
+          maxSwellM,
+          avgPeriodS,
+          avgWindKmh,
+          score: surfScore(avgSwellM, avgPeriodS, avgWindKmh, windOffshore),
+        })
+      }
+
+      return days
+    }, 1_800_000)
+
+    forecasts = data
   } catch {
     return NextResponse.json({ error: 'Marine API unavailable' }, { status: 502 })
   }
 
-  const { time, swell_wave_height, swell_wave_period, wind_speed_10m } = marineJson.hourly
-
-  const today = new Date()
-  const forecasts: DayForecast[] = []
-
-  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-    const targetDate = addDays(today, dayOffset)
-    const dateStr = formatDate(targetDate)
-
-    const daySwells: number[] = []
-    const dayPeriods: number[] = []
-    const dayWinds: number[] = []
-
-    for (let i = 0; i < time.length; i++) {
-      const t = time[i]
-      if (!t.startsWith(dateStr)) continue
-      // Extract hour from "YYYY-MM-DDTHH:MM"
-      const hourStr = t.slice(11, 13)
-      const hour = parseInt(hourStr, 10)
-      if (hour < 7 || hour > 20) continue
-
-      const swell = swell_wave_height[i] ?? 0
-      const period = swell_wave_period[i] ?? 0
-      const wind = wind_speed_10m[i] ?? 0
-
-      daySwells.push(swell)
-      dayPeriods.push(period)
-      dayWinds.push(wind)
+  bestDayIdx = 0
+  for (let i = 1; i < forecasts.length; i++) {
+    if (forecasts[i].score > forecasts[bestDayIdx].score) {
+      bestDayIdx = i
     }
-
-    const avgSwellM = parseFloat(avg(daySwells).toFixed(2))
-    const maxSwellM = parseFloat(max(daySwells).toFixed(2))
-    const avgPeriodS = parseFloat(avg(dayPeriods).toFixed(1))
-    const avgWindKmh = parseFloat(avg(dayWinds).toFixed(1))
-    const windOffshore = avgWindKmh < 20
-
-    forecasts.push({
-      date: dateStr,
-      avgSwellM,
-      maxSwellM,
-      avgPeriodS,
-      avgWindKmh,
-      score: surfScore(avgSwellM, avgPeriodS, avgWindKmh, windOffshore),
-    })
   }
 
-  return NextResponse.json({ data: forecasts })
+  return NextResponse.json({ days: forecasts, bestDayIdx })
 }

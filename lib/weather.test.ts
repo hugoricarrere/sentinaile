@@ -150,4 +150,31 @@ describe('surfScore', () => {
     expect(score).toBeGreaterThanOrEqual(1)
     expect(score).toBeLessThanOrEqual(10)
   })
+
+  // ── windDirDeg + facingDeg (real offshore calculation) ──
+  it('scores higher when wind is exactly offshore vs onshore (same other conditions)', () => {
+    // facingDeg=270 (west-facing spot), offshoreDir=90 (east wind → blowing offshore)
+    const offshore = surfScore(2, 12, 10, false, 90, 270)  // wind from east = offshore
+    const onshore  = surfScore(2, 12, 10, false, 270, 270) // wind from west = onshore
+    expect(offshore).toBeGreaterThan(onshore)
+  })
+  it('detects offshore when wind direction is within 70° of pure offshore direction', () => {
+    // facingDeg=270, offshoreDir=90; wind at 130° → diff = 40° → offshore
+    const score = surfScore(2, 12, 10, false, 130, 270)
+    // Should behave like offshore: same as explicit windOffshore=true
+    const reference = surfScore(2, 12, 10, true)
+    expect(score).toBe(reference)
+  })
+  it('detects onshore when wind direction is 90° from pure offshore direction', () => {
+    // facingDeg=270, offshoreDir=90; wind at 180° → diff = 90° → onshore
+    const score = surfScore(2, 12, 10, false, 180, 270)
+    // Should behave like onshore
+    const reference = surfScore(2, 12, 10, false)
+    expect(score).toBe(reference)
+  })
+  it('falls back to windOffshore param when windDirDeg and facingDeg are absent', () => {
+    const withTrue  = surfScore(2, 12, 10, true)
+    const withFalse = surfScore(2, 12, 10, false)
+    expect(withTrue).toBeGreaterThanOrEqual(withFalse)
+  })
 })

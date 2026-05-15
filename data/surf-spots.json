@@ -6,7 +6,8 @@
     "latitude": 43.654,
     "country": "France",
     "level": "expert",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-hossegor-estagnots",
@@ -15,7 +16,8 @@
     "latitude": 43.671,
     "country": "France",
     "level": "advanced",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-hossegor-centrales",
@@ -24,7 +26,8 @@
     "latitude": 43.66,
     "country": "France",
     "level": "advanced",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-seignosse",
@@ -33,7 +36,8 @@
     "latitude": 43.695,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 255
   },
   {
     "id": "surf-capbreton",
@@ -42,7 +46,8 @@
     "latitude": 43.65,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 230
   },
   {
     "id": "surf-soorts",
@@ -51,7 +56,8 @@
     "latitude": 43.677,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-messanges",
@@ -60,7 +66,8 @@
     "latitude": 43.81,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-mimizan",
@@ -69,7 +76,8 @@
     "latitude": 44.21,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-contis",
@@ -78,7 +86,8 @@
     "latitude": 44.094,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-lacanau",
@@ -87,7 +96,8 @@
     "latitude": 44.983,
     "country": "France",
     "level": "all",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-montalivet",
@@ -96,7 +106,8 @@
     "latitude": 45.373,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-soulac",
@@ -105,7 +116,8 @@
     "latitude": 45.502,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 300
   },
   {
     "id": "surf-biarritz-grande",
@@ -114,7 +126,8 @@
     "latitude": 43.487,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 315
   },
   {
     "id": "surf-biarritz-cote",
@@ -123,7 +136,8 @@
     "latitude": 43.482,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-biarritz-milady",
@@ -132,7 +146,8 @@
     "latitude": 43.468,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-anglet",
@@ -141,7 +156,8 @@
     "latitude": 43.507,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 295
   },
   {
     "id": "surf-guethary",
@@ -150,7 +166,8 @@
     "latitude": 43.432,
     "country": "France",
     "level": "expert",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 285
   },
   {
     "id": "surf-hendaye",
@@ -159,7 +176,8 @@
     "latitude": 43.373,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 280
   },
   {
     "id": "surf-la-torche",
@@ -168,7 +186,8 @@
     "latitude": 47.845,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 205
   },
   {
     "id": "surf-audierne",
@@ -177,7 +196,8 @@
     "latitude": 47.951,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 215
   },
   {
     "id": "surf-quiberon",
@@ -186,7 +206,8 @@
     "latitude": 47.494,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 250
   },
   {
     "id": "surf-crozon",
@@ -195,7 +216,8 @@
     "latitude": 48.245,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 240
   },
   {
     "id": "surf-plouescat",
@@ -204,7 +226,8 @@
     "latitude": 48.648,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 345
   },
   {
     "id": "surf-brignogan",
@@ -213,7 +236,8 @@
     "latitude": 48.672,
     "country": "France",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 335
   },
   {
     "id": "surf-jullouville",
@@ -222,7 +246,8 @@
     "latitude": 48.8,
     "country": "France",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-mundaka",
@@ -231,7 +256,8 @@
     "latitude": 43.406,
     "country": "Spain",
     "level": "expert",
-    "breakType": "river mouth"
+    "breakType": "river mouth",
+    "facingDeg": 45
   },
   {
     "id": "surf-zarautz",
@@ -240,7 +266,8 @@
     "latitude": 43.284,
     "country": "Spain",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 355
   },
   {
     "id": "surf-bakio",
@@ -249,7 +276,8 @@
     "latitude": 43.435,
     "country": "Spain",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 355
   },
   {
     "id": "surf-sopelana",
@@ -258,7 +286,8 @@
     "latitude": 43.394,
     "country": "Spain",
     "level": "advanced",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 320
   },
   {
     "id": "surf-rodiles",
@@ -267,7 +296,8 @@
     "latitude": 43.565,
     "country": "Spain",
     "level": "advanced",
-    "breakType": "estuary"
+    "breakType": "estuary",
+    "facingDeg": 360
   },
   {
     "id": "surf-somo",
@@ -276,7 +306,8 @@
     "latitude": 43.465,
     "country": "Spain",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 355
   },
   {
     "id": "surf-pantin",
@@ -285,7 +316,8 @@
     "latitude": 43.683,
     "country": "Spain",
     "level": "advanced",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 360
   },
   {
     "id": "surf-nazare",
@@ -294,7 +326,8 @@
     "latitude": 39.607,
     "country": "Portugal",
     "level": "expert",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-peniche",
@@ -303,7 +336,8 @@
     "latitude": 39.361,
     "country": "Portugal",
     "level": "advanced",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 260
   },
   {
     "id": "surf-ericeira",
@@ -312,7 +346,8 @@
     "latitude": 38.967,
     "country": "Portugal",
     "level": "advanced",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 270
   },
   {
     "id": "surf-sagres",
@@ -321,7 +356,8 @@
     "latitude": 37.006,
     "country": "Portugal",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 185
   },
   {
     "id": "surf-figueira",
@@ -330,7 +366,8 @@
     "latitude": 40.155,
     "country": "Portugal",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 265
   },
   {
     "id": "surf-porto-covo",
@@ -339,7 +376,8 @@
     "latitude": 37.849,
     "country": "Portugal",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 260
   },
   {
     "id": "surf-fistral",
@@ -348,7 +386,8 @@
     "latitude": 50.417,
     "country": "UK",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-croyde",
@@ -357,7 +396,8 @@
     "latitude": 51.12,
     "country": "UK",
     "level": "intermediate",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 285
   },
   {
     "id": "surf-sennen",
@@ -366,7 +406,8 @@
     "latitude": 50.072,
     "country": "UK",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 225
   },
   {
     "id": "surf-perranporth",
@@ -375,7 +416,8 @@
     "latitude": 50.344,
     "country": "UK",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 290
   },
   {
     "id": "surf-bundoran",
@@ -384,7 +426,8 @@
     "latitude": 54.478,
     "country": "Ireland",
     "level": "advanced",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 310
   },
   {
     "id": "surf-lahinch",
@@ -393,7 +436,8 @@
     "latitude": 52.933,
     "country": "Ireland",
     "level": "beginner",
-    "breakType": "beach"
+    "breakType": "beach",
+    "facingDeg": 270
   },
   {
     "id": "surf-taghazout",
@@ -402,7 +446,8 @@
     "latitude": 30.543,
     "country": "Morocco",
     "level": "advanced",
-    "breakType": "point break"
+    "breakType": "point break",
+    "facingDeg": 295
   },
   {
     "id": "surf-pipeline",
@@ -411,7 +456,8 @@
     "latitude": 21.665,
     "country": "USA",
     "level": "expert",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 355
   },
   {
     "id": "surf-uluwatu",
@@ -420,6 +466,7 @@
     "latitude": -8.829,
     "country": "Indonesia",
     "level": "advanced",
-    "breakType": "reef"
+    "breakType": "reef",
+    "facingDeg": 205
   }
 ]

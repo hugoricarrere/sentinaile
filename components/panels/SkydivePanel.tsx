@@ -3,9 +3,9 @@ import { parisHour } from '@/lib/time'
 import { Row } from '@/components/ui/Row'
 
 const COND = {
-  green: { label: '🟢 Favorable', color: '#00FF88' },
-  yellow: { label: '🟡 Attention', color: '#FFB347' },
-  red: { label: '🔴 Défavorable', color: '#FF6B35' },
+  green:  { label: '🟢 ● Favorable',    color: '#00FF88' },
+  yellow: { label: '🟡 ▲ Attention',    color: '#FFB347' },
+  red:    { label: '🔴 ■ Défavorable',  color: '#FF6B35' },
 }
 
 interface SkydiveData {
@@ -37,7 +37,7 @@ export default function SkydivePanel({ point }: { point: GeoPoint }) {
       <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 17, color: '#FF4500', marginBottom: 4, lineHeight: 1.2 }}>
         {d.name}
       </p>
-      <p style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
+      <p aria-label={`Condition : ${cond.label}`} style={{ fontFamily: 'var(--font-rajdhani)', fontWeight: 700, fontSize: 15, color: cond.color, marginBottom: 10 }}>
         {cond.label}
       </p>
 
