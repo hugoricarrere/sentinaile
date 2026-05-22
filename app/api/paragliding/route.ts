@@ -8,6 +8,7 @@ import { currentHourIndex } from '@/lib/time'
 interface PGSpot {
   id: string; name: string; longitude: number; latitude: number
   country: string; type: string; level: string; windDirections: string[]; altitudeM: number
+  ffvlId?: number
 }
 
 interface PGResult extends PGSpot {
@@ -51,9 +52,6 @@ async function fetchParagliding(): Promise<PGResult[]> {
       const blHeight = h.boundary_layer_height?.[idx] ?? 1000
       const liftedIndex = h.lifted_index?.[idx] ?? 0
       // Check for storm: weathercode >= 95 in current hour + next 3h
-      const windowEnd = Math.min(idx + 4, h.weathercode?.length ?? 0)
-      const stormForecast = h.weathercode?.slice(idx, windowEnd).some(c => c >= 95) ?? false
-      const condition = paraglideCondition(windKmh, gustKmh, tempC, radiation, stormForecast, cape, blHeight, liftedIndex)
       const forecast = Array.from({ length: 24 }, (_, i) => ({
         hour: i,
         wind: h.windspeed_10m?.[i] ?? 0,
@@ -62,16 +60,19 @@ async function fetchParagliding(): Promise<PGResult[]> {
 
       // ── Hourly timeline (24h) ────────────────────────────────────────────
       const hourlyConditions = Array.from({ length: 24 }, (_, i) => {
-        const w    = h.windspeed_10m?.[i]   ?? 0
-        const g    = h.windgusts_10m?.[i]   ?? 0
-        const t    = h.temperature_2m?.[i]  ?? 15
-        const r    = h.shortwave_radiation?.[i] ?? 200
+        const w     = h.windspeed_10m?.[i]       ?? 0
+        const g     = h.windgusts_10m?.[i]       ?? 0
+        const t     = h.temperature_2m?.[i]      ?? 15
+        const r     = h.shortwave_radiation?.[i] ?? 200
         const storm = (h.weathercode?.[i] ?? 0) >= 95
-        const c    = h.cape?.[i]             ?? 0
-        const bl   = h.boundary_layer_height?.[i] ?? 1000
-        const li   = h.lifted_index?.[i]    ?? 0
+        const c     = h.cape?.[i]                ?? 0
+        const bl    = h.boundary_layer_height?.[i] ?? 1000
+        const li    = h.lifted_index?.[i]        ?? 0
         return paraglideCondition(w, g, t, r, storm, c, bl, li)
       }) as ConditionStatus[]
+
+      // Condition courante = heure idx → cohérent avec la barre horaire et le meteogram
+      const condition = hourlyConditions[idx] ?? hourlyConditions[0] ?? 'yellow'
 
       const hourlyWindDirs = Array.from({ length: 24 }, (_, i) => h.winddirection_10m?.[i] ?? 0)
 

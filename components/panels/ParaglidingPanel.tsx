@@ -24,6 +24,7 @@ interface PGData {
   hourlyWindDirs?: number[]
   blHeight?: number
   liftedIndex?: number
+  ffvlId?: number
 }
 
 /** Tiny SVG arrow pointing where wind blows TO (rotated by windDir degrees) */
@@ -117,6 +118,29 @@ export default function ParaglidingPanel({ point }: { point: GeoPoint }) {
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #0d1826' }}>
         <FlyForecast lat={point.latitude} lng={point.longitude} />
       </div>
+      {/* SpotAiR deep link */}
+      <a
+        href={d.ffvlId
+          ? `https://www.spotair.mobi/spotpg/ffvl/${d.ffvlId}`
+          : `https://www.spotair.mobi/#14/${point.latitude.toFixed(4)}/${point.longitude.toFixed(4)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          marginTop: 10,
+          fontFamily: 'var(--font-rajdhani)', fontWeight: 600, fontSize: 13,
+          letterSpacing: '0.1em', textDecoration: 'none',
+          color: '#4a6fa5', border: '1px solid #1a2840',
+          padding: '6px 0', borderRadius: 3,
+          transition: 'border-color 0.15s, color 0.15s',
+        }}
+      >
+        <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        VOIR SUR SPOTAIR
+      </a>
       {/* PushAlertButton: requires VAPID keys + persistent store — disabled until configured */}
     </div>
   )

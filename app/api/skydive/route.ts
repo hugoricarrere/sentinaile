@@ -104,20 +104,21 @@ async function fetchSkydive(): Promise<DZResult[]> {
       const pressureAltM = (1 - Math.pow(pressureHPa / 1013.25, 0.190284)) * 44330
       const densityAltM  = Math.round(pressureAltM + 120 * (tempC - tempISA))
 
-      const condition = skydiveCondition(
-        windSurface, wind4000, visibility, precipFraction, cloudcoverLow, hasStorm, cape,
-      )
-
       // ── Hourly timeline (6h–21h) ─────────────────────────────────────────
+      // precipFraction = 0 par heure (identique au meteogram) — cohérence garantie
       const hourlyConditions = Array.from({ length: 24 }, (_, i) => {
-        const ws   = h.windspeed_10m?.[i]    ?? 0
-        const w4   = h.windspeed_600hPa?.[i] ?? 0
-        const vis  = (h.visibility?.[i] ?? 10000) / 1000
-        const cld  = h.cloudcover_low?.[i]   ?? 0
+        const ws    = h.windspeed_10m?.[i]    ?? 0
+        const w4    = h.windspeed_600hPa?.[i] ?? 0
+        const vis   = (h.visibility?.[i] ?? 10000) / 1000
+        const cld   = h.cloudcover_low?.[i]   ?? 0
         const storm = (h.weathercode?.[i] ?? 0) >= 95
-        const c    = h.cape?.[i] ?? 0
+        const c     = h.cape?.[i] ?? 0
         return skydiveCondition(ws, w4, vis, 0, cld, storm, c)
       }) as ConditionStatus[]
+
+      // Condition courante = heure idx de la timeline horaire
+      // → parfaitement cohérent avec la barre go/no-go et le meteogram
+      const condition = hourlyConditions[idx] ?? hourlyConditions[0] ?? 'red'
 
       const hourlyWindDirs = Array.from({ length: 24 }, (_, i) => h.winddirection_10m?.[i] ?? 0)
 
